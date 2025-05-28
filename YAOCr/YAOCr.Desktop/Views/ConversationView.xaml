@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="YAOCr.Views.ConversationView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="using:YAOCr.Views"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+			 xmlns:controls="using:YAOCr.Controls"
+			 mc:Ignorable="d">
+
+
+	<Grid ColumnSpacing="36">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="3*" />
+		</Grid.ColumnDefinitions>
+
+		<Border Grid.Column="0">
+			<Grid Style="{ThemeResource ThemedGridStyle}">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<Button x:Name="btnNewConversation"
+						Grid.Row="0"
+						Style="{ThemeResource ThemedButtonStyle}"
+						HorizontalAlignment="Stretch"
+						Padding="16"
+						PointerEntered="btnConversation_PointerEntered"
+						PointerExited="btnConversation_PointerExited">
+					<StackPanel Orientation="Horizontal"
+								HorizontalAlignment="Center">
+						<TextBlock Text="New Conversation"
+								   TextAlignment="Center"
+								   Margin="0,0,16,0" />
+						<FontIcon Glyph="&#xE8BD;" />
+					</StackPanel>
+
+				</Button>
+
+
+				<ListView x:Name="lstConversations"
+						  Grid.Row="1"
+						  ItemsSource="{Binding Conversations}"
+						  SelectionMode="Single"
+						  ItemContainerStyle="{ThemeResource ThemedListViewItemStyle}"
+						  Style="{ThemeResource ThemedListViewStyle}">
+					<ListView.ItemTemplate>
+
+						<DataTemplate>
+							<Border Padding="10">
+								<controls:ConversationItem Conversation="{Binding Mode=TwoWay}"
+														   Padding="10"
+														   SaveCommand="{Binding ElementName=lstConversations, Path=DataContext.SaveConversationCommand}"/>
+
+							</Border>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+
+			</Grid>
+		</Border>
+
+		<Border Grid.Column="1">
+			<ListView ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}"
+					  ItemContainerStyle="{ThemeResource ThemedListViewItemStyle}"
+					  Style="{ThemeResource ThemedListViewStyle}">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Content}" />
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</Border>
+
+		<!-- TEST: To be removed -->
+		<StackPanel VerticalAlignment="Center">
+			<Button x:Name="btnHello"
+					Content="Enabled button"
+					Style="{ThemeResource ThemedButtonStyle}" />
+
+			<!--<ListView>
+				<ListViewItem Style="{StaticResource DarkViewItemStyle}">Item A</ListViewItem>
+				<ListViewItem Style="{StaticResource DarkViewItemStyle}">Item B</ListViewItem>
+				<ListViewItem Style="{StaticResource DarkViewItemStyle}">Item C</ListViewItem>
+			</ListView>-->
+
+			<!--<Button x:Name="btnThemeToggle"
+					Click="btnThemeToggle_Click"
+					Content="Toggle Theme"
+					Style="{ThemeResource ThemedButtonStyle}"/>-->
+
+			<Button x:Name="btnToDark"
+					Click="btnToDark_Click"
+					Content="Switch to Dark Theme"
+					Style="{ThemeResource ThemedButtonStyle}" />
+			<Button x:Name="btnToLight"
+					Click="btnToLight_Click"
+					Content="Switch to Light Theme"
+					Style="{ThemeResource ThemedButtonStyle}" />
+			<TextBox Text="Hello"
+					 Style="{ThemeResource ThemedTextBoxStyle}" />
+		</StackPanel>
+
+
+	</Grid>
+
+
+</UserControl>

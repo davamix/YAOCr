@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<ResourceDictionary.ThemeDictionaries>
+		<ResourceDictionary x:Key="Light">
+			<Style x:Key="ThemedGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource LightGridStyle}" />
+			<Style x:Key="ThemedMainGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource LightMainGridStyle}" />
+			<Style x:Key="ThemedButtonStyle"
+				   TargetType="Button"
+				   BasedOn="{StaticResource LightButtonStyle}" />
+			<Style x:Key="ThemedListViewItemStyle"
+				   TargetType="ListViewItem"
+				   BasedOn="{StaticResource LightListViewItemStyle}" />
+			<Style x:Key="ThemedListViewStyle"
+				   TargetType="ListView"
+				   BasedOn="{StaticResource LightListViewStyle}" />
+			<Style x:Key="ThemedTextBoxStyle"
+				   TargetType="TextBox"
+				   BasedOn="{StaticResource LightTextBoxStyle}" />
+		</ResourceDictionary>
+
+		<ResourceDictionary x:Key="Dark">
+			<Style x:Key="ThemedGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource DarkGridStyle}" />
+			<Style x:Key="ThemedMainGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource DarkMainGridStyle}" />
+			<Style x:Key="ThemedButtonStyle"
+				   TargetType="Button"
+				   BasedOn="{StaticResource DarkButtonStyle}" />
+			<Style x:Key="ThemedListViewItemStyle"
+				   TargetType="ListViewItem"
+				   BasedOn="{StaticResource DarkListViewItemStyle}" />
+			<Style x:Key="ThemedListViewStyle"
+				   TargetType="ListView"
+				   BasedOn="{StaticResource DarkListViewStyle}" />
+			<Style x:Key="ThemedTextBoxStyle"
+				   TargetType="TextBox"
+				   BasedOn="{StaticResource DarkTextBoxStyle}" />
+		</ResourceDictionary>
+	</ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

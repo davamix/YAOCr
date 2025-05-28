@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="YAOCr.Controls.ConversationItem"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="using:YAOCr.Controls"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+			 x:Name="conversationItemControl">
+
+	<Grid>
+		<Grid x:Name="gridReadItem">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock x:Name="txtConversationName"
+					   Grid.Column="0"
+					   Text="{Binding ElementName=conversationItemControl, Path=Conversation.Name}"
+					   VerticalAlignment="Center" />
+
+			<Button x:Name="btnRenameConversation"
+					Grid.Column="1"
+					Style="{ThemeResource ThemedButtonStyle}"
+					ToolTipService.ToolTip="Rename conversation"
+					PointerEntered="btnConversation_PointerEntered"
+					PointerExited="btnConversation_PointerExited"
+					Click="btnRenameConversation_Click">
+				<FontIcon Glyph="&#xE8AC;" />
+			</Button>
+		</Grid>
+
+		<Grid x:Name="gridEditItem"
+			  Visibility="Collapsed">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<TextBox x:Name="txtEditConversationName"
+					 Grid.Column="0"
+					 Style="{ThemeResource ThemedTextBoxStyle}"
+					 Text="{Binding ElementName=conversationItemControl, Path=Conversation.Name, Mode=TwoWay}" />
+
+			<Button x:Name="btnSave"
+					Grid.Column="1"
+					Style="{ThemeResource ThemedButtonStyle}"
+					Margin="10,0,0,0"
+					Command="{Binding ElementName=conversationItemControl, Path=SaveCommand}"
+					CommandParameter="{Binding ElementName=conversationItemControl, Path=Conversation}"
+					PointerEntered="btnConversation_PointerEntered"
+					PointerExited="btnConversation_PointerExited"
+					Click="btnSave_Click">
+				<FontIcon Glyph="&#xE74E;" />
+			</Button>
+
+
+		</Grid>
+
+	</Grid>
+</UserControl>
