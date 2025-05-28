@@ -13,9 +13,9 @@
 			<Style x:Key="ThemedButtonStyle"
 				   TargetType="Button"
 				   BasedOn="{StaticResource LightButtonStyle}" />
-			<Style x:Key="ThemedListViewItemStyle"
+			<Style x:Key="ThemedListViewItemContainerStyle"
 				   TargetType="ListViewItem"
-				   BasedOn="{StaticResource LightListViewItemStyle}" />
+				   BasedOn="{StaticResource LightListViewItemContainerStyle}" />
 			<Style x:Key="ThemedListViewStyle"
 				   TargetType="ListView"
 				   BasedOn="{StaticResource LightListViewStyle}" />
@@ -34,9 +34,9 @@
 			<Style x:Key="ThemedButtonStyle"
 				   TargetType="Button"
 				   BasedOn="{StaticResource DarkButtonStyle}" />
-			<Style x:Key="ThemedListViewItemStyle"
+			<Style x:Key="ThemedListViewItemContainerStyle"
 				   TargetType="ListViewItem"
-				   BasedOn="{StaticResource DarkListViewItemStyle}" />
+				   BasedOn="{StaticResource DarkListViewItemContainerStyle}" />
 			<Style x:Key="ThemedListViewStyle"
 				   TargetType="ListView"
 				   BasedOn="{StaticResource DarkListViewStyle}" />

@@ -53,10 +53,37 @@ public sealed partial class ConversationItem : UserControl {
     private void btnRenameConversation_Click(object sender, RoutedEventArgs e) {
         gridEditItem.Visibility = Visibility.Visible;
         gridReadItem.Visibility = Visibility.Collapsed;
+
+        txtEditConversationName.Text = Conversation.Name;
     }
 
     private void btnSave_Click(object sender, RoutedEventArgs e) {
+        SaveConversationName(Conversation.Name);
+    }
+
+    private void txtEditConversationName_KeyUp(object sender, KeyRoutedEventArgs e) {
+        if(e.Key == Windows.System.VirtualKey.Enter) {
+            Conversation.Name = txtEditConversationName.Text;
+            SaveConversationName(Conversation.Name);
+            SaveCommand?.Execute(Conversation);
+        } else if (e.Key == Windows.System.VirtualKey.Escape) {
+            SaveConversationName(txtConversationName.Text);
+        }
+    }
+
+    private void gridReadItem_PointerEntered(object sender, PointerRoutedEventArgs e) {
+        fadeInButtonStoryboard.Begin();
+    }
+
+    private void gridReadItem_PointerExited(object sender, PointerRoutedEventArgs e) {
+        fadeOutButtonStoryboard.Begin();
+    }
+
+    private void SaveConversationName(string newValue) {
         gridReadItem.Visibility = Visibility.Visible;
         gridEditItem.Visibility = Visibility.Collapsed;
+
+        txtConversationName.Text = Conversation.Name;
     }
+
 }

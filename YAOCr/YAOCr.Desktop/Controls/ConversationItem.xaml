@@ -8,8 +8,28 @@
 			 mc:Ignorable="d"
 			 x:Name="conversationItemControl">
 
-	<Grid>
+	<Grid PointerEntered="gridReadItem_PointerEntered"
+		  PointerExited="gridReadItem_PointerExited"
+		  Background="Transparent"
+		  Padding="10">
 		<Grid x:Name="gridReadItem">
+			<Grid.Resources>
+				<Storyboard x:Name="fadeInButtonStoryboard">
+					<DoubleAnimation Storyboard.TargetProperty="Opacity"
+									 Storyboard.TargetName="btnRenameConversation"
+									 From="0"
+									 To="1"
+									 Duration="0:0:0.5" />
+				</Storyboard>
+
+				<Storyboard x:Name="fadeOutButtonStoryboard">
+					<DoubleAnimation Storyboard.TargetProperty="Opacity"
+									 Storyboard.TargetName="btnRenameConversation"
+									 From="1"
+									 To="0"
+									 Duration="0:0:0.5" />
+				</Storyboard>
+			</Grid.Resources>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="Auto" />
@@ -24,6 +44,7 @@
 					Grid.Column="1"
 					Style="{ThemeResource ThemedButtonStyle}"
 					ToolTipService.ToolTip="Rename conversation"
+					Opacity="0"
 					PointerEntered="btnConversation_PointerEntered"
 					PointerExited="btnConversation_PointerExited"
 					Click="btnRenameConversation_Click">
@@ -41,7 +62,8 @@
 			<TextBox x:Name="txtEditConversationName"
 					 Grid.Column="0"
 					 Style="{ThemeResource ThemedTextBoxStyle}"
-					 Text="{Binding ElementName=conversationItemControl, Path=Conversation.Name, Mode=TwoWay}" />
+					 Text="{Binding ElementName=conversationItemControl, Path=Conversation.Name, Mode=TwoWay}"
+					 KeyUp="txtEditConversationName_KeyUp"/>
 
 			<Button x:Name="btnSave"
 					Grid.Column="1"

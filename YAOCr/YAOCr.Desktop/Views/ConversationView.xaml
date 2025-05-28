@@ -45,15 +45,12 @@
 						  Grid.Row="1"
 						  ItemsSource="{Binding Conversations}"
 						  SelectionMode="Single"
-						  ItemContainerStyle="{ThemeResource ThemedListViewItemStyle}"
 						  Style="{ThemeResource ThemedListViewStyle}">
 					<ListView.ItemTemplate>
-
 						<DataTemplate>
-							<Border Padding="10">
+							<Border>
 								<controls:ConversationItem Conversation="{Binding Mode=TwoWay}"
-														   Padding="10"
-														   SaveCommand="{Binding ElementName=lstConversations, Path=DataContext.SaveConversationCommand}"/>
+														   SaveCommand="{Binding ElementName=lstConversations, Path=DataContext.SaveConversationCommand}" />
 
 							</Border>
 						</DataTemplate>
@@ -65,7 +62,7 @@
 
 		<Border Grid.Column="1">
 			<ListView ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}"
-					  ItemContainerStyle="{ThemeResource ThemedListViewItemStyle}"
+					  ItemContainerStyle="{ThemeResource ThemedListViewItemContainerStyle}"
 					  Style="{ThemeResource ThemedListViewStyle}">
 				<ListView.ItemTemplate>
 					<DataTemplate>

@@ -53,8 +53,14 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="DarkListViewItemStyle"
+	<Style x:Key="DarkListViewItemContainerStyle"
 		   TargetType="ListViewItem">
+		<Setter Property="HorizontalContentAlignment"
+				Value="Stretch" />
+		<Setter Property="VerticalContentAlignment"
+				Value="Stretch" />
+		<Setter Property="Padding"
+				Value="0" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ListViewItem">
@@ -90,7 +96,7 @@
 							<ContentPresenter x:Name="ContentPresenter"
 											  Content="{TemplateBinding Content}"
 											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-											  VerticalAlignment="Center" />
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
 						</Border>
 					</Grid>
 				</ControlTemplate>
@@ -101,7 +107,7 @@
 	<Style x:Key="DarkListViewStyle"
 		   TargetType="ListView">
 		<Setter Property="ItemContainerStyle"
-				Value="{StaticResource DarkListViewItemStyle}" />
+				Value="{StaticResource DarkListViewItemContainerStyle}" />
 		<Setter Property="Background"
 				Value="{StaticResource DarkRegionColor}" />
 		<Setter Property="BorderThickness"
