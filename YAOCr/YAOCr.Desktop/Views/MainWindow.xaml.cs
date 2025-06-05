@@ -23,16 +23,50 @@ namespace YAOCr.Views;
 /// <summary>
 /// An empty window that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class MainWindow : Window
-{
-    public MainWindow()
-    {
+public sealed partial class MainWindow : Window {
+    private readonly ThemeService _themeService;
+    public ElementTheme RequestedTheme { get; private set; } = ElementTheme.Light;
+
+    public MainWindow() {
         this.InitializeComponent();
 
-        if (this.Content is FrameworkElement rootElement) {
-            rootElement.RequestedTheme = ElementTheme.Light;
-        }
+        _themeService = Ioc.Default.GetService<ThemeService>()!;
 
+        //_themeService.ThemeChanged += OnThemeChanged;
     }
 
+    private void OnThemeChanged(object? sender, ElementTheme e) {
+        RequestedTheme = e;
+
+        if (this.Content is FrameworkElement rootElement) {
+            rootElement.RequestedTheme = e;
+
+            var listViews = FindVisualChildren<ListView>(rootElement);
+            foreach (var listView in listViews) {
+                var containerStyleSelector = listView.ItemContainerStyleSelector;
+
+                listView.ItemContainerStyleSelector = null;
+                listView.ItemContainerStyleSelector = containerStyleSelector;
+            }
+        }
+    }
+
+    private IEnumerable<T> FindVisualChildren<T>(DependencyObject parent) where T : DependencyObject {
+        var count = VisualTreeHelper.GetChildrenCount(parent);
+        for (var i = 0; i < count; i++) {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T childType) {
+                yield return childType;
+            }
+
+            foreach (var grandChild in FindVisualChildren<T>(child)) {
+                yield return grandChild;
+            }
+        }
+    }
+
+    // Remember to unsubscribe when the window is closed
+    private void Window_Closed(object sender, WindowEventArgs args) {
+        _themeService.ThemeChanged -= OnThemeChanged;
+    }
 }

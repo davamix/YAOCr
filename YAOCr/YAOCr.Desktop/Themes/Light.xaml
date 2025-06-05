@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls">
 
 	<ResourceDictionary.MergedDictionaries>
 		<XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
@@ -110,7 +111,7 @@
 				Value="{StaticResource LightListViewItemContainerStyle}" />
 		<Setter Property="Background"
 				Value="{StaticResource LightRegionColor}" />
-		
+
 	</Style>
 
 	<Style x:Key="LightButtonStyle"
@@ -348,6 +349,126 @@
 										HorizontalAlignment="Stretch"
 										VerticalAlignment="Stretch" />
 							</Grid>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="LightListViewItemUserMessageStyle"
+		   TargetType="ListViewItem"
+		   BasedOn="{StaticResource LightListViewItemContainerStyle}">
+		<Setter Property="Margin"
+				Value="5" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ListViewItem">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<!--<VisualState.Setters>
+										<Setter Target="ListViewItemBorder.Background">
+											<Setter.Value>
+												<SolidColorBrush Color="Violet" />
+											</Setter.Value>
+										</Setter>
+									</VisualState.Setters>-->
+								</VisualState>
+								<VisualState x:Name="PointerOver">
+									
+								
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightBase200Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+								<VisualState x:Name="Selected">
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightBase300Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Border x:Name="ListViewItemBorder"
+								Padding="15"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="BorderBackground"
+												 Color="{StaticResource LightBase100Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}"
+											  HorizontalContentAlignment="Right"/>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="LightListViewItemAssistantMessageStyle"
+		   TargetType="ListViewItem"
+		   BasedOn="{StaticResource LightListViewItemContainerStyle}">
+		<Setter Property="Margin"
+				Value="5" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ListViewItem">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<!--<VisualState.Setters>
+										<Setter Target="ListViewItemBorder.Background">
+											<Setter.Value>
+												<SolidColorBrush Color="LawnGreen" />
+											</Setter.Value>
+										</Setter>
+									</VisualState.Setters>-->
+								</VisualState>
+								
+								<VisualState x:Name="PointerOver">
+									
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightPrimary200Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+								<VisualState x:Name="Selected">
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightPrimary300Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Border x:Name="ListViewItemBorder"
+								Padding="15"
+								CornerRadius="0"
+								BorderThickness="5,0,0,0"
+								BorderBrush="Olive">
+							<Border.Background>
+								<SolidColorBrush x:Name="BorderBackground"
+												 Color="{StaticResource LightPrimary100Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}"
+											  />
 						</Border>
 					</Grid>
 				</ControlTemplate>

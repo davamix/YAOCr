@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls">
 
 	<ResourceDictionary.ThemeDictionaries>
 		<ResourceDictionary x:Key="Light">
@@ -22,6 +23,12 @@
 			<Style x:Key="ThemedTextBoxStyle"
 				   TargetType="TextBox"
 				   BasedOn="{StaticResource LightTextBoxStyle}" />
+			<Style x:Key="ThemedListViewItemUserMessageStyle"
+				   TargetType="ListViewItem"
+				   BasedOn="{StaticResource LightListViewItemUserMessageStyle}" />
+			<Style x:Key="ThemedListViewItemAssistantMessageStyle"
+				   TargetType="ListViewItem"
+				   BasedOn="{StaticResource LightListViewItemAssistantMessageStyle}" />
 		</ResourceDictionary>
 
 		<ResourceDictionary x:Key="Dark">
@@ -43,6 +50,12 @@
 			<Style x:Key="ThemedTextBoxStyle"
 				   TargetType="TextBox"
 				   BasedOn="{StaticResource DarkTextBoxStyle}" />
+			<Style x:Key="ThemedListViewItemUserMessageStyle"
+				   TargetType="ListViewItem"
+				   BasedOn="{StaticResource DarkListViewItemUserMessageStyle}" />
+			<Style x:Key="ThemedListViewItemAssistantMessageStyle"
+				   TargetType="ListViewItem"
+				   BasedOn="{StaticResource DarkListViewItemAssistantMessageStyle}" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

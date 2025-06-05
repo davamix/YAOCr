@@ -76,8 +76,6 @@
 					Click="btnSave_Click">
 				<FontIcon Glyph="&#xE74E;" />
 			</Button>
-
-
 		</Grid>
 
 	</Grid>

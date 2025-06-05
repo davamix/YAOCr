@@ -19,6 +19,14 @@ public sealed partial class ConversationView : UserControl {
         this.DataContext = Ioc.Default.GetService<ConversationsViewModel>();
 
         _themeService = Ioc.Default.GetService<ThemeService>()!;
+        _themeService.ThemeChanged += _themeService_ThemeChanged;
+    }
+
+    private void _themeService_ThemeChanged(object? sender, ElementTheme e) {
+        var oldSelector = lstMessages.ItemContainerStyleSelector;
+        lstMessages.ItemContainerStyleSelector = null;
+        lstMessages.ItemContainerStyleSelector = oldSelector;
+
     }
 
     private void btnToDark_Click(object sender, RoutedEventArgs e) {
@@ -29,6 +37,7 @@ public sealed partial class ConversationView : UserControl {
     private void btnToLight_Click(object sender, RoutedEventArgs e) {
         var mw = ((App)Application.Current).MainWin;
         _themeService.ApplyTheme(mw, ElementTheme.Light);
+        //MainWindow.Current
     }
 
     private void btnConversation_PointerEntered(object sender, PointerRoutedEventArgs e) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls">
 
 	<ResourceDictionary.MergedDictionaries>
 		<XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
@@ -379,6 +380,112 @@
 										HorizontalAlignment="Stretch"
 										VerticalAlignment="Stretch" />
 							</Grid>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="DarkListViewItemUserMessageStyle"
+		   TargetType="ListViewItem"
+		   BasedOn="{StaticResource DarkListViewItemContainerStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ListViewItem">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal" />
+								<VisualState x:Name="PointerOver">
+									<VisualState.Setters>
+										<Setter Target="BorderBackground.Color">
+											<Setter.Value>
+												<SolidColorBrush Color="DarkCyan" />
+											</Setter.Value>
+										</Setter>
+									</VisualState.Setters>
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkBase200Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+								<VisualState x:Name="Selected">
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkBase300Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Border x:Name="ListViewItemBorder"
+								Padding="{TemplateBinding Padding}"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="BorderBackground"
+												 Color="{StaticResource DarkBase100Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="DarkListViewItemAssistantMessageStyle"
+		   TargetType="ListViewItem"
+		   BasedOn="{StaticResource DarkListViewItemContainerStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ListViewItem">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal" />
+								<VisualState x:Name="PointerOver">
+									<VisualState.Setters>
+										<Setter Target="BorderBackground.Color">
+											<Setter.Value>
+												<SolidColorBrush Color="DarkOrange" />
+											</Setter.Value>
+										</Setter>
+									</VisualState.Setters>
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkPrimary200Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+								<VisualState x:Name="Selected">
+									<!--<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkPrimary300Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>-->
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Border x:Name="ListViewItemBorder"
+								Padding="{TemplateBinding Padding}"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="BorderBackground"
+												 Color="{StaticResource DarkPrimary100Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
 						</Border>
 					</Grid>
 				</ControlTemplate>

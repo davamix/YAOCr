@@ -7,6 +7,8 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 			 xmlns:controls="using:YAOCr.Controls"
+			 xmlns:models="using:YAOCr.Core.Models"
+			 xmlns:selectors="using:YAOCr.Themes.Selectors"
 			 mc:Ignorable="d">
 
 
@@ -61,12 +63,14 @@
 		</Border>
 
 		<Border Grid.Column="1">
-			<ListView ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}"
-					  ItemContainerStyle="{ThemeResource ThemedListViewItemContainerStyle}"
-					  Style="{ThemeResource ThemedListViewStyle}">
+			<ListView x:Name="lstMessages" ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}"
+					  >
+				<ListView.ItemContainerStyleSelector>
+					<selectors:MessageStyleSelector />
+				</ListView.ItemContainerStyleSelector>
 				<ListView.ItemTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding Content}" />
+						<controls:ConversationMessageItem Message="{Binding}" />
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>
