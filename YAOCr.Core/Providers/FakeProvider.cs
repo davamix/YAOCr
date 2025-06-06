@@ -42,7 +42,15 @@ public class FakeConversationProvider : IConversationProvider {
                 new Message {
                     Id = Guid.NewGuid().ToString(),
                     Sender = SenderEnum.Assistant,
-                    Content = "This is a sample response on conversation " + (_conversations.Count + 1),
+                    Content = @"
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac elit at neque efficitur porttitor ac sit amet tortor. 
+                    Nunc finibus lacus a lectus elementum, a ullamcorper odio imperdiet. Ut dignissim, urna non rutrum ultricies, 
+                    justo augue consectetur elit, id pharetra eros tellus quis nisl. Aliquam ultrices fringilla euismod. Etiam fringilla pellentesque 
+                    odio vitae lacinia. Etiam condimentum massa augue, eget pharetra massa interdum sit amet.
+
+                    Phasellus bibendum magna et sodales vehicula. Orci varius natoque penatibus et magnis dis parturient montes, 
+                    nascetur ridiculus mus. 
+                    ",
                     CreatedAt = DateTime.Now
                 }
             }

@@ -10,6 +10,9 @@
 	<Color x:Key="LightRegionColor">#FFF2F2F2</Color>
 	<Color x:Key="LightRegionAltColor">#FFDADADA</Color>
 
+	<Color x:Key="LightRegionForegroundColor">#FFEAEAEA</Color>
+	<Color x:Key="LightRegionAltForegroundColor">#FFCACACA</Color>
+
 	<Color x:Key="LightBase100Color">#FFA9ECCA</Color>
 	<Color x:Key="LightBase200Color">#FF92E4BA</Color>
 	<Color x:Key="LightBase300Color">#FF7BDCAA</Color>
@@ -360,7 +363,9 @@
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource LightListViewItemContainerStyle}">
 		<Setter Property="Margin"
-				Value="5" />
+				Value="0, 5, 15, 10" />
+		<Setter Property="HorizontalAlignment"
+				Value="Right" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ListViewItem">
@@ -397,11 +402,13 @@
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 						<Border x:Name="ListViewItemBorder"
-								Padding="15"
-								CornerRadius="0">
+								Padding="{TemplateBinding Padding}"
+								CornerRadius="0"
+								BorderThickness="1"
+								BorderBrush="{StaticResource LightBase600Color}">
 							<Border.Background>
 								<SolidColorBrush x:Name="BorderBackground"
-												 Color="{StaticResource LightBase100Color}" />
+												 Color="{StaticResource LightRegionColor}" />
 							</Border.Background>
 							<ContentPresenter x:Name="ContentPresenter"
 											  Content="{TemplateBinding Content}"
@@ -419,7 +426,9 @@
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource LightListViewItemContainerStyle}">
 		<Setter Property="Margin"
-				Value="5" />
+				Value="0,10,0,0" />
+		<Setter Property="HorizontalAlignment"
+				Value="Left" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ListViewItem">
@@ -456,13 +465,13 @@
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 						<Border x:Name="ListViewItemBorder"
-								Padding="15"
+								Padding="{TemplateBinding Padding}"
 								CornerRadius="0"
-								BorderThickness="5,0,0,0"
-								BorderBrush="Olive">
+								BorderThickness="1"
+								BorderBrush="{StaticResource LightPrimary600Color}">
 							<Border.Background>
 								<SolidColorBrush x:Name="BorderBackground"
-												 Color="{StaticResource LightPrimary100Color}" />
+												 Color="{StaticResource LightRegionColor}" />
 							</Border.Background>
 							<ContentPresenter x:Name="ContentPresenter"
 											  Content="{TemplateBinding Content}"
@@ -474,5 +483,25 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+	</Style>
+
+	<Style x:Key="LightMarkdownTextBlockStyle"
+		   TargetType="controls:MarkdownTextBlock">
+		<!--<Setter Property="Foreground"
+				Value="{StaticResource LightRegionForegroundColor}" />-->
+		<Setter Property="Background"
+				Value="Transparent" />
+		<Setter Property="Margin"
+				Value="5" />
+		<Setter Property="Padding"
+				Value="0" />
+		<Setter Property="CodeBackground"
+				Value="{StaticResource LightRegionAltColor}" />
+		<Setter Property="CodeForeground"
+				Value="#FF000000" />
+		<!--<Setter Property="CodeMargin"
+				Value="0" />
+		<Setter Property="CodePadding"
+				Value="0" />-->
 	</Style>
 </ResourceDictionary>

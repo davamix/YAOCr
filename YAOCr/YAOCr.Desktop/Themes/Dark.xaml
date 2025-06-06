@@ -390,6 +390,10 @@
 	<Style x:Key="DarkListViewItemUserMessageStyle"
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource DarkListViewItemContainerStyle}">
+		<Setter Property="Margin"
+				Value="0, 5, 15, 10" />
+		<Setter Property="HorizontalAlignment"
+				Value="Right" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ListViewItem">
@@ -398,13 +402,13 @@
 							<VisualStateGroup x:Name="CommonStates">
 								<VisualState x:Name="Normal" />
 								<VisualState x:Name="PointerOver">
-									<VisualState.Setters>
+									<!--<VisualState.Setters>
 										<Setter Target="BorderBackground.Color">
 											<Setter.Value>
 												<SolidColorBrush Color="DarkCyan" />
 											</Setter.Value>
 										</Setter>
-									</VisualState.Setters>
+									</VisualState.Setters>-->
 									<!--<Storyboard>
 										<ColorAnimation Storyboard.TargetName="BorderBackground"
 														Storyboard.TargetProperty="Color"
@@ -424,15 +428,18 @@
 						</VisualStateManager.VisualStateGroups>
 						<Border x:Name="ListViewItemBorder"
 								Padding="{TemplateBinding Padding}"
-								CornerRadius="0">
+								CornerRadius="0"
+								BorderThickness="1"
+								BorderBrush="{StaticResource DarkBase600Color}">
 							<Border.Background>
 								<SolidColorBrush x:Name="BorderBackground"
-												 Color="{StaticResource DarkBase100Color}" />
+												 Color="{StaticResource DarkRegionColor}" />
 							</Border.Background>
 							<ContentPresenter x:Name="ContentPresenter"
 											  Content="{TemplateBinding Content}"
 											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}"
+											  HorizontalContentAlignment="Right" />
 						</Border>
 					</Grid>
 				</ControlTemplate>
@@ -443,6 +450,8 @@
 	<Style x:Key="DarkListViewItemAssistantMessageStyle"
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource DarkListViewItemContainerStyle}">
+		<Setter Property="Margin"
+				Value="0,10,0,0" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ListViewItem">
@@ -451,13 +460,13 @@
 							<VisualStateGroup x:Name="CommonStates">
 								<VisualState x:Name="Normal" />
 								<VisualState x:Name="PointerOver">
-									<VisualState.Setters>
+									<!--<VisualState.Setters>
 										<Setter Target="BorderBackground.Color">
 											<Setter.Value>
 												<SolidColorBrush Color="DarkOrange" />
 											</Setter.Value>
 										</Setter>
-									</VisualState.Setters>
+									</VisualState.Setters>-->
 									<!--<Storyboard>
 										<ColorAnimation Storyboard.TargetName="BorderBackground"
 														Storyboard.TargetProperty="Color"
@@ -477,10 +486,12 @@
 						</VisualStateManager.VisualStateGroups>
 						<Border x:Name="ListViewItemBorder"
 								Padding="{TemplateBinding Padding}"
-								CornerRadius="0">
+								CornerRadius="0"
+								BorderThickness="1"
+								BorderBrush="{StaticResource DarkPrimary600Color}">
 							<Border.Background>
 								<SolidColorBrush x:Name="BorderBackground"
-												 Color="{StaticResource DarkPrimary100Color}" />
+												 Color="{StaticResource DarkRegionColor}" />
 							</Border.Background>
 							<ContentPresenter x:Name="ContentPresenter"
 											  Content="{TemplateBinding Content}"
@@ -491,5 +502,17 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+	</Style>
+
+	<Style x:Key="DarkMarkdownTextBlockStyle"
+		   TargetType="controls:MarkdownTextBlock">
+		<Setter Property="Background"
+				Value="Transparent" />
+		<Setter Property="Margin"
+				Value="5" />
+		<Setter Property="CodeBackground"
+				Value="{StaticResource DarkRegionAltColor}" />
+		<Setter Property="CodeForeground"
+				Value="#FFFFFFFF" />
 	</Style>
 </ResourceDictionary>

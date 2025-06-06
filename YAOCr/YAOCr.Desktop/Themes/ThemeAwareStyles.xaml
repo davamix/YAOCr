@@ -29,6 +29,9 @@
 			<Style x:Key="ThemedListViewItemAssistantMessageStyle"
 				   TargetType="ListViewItem"
 				   BasedOn="{StaticResource LightListViewItemAssistantMessageStyle}" />
+			<Style x:Key="ThemedMarkdownTextBlockStyle"
+				   TargetType="controls:MarkdownTextBlock"
+				   BasedOn="{StaticResource LightMarkdownTextBlockStyle}" />
 		</ResourceDictionary>
 
 		<ResourceDictionary x:Key="Dark">
@@ -56,6 +59,9 @@
 			<Style x:Key="ThemedListViewItemAssistantMessageStyle"
 				   TargetType="ListViewItem"
 				   BasedOn="{StaticResource DarkListViewItemAssistantMessageStyle}" />
+			<Style x:Key="ThemedMarkdownTextBlockStyle"
+				   TargetType="controls:MarkdownTextBlock"
+				   BasedOn="{StaticResource DarkMarkdownTextBlockStyle}" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

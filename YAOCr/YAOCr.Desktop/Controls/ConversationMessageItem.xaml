@@ -6,10 +6,12 @@
     xmlns:local="using:YAOCr.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:control="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
     x:Name="conversationMessageItemControl">
 
     <Grid>
-		<TextBlock Text="{Binding ElementName=conversationMessageItemControl, Path=Message.Content}" />
+		<control:MarkdownTextBlock Text="{Binding ElementName=conversationMessageItemControl, Path=Message.Content}"
+        Style="{ThemeResource ThemedMarkdownTextBlockStyle}"/>
 	</Grid>
 </UserControl>
