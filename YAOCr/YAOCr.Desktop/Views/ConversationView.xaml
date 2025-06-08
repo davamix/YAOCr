@@ -18,6 +18,7 @@
 			<ColumnDefinition Width="3*" />
 		</Grid.ColumnDefinitions>
 
+		<!-- Conversations panel (left side) -->
 		<Border Grid.Column="0">
 			<Grid Style="{ThemeResource ThemedGridStyle}">
 				<Grid.RowDefinitions>
@@ -62,18 +63,31 @@
 			</Grid>
 		</Border>
 
+		<!-- Messages panel (right side) -->
 		<Border Grid.Column="1">
-			<ListView x:Name="lstMessages" ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}"
-					  >
-				<ListView.ItemContainerStyleSelector>
-					<selectors:MessageStyleSelector />
-				</ListView.ItemContainerStyleSelector>
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<controls:ConversationMessageItem Message="{Binding}" />
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<ListView x:Name="lstMessages"
+				Grid.Row="0"
+						  ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}">
+					<ListView.ItemContainerStyleSelector>
+						<selectors:MessageStyleSelector />
+					</ListView.ItemContainerStyleSelector>
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<controls:ConversationMessageItem Message="{Binding}" />
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+
+				<controls:Prompt Grid.Row="1"
+				SendCommand="{Binding SendCommand}"/>
+			</Grid>
+			
 		</Border>
 
 		<!-- TEST: To be removed -->

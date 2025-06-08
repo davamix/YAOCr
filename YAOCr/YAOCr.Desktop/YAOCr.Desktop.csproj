@@ -13,11 +13,13 @@
   <ItemGroup>
     <None Remove="Controls\ConversationItem.xaml" />
     <None Remove="Controls\ConversationMessageItem.xaml" />
+    <None Remove="Controls\Prompt.xaml" />
     <None Remove="Themes\Dark.xaml" />
     <None Remove="Themes\ThemeAwareStyles.xaml" />
     <None Remove="Views\ConversationView.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Remove="Controls\Prompt.xaml" />
     <Page Remove="Themes\Dark.xaml" />
     <Page Remove="Themes\Light.xaml" />
   </ItemGroup>

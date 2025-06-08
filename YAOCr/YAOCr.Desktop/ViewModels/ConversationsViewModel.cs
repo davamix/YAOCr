@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using YAOCr.Core.Models;
 using YAOCr.Core.Providers;
 
@@ -27,5 +28,10 @@ public partial class ConversationsViewModel : ObservableObject {
     [RelayCommand]
     private void SaveConversation(Conversation conversation) {
 
+    }
+
+    [RelayCommand]
+    private void Send() {
+        Debug.WriteLine("Send command executed");
     }
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls">
+					xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+					xmlns:custom="using:YAOCr.Controls">
 
 	<ResourceDictionary.MergedDictionaries>
 		<XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
@@ -351,6 +352,7 @@
 										AutomationProperties.AccessibilityView="Raw"
 										HorizontalAlignment="Stretch"
 										VerticalAlignment="Stretch" />
+
 							</Grid>
 						</Border>
 					</Grid>
@@ -363,7 +365,7 @@
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource LightListViewItemContainerStyle}">
 		<Setter Property="Margin"
-				Value="0, 5, 15, 10" />
+				Value="0, 5, 36, 10" />
 		<Setter Property="HorizontalAlignment"
 				Value="Right" />
 		<Setter Property="Template">
@@ -382,8 +384,8 @@
 									</VisualState.Setters>-->
 								</VisualState>
 								<VisualState x:Name="PointerOver">
-									
-								
+
+
 									<!--<Storyboard>
 										<ColorAnimation Storyboard.TargetName="BorderBackground"
 														Storyboard.TargetProperty="Color"
@@ -402,7 +404,7 @@
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 						<Border x:Name="ListViewItemBorder"
-								Padding="{TemplateBinding Padding}"
+								Padding="15"
 								CornerRadius="0"
 								BorderThickness="1"
 								BorderBrush="{StaticResource LightBase600Color}">
@@ -414,7 +416,7 @@
 											  Content="{TemplateBinding Content}"
 											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
 											  VerticalAlignment="{TemplateBinding VerticalAlignment}"
-											  HorizontalContentAlignment="Right"/>
+											  HorizontalContentAlignment="Right" />
 						</Border>
 					</Grid>
 				</ControlTemplate>
@@ -426,7 +428,7 @@
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource LightListViewItemContainerStyle}">
 		<Setter Property="Margin"
-				Value="0,10,0,0" />
+				Value="0,10,36,0" />
 		<Setter Property="HorizontalAlignment"
 				Value="Left" />
 		<Setter Property="Template">
@@ -444,9 +446,9 @@
 										</Setter>
 									</VisualState.Setters>-->
 								</VisualState>
-								
+
 								<VisualState x:Name="PointerOver">
-									
+
 									<!--<Storyboard>
 										<ColorAnimation Storyboard.TargetName="BorderBackground"
 														Storyboard.TargetProperty="Color"
@@ -465,7 +467,7 @@
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 						<Border x:Name="ListViewItemBorder"
-								Padding="{TemplateBinding Padding}"
+								Padding="15"
 								CornerRadius="0"
 								BorderThickness="1"
 								BorderBrush="{StaticResource LightPrimary600Color}">
@@ -476,8 +478,7 @@
 							<ContentPresenter x:Name="ContentPresenter"
 											  Content="{TemplateBinding Content}"
 											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-											  VerticalAlignment="{TemplateBinding VerticalAlignment}"
-											  />
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
 						</Border>
 					</Grid>
 				</ControlTemplate>
@@ -493,8 +494,6 @@
 				Value="Transparent" />
 		<Setter Property="Margin"
 				Value="5" />
-		<Setter Property="Padding"
-				Value="0" />
 		<Setter Property="CodeBackground"
 				Value="{StaticResource LightRegionAltColor}" />
 		<Setter Property="CodeForeground"
@@ -504,4 +503,139 @@
 		<Setter Property="CodePadding"
 				Value="0" />-->
 	</Style>
+
+	<Style x:Key="LightPromptStyle"
+		   TargetType="custom:Prompt"
+		   BasedOn="{StaticResource LightTextBoxStyle}">
+		<Setter Property="Margin"
+				Value="0,16,0,16" />
+		<Setter Property="AcceptsReturn"
+				Value="True" />
+		<Setter Property="TextWrapping"
+				Value="Wrap" />
+		<Setter Property="MaxHeight"
+				Value="100" />
+		<Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+				Value="Auto" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="TextBox">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightRegionColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="PointerOver">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBrush"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightBase1100Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Focused">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBrush"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightPrimary600Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Disabled">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightRegionAltColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+							<VisualStateGroup x:Name="ButtonStates">
+								<VisualState x:Name="ButtonVisible">
+									<Storyboard>
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeleteButton"
+																	   Storyboard.TargetProperty="Visibility">
+											<DiscreteObjectKeyFrame KeyTime="0"
+																	Value="Visible" />
+										</ObjectAnimationUsingKeyFrames>
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="ButtonCollapsed" />
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+
+						<Border x:Name="BorderElement"
+								Background="Transparent"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								MinWidth="{TemplateBinding MinWidth}"
+								MinHeight="{TemplateBinding MinHeight}">
+							<Border.BorderBrush>
+								<SolidColorBrush x:Name="BorderBrush"
+												 Color="{StaticResource LightBase900Color}" />
+							</Border.BorderBrush>
+							<Grid>
+								<Grid.Background>
+									<SolidColorBrush x:Name="BorderBackground"
+													 Color="{StaticResource LightRegionColor}" />
+								</Grid.Background>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="Auto" />
+								</Grid.ColumnDefinitions>
+
+								<ScrollViewer x:Name="ContentElement"
+											  Grid.Column="0"
+											  HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+											  VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+											  HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+											  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+											  IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
+											  IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+											  IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+											  Margin="{TemplateBinding BorderThickness}"
+											  Padding="{TemplateBinding Padding}"
+											  IsTabStop="False"
+											  ZoomMode="Disabled"
+											  AutomationProperties.AccessibilityView="Raw" />
+
+								<TextBlock x:Name="PlaceholderTextContentPresenter"
+										   Grid.Column="0"
+										   Text="{TemplateBinding PlaceholderText}"
+										   Foreground="{ThemeResource TextControlPlaceholderForeground}"
+										   IsHitTestVisible="False"
+										   Margin="{TemplateBinding BorderThickness}"
+										   Padding="{TemplateBinding Padding}"
+										   Visibility="Collapsed" />
+
+								<Button x:Name="SendButton"
+										Grid.Column="1"
+										Style="{StaticResource LightButtonStyle}"
+										BorderThickness="0"
+										IsTabStop="False"
+										AutomationProperties.AccessibilityView="Raw"
+										HorizontalAlignment="Stretch"
+										VerticalAlignment="Stretch">
+									<FontIcon Glyph="&#xE724;" />
+								</Button>
+
+							</Grid>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!--<Style x:Key="LightSendButtonStyle"
+		   TargetType="Button"
+		   BasedOn="{StaticResource LightButtonStyle}">
+		   
+		   </Style>-->
+
 </ResourceDictionary>

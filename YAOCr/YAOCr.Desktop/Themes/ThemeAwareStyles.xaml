@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls">
+					xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+					xmlns:custom="using:YAOCr.Controls">
 
 	<ResourceDictionary.ThemeDictionaries>
 		<ResourceDictionary x:Key="Light">
@@ -32,6 +33,9 @@
 			<Style x:Key="ThemedMarkdownTextBlockStyle"
 				   TargetType="controls:MarkdownTextBlock"
 				   BasedOn="{StaticResource LightMarkdownTextBlockStyle}" />
+			<Style x:Key="ThemedPromptStyle"
+				   TargetType="custom:Prompt"
+				   BasedOn="{StaticResource LightPromptStyle}" />
 		</ResourceDictionary>
 
 		<ResourceDictionary x:Key="Dark">
@@ -62,6 +66,9 @@
 			<Style x:Key="ThemedMarkdownTextBlockStyle"
 				   TargetType="controls:MarkdownTextBlock"
 				   BasedOn="{StaticResource DarkMarkdownTextBlockStyle}" />
+			<Style x:Key="ThemedPromptStyle"
+				   TargetType="custom:Prompt"
+				   BasedOn="{StaticResource DarkPromptStyle}" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>
