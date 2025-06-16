@@ -32,9 +32,10 @@ namespace YAOCr {
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {
 
-            
+
             Ioc.Default.ConfigureServices(
             new ServiceCollection()
+                .RegisterConfiguration()
                 .RegisterViewModels()
                 .RegisterProviders()
                 .RegisterServices()
@@ -45,9 +46,9 @@ namespace YAOCr {
             m_window.CenterOnScreen();
             m_window.Activate();
 
-            
+
         }
 
-        
+
     }
 }

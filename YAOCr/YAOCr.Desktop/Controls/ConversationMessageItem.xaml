@@ -8,7 +8,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:control="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
-    x:Name="conversationMessageItemControl">
+    x:Name="conversationMessageItemControl"
+	Loaded="conversationMessageItemControl_Loaded">
+
+	<UserControl.Resources>
+		<Storyboard x:Name="ConversationMessageItemFadeInStoryboard">
+			<DoubleAnimation Storyboard.TargetName="conversationMessageItemControl"
+							 Storyboard.TargetProperty="Opacity"
+							 From="0.0"
+							 To="1.0"
+							 Duration="0:0:0.2" />
+		</Storyboard>
+	</UserControl.Resources>
 
     <Grid>
 		<control:MarkdownTextBlock Text="{Binding ElementName=conversationMessageItemControl, Path=Message.Content}"

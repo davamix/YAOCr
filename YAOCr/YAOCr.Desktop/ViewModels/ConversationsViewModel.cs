@@ -4,16 +4,19 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using YAOCr.Core.Models;
 using YAOCr.Core.Providers;
+using YAOCr.Services;
 
 namespace YAOCr.ViewModels;
 public partial class ConversationsViewModel : ObservableObject {
     private readonly IConversationProvider _conversationProvider;
+    private readonly DialogService _dialogService;
 
     public ObservableCollection<Conversation> Conversations { get; set; } = new();
 
-    public ConversationsViewModel(IConversationProvider conversationProvider) {
+    public ConversationsViewModel(IConversationProvider conversationProvider,
+        DialogService dialogService) {
         _conversationProvider = conversationProvider;
-
+        _dialogService = dialogService;
         InitializeConversations();
     }
 
@@ -33,5 +36,10 @@ public partial class ConversationsViewModel : ObservableObject {
     [RelayCommand]
     private void Send() {
         Debug.WriteLine("Send command executed");
+    }
+
+    [RelayCommand]
+    private void OpenSettingsDialog() {
+        _dialogService.OpenDialogSettings();
     }
 }

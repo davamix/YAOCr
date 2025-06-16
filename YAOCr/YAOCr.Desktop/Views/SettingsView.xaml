@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="YAOCr.Views.SettingsView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="using:YAOCr.Views"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+			 mc:Ignorable="d"
+			 Visibility="Collapsed">
+
+	<Grid Style="{ThemeResource ThemedDialogMainGridStyle}">
+		<Grid Style="{ThemeResource ThemedDialogCotentGridStyle}">
+			<StackPanel>
+				<!-- HEADER -->
+				<Grid Style="{ThemeResource ThemedDialogGridHeaderStyle}">
+					<TextBlock Text="Settings"
+							   Style="{ThemeResource ThemedDialogTextBlockHeaderStyle}" />
+
+					<Button x:Name="btnClose"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Top"
+							Click="btnClose_Click"
+							PointerEntered="btn_PointerEntered"
+							PointerExited="btn_PointerExited"
+							Style="{ThemeResource ThemedCloseDialogButtonStyle}"
+							Command="{Binding SaveSettingsCommand}">
+						<FontIcon Glyph="&#xE711;" />
+					</Button>
+				</Grid>
+
+				<!-- SETTINGS -->
+				<ScrollViewer>
+					<StackPanel Padding="16">
+						<TextBlock Text="General"
+								   Margin="0, 16, 0, 12"
+								   Style="{StaticResource SubtitleTextBlockStyle}" />
+
+
+						<controls:SettingsCard Header="Ollama Server Url"
+											   Description="Set the address of Ollama server">
+							<TextBox Text="{Binding Settings.OllamaServerAddress, Mode=TwoWay}"
+									 Style="{ThemeResource ThemedTextBoxStyle}"
+									 Width="250"
+									 MaxWidth="250" />
+						</controls:SettingsCard>
+
+						<controls:SettingsCard Header="Qdrant Server Url"
+											   Description="Set the address of Qdrant server">
+							<TextBox Text="{Binding Settings.QdrantServerAddress, Mode=TwoWay}"
+									 Style="{ThemeResource ThemedTextBoxStyle}"
+									 Width="250"
+									 MaxWidth="250" />
+						</controls:SettingsCard>
+
+						<TextBlock Text="Appereance"
+								   Margin="0, 16, 0, 12"
+								   Style="{StaticResource SubtitleTextBlockStyle}" />
+						<controls:SettingsCard  Header="Application theme"
+												Description="Choose the application theme">
+							<controls:SettingsCard.HeaderIcon>
+								<FontIcon Glyph="&#xE790;" />
+							</controls:SettingsCard.HeaderIcon>
+
+							<ComboBox x:Name="cmbTheme"
+									  SelectedItem="{Binding Settings.Theme, Mode=TwoWay}"
+									  Style="{ThemeResource ThemedComboBoxStyle}"
+									  ItemContainerStyle="{ThemeResource ThemedComboBoxItemContainerStyle}"
+									  SelectionChanged="cmbTheme_SelectionChanged">
+								<x:String>Light</x:String>
+								<x:String>Dark</x:String>
+							</ComboBox>
+
+						</controls:SettingsCard>
+					</StackPanel>
+				</ScrollViewer>
+
+
+			</StackPanel>
+		</Grid>
+
+	</Grid>
+</UserControl>

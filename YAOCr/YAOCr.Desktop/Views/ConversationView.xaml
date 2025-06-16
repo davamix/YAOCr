@@ -24,6 +24,7 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
 				<Button x:Name="btnNewConversation"
@@ -31,8 +32,8 @@
 						Style="{ThemeResource ThemedButtonStyle}"
 						HorizontalAlignment="Stretch"
 						Padding="16"
-						PointerEntered="btnConversation_PointerEntered"
-						PointerExited="btnConversation_PointerExited">
+						PointerEntered="btn_PointerEntered"
+						PointerExited="btn_PointerExited">
 					<StackPanel Orientation="Horizontal"
 								HorizontalAlignment="Center">
 						<TextBlock Text="New Conversation"
@@ -60,6 +61,22 @@
 					</ListView.ItemTemplate>
 				</ListView>
 
+				<Button x:Name="btnSettings"
+						Grid.Row="2"
+						Style="{ThemeResource ThemedButtonStyle}"
+						HorizontalAlignment="Stretch"
+						Padding="16"
+						PointerEntered="btn_PointerEntered"
+						PointerExited="btn_PointerExited"
+						Command="{Binding OpenSettingsDialogCommand}">
+					<StackPanel Orientation="Horizontal"
+								HorizontalAlignment="Center">
+						<TextBlock Text="Settings"
+								   TextAlignment="Center"
+								   Margin="0,0,16,0" />
+						<FontIcon Glyph="&#xE713;" />
+					</StackPanel>
+				</Button>
 			</Grid>
 		</Border>
 
@@ -72,7 +89,7 @@
 				</Grid.RowDefinitions>
 
 				<ListView x:Name="lstMessages"
-				Grid.Row="0"
+						  Grid.Row="0"
 						  ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}">
 					<ListView.ItemContainerStyleSelector>
 						<selectors:MessageStyleSelector />
@@ -84,41 +101,16 @@
 					</ListView.ItemTemplate>
 				</ListView>
 
-				<controls:Prompt Grid.Row="1"
-				SendCommand="{Binding SendCommand}"/>
+				<controls:Prompt Grid.Row="0"
+								 SendCommand="{Binding SendCommand}"
+								 PlaceholderText="Type your message"
+								 HorizontalAlignment="Stretch"
+								 HorizontalContentAlignment="Stretch"
+								 VerticalAlignment="Bottom"/>
+
 			</Grid>
-			
+
 		</Border>
-
-		<!-- TEST: To be removed -->
-		<StackPanel VerticalAlignment="Center">
-			<Button x:Name="btnHello"
-					Content="Enabled button"
-					Style="{ThemeResource ThemedButtonStyle}" />
-
-			<!--<ListView>
-				<ListViewItem Style="{StaticResource DarkViewItemStyle}">Item A</ListViewItem>
-				<ListViewItem Style="{StaticResource DarkViewItemStyle}">Item B</ListViewItem>
-				<ListViewItem Style="{StaticResource DarkViewItemStyle}">Item C</ListViewItem>
-			</ListView>-->
-
-			<!--<Button x:Name="btnThemeToggle"
-					Click="btnThemeToggle_Click"
-					Content="Toggle Theme"
-					Style="{ThemeResource ThemedButtonStyle}"/>-->
-
-			<Button x:Name="btnToDark"
-					Click="btnToDark_Click"
-					Content="Switch to Dark Theme"
-					Style="{ThemeResource ThemedButtonStyle}" />
-			<Button x:Name="btnToLight"
-					Click="btnToLight_Click"
-					Content="Switch to Light Theme"
-					Style="{ThemeResource ThemedButtonStyle}" />
-			<TextBox Text="Hello"
-					 Style="{ThemeResource ThemedTextBoxStyle}" />
-		</StackPanel>
-
 
 	</Grid>
 

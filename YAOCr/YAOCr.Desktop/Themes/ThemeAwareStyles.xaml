@@ -15,6 +15,9 @@
 			<Style x:Key="ThemedButtonStyle"
 				   TargetType="Button"
 				   BasedOn="{StaticResource LightButtonStyle}" />
+			<Style x:Key="ThemedCloseDialogButtonStyle"
+				   TargetType="Button"
+				   BasedOn="{StaticResource LightCloseDialogButtonStyle}" />
 			<Style x:Key="ThemedListViewItemContainerStyle"
 				   TargetType="ListViewItem"
 				   BasedOn="{StaticResource LightListViewItemContainerStyle}" />
@@ -36,6 +39,27 @@
 			<Style x:Key="ThemedPromptStyle"
 				   TargetType="custom:Prompt"
 				   BasedOn="{StaticResource LightPromptStyle}" />
+			<Style x:Key="ThemedSrollViewerSettingsStyle"
+				   TargetType="ScrollViewer"
+				   BasedOn="{StaticResource LightScrollViewerSettingsStyle}" />
+			<Style x:Key="ThemedDialogMainGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource LightDialogMainGridStyle}" />
+			<Style x:Key="ThemedDialogGridHeaderStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource LightDialogGridHeaderStyle}" />
+			<Style x:Key="ThemedDialogTextBlockHeaderStyle"
+				   TargetType="TextBlock"
+				   BasedOn="{StaticResource LightDialogTextBlockHeaderStyle}" />
+			<Style x:Key="ThemedDialogCotentGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource LightDialogCotentGridStyle}" />
+			<Style x:Key="ThemedComboBoxItemContainerStyle"
+				   TargetType="ComboBoxItem"
+				   BasedOn="{StaticResource LightComboBoxItemContainerStyle}" />
+			<Style x:Key="ThemedComboBoxStyle"
+				   TargetType="ComboBox"
+				   BasedOn="{StaticResource LightComboBoxStyle}" />
 		</ResourceDictionary>
 
 		<ResourceDictionary x:Key="Dark">
@@ -48,6 +72,9 @@
 			<Style x:Key="ThemedButtonStyle"
 				   TargetType="Button"
 				   BasedOn="{StaticResource DarkButtonStyle}" />
+			<Style x:Key="ThemedCloseDialogButtonStyle"
+				   TargetType="Button"
+				   BasedOn="{StaticResource DarkCloseDialogButtonStyle}" />
 			<Style x:Key="ThemedListViewItemContainerStyle"
 				   TargetType="ListViewItem"
 				   BasedOn="{StaticResource DarkListViewItemContainerStyle}" />
@@ -69,6 +96,27 @@
 			<Style x:Key="ThemedPromptStyle"
 				   TargetType="custom:Prompt"
 				   BasedOn="{StaticResource DarkPromptStyle}" />
+			<Style x:Key="ThemedSrollViewerSettingsStyle"
+				   TargetType="ScrollViewer"
+				   BasedOn="{StaticResource DarkScrollViewerSettingsStyle}" />
+			<Style x:Key="ThemedDialogMainGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource DarkDialogMainGridStyle}" />
+			<Style x:Key="ThemedDialogGridHeaderStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource DarkDialogGridHeaderStyle}" />
+			<Style x:Key="ThemedDialogTextBlockHeaderStyle"
+				   TargetType="TextBlock"
+				   BasedOn="{StaticResource DarkDialogTextBlockHeaderStyle}" />
+			<Style x:Key="ThemedDialogCotentGridStyle"
+				   TargetType="Grid"
+				   BasedOn="{StaticResource DarkDialogCotentGridStyle}" />
+			<Style x:Key="ThemedComboBoxItemContainerStyle"
+				   TargetType="ComboBoxItem"
+				   BasedOn="{StaticResource DarkComboBoxItemContainerStyle}" />
+			<Style x:Key="ThemedComboBoxStyle"
+				   TargetType="ComboBox"
+				   BasedOn="{StaticResource DarkComboBoxStyle}" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

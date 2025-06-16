@@ -13,5 +13,7 @@
 		  Style="{ThemeResource ThemedMainGridStyle}"
 		  RequestedTheme="{x:Bind RequestedTheme, Mode=OneWay}">
 		<views:ConversationView />
+
+		<views:SettingsView />
 	</Grid>
 </Window>

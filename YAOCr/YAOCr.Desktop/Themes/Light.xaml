@@ -14,6 +14,8 @@
 	<Color x:Key="LightRegionForegroundColor">#FFEAEAEA</Color>
 	<Color x:Key="LightRegionAltForegroundColor">#FFCACACA</Color>
 
+	<Color x:Key="LightBlurColor">#55000000</Color>
+
 	<Color x:Key="LightBase100Color">#FFA9ECCA</Color>
 	<Color x:Key="LightBase200Color">#FF92E4BA</Color>
 	<Color x:Key="LightBase300Color">#FF7BDCAA</Color>
@@ -37,6 +39,11 @@
 	<Color x:Key="LightPrimary900Color">#FF031B12</Color>
 	<Color x:Key="LightPrimary1000Color">#FF01180E</Color>
 	<Color x:Key="LightPrimary1100Color">#FF001409</Color>
+
+	<Color x:Key="LightSecondaryColor">#5CA3E5</Color>
+	<Color x:Key="LightSecondaryAltColor">#82B7E9</Color>
+	<Color x:Key="LightSelectedItemColor">#6EC2CA</Color>
+	<Color x:Key="LightPointerOverItemColor">#84CEA8</Color>
 
 	<Style x:Key="LightMainGridStyle"
 		   TargetType="Grid">
@@ -161,6 +168,63 @@
 							<Border.Background>
 								<SolidColorBrush x:Name="ButtonBackground"
 												 Color="{StaticResource LightBase600Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="LightCloseDialogButtonStyle"
+		   TargetType="Button">
+		<Setter Property="Foreground"
+				Value="{StaticResource LightRegionForegroundColor}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightPrimary600Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="PointerOver">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightSecondaryColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Pressed">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightSecondaryAltColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+
+						<Border x:Name="ButtonBorder"
+								BorderThickness="0"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								Padding="{TemplateBinding Padding}"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="ButtonBackground"
+												 Color="{StaticResource LightPrimary600Color}" />
 							</Border.Background>
 							<ContentPresenter x:Name="ContentPresenter"
 											  Content="{TemplateBinding Content}"
@@ -374,15 +438,8 @@
 					<Grid>
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="CommonStates">
-								<VisualState x:Name="Normal">
-									<!--<VisualState.Setters>
-										<Setter Target="ListViewItemBorder.Background">
-											<Setter.Value>
-												<SolidColorBrush Color="Violet" />
-											</Setter.Value>
-										</Setter>
-									</VisualState.Setters>-->
-								</VisualState>
+								<VisualState x:Name="Normal" />
+
 								<VisualState x:Name="PointerOver">
 
 
@@ -437,15 +494,8 @@
 					<Grid>
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="CommonStates">
-								<VisualState x:Name="Normal">
-									<!--<VisualState.Setters>
-										<Setter Target="ListViewItemBorder.Background">
-											<Setter.Value>
-												<SolidColorBrush Color="LawnGreen" />
-											</Setter.Value>
-										</Setter>
-									</VisualState.Setters>-->
-								</VisualState>
+								<VisualState x:Name="Normal" />
+
 
 								<VisualState x:Name="PointerOver">
 
@@ -508,7 +558,7 @@
 		   TargetType="custom:Prompt"
 		   BasedOn="{StaticResource LightTextBoxStyle}">
 		<Setter Property="Margin"
-				Value="0,16,0,16" />
+				Value="0,16,36,16" />
 		<Setter Property="AcceptsReturn"
 				Value="True" />
 		<Setter Property="TextWrapping"
@@ -569,12 +619,17 @@
 								<VisualState x:Name="ButtonCollapsed" />
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
-
 						<Border x:Name="BorderElement"
 								Background="Transparent"
 								BorderThickness="{TemplateBinding BorderThickness}"
 								MinWidth="{TemplateBinding MinWidth}"
-								MinHeight="{TemplateBinding MinHeight}">
+								MinHeight="{TemplateBinding MinHeight}"
+								Height="{TemplateBinding Height}"
+								VerticalAlignment="Bottom">
+							<Border.RenderTransform>
+								<TranslateTransform x:Name="TranslateTransform"
+													Y="0" />
+							</Border.RenderTransform>
 							<Border.BorderBrush>
 								<SolidColorBrush x:Name="BorderBrush"
 												 Color="{StaticResource LightBase900Color}" />
@@ -632,10 +687,219 @@
 		</Setter>
 	</Style>
 
-	<!--<Style x:Key="LightSendButtonStyle"
-		   TargetType="Button"
-		   BasedOn="{StaticResource LightButtonStyle}">
-		   
-		   </Style>-->
+	<Style x:Key="LightScrollViewerSettingsStyle"
+		   TargetType="ScrollViewer">
+		<Setter Property="Background"
+				Value="{StaticResource LightRegionColor}" />
+	</Style>
 
+	<Style x:Key="LightDialogMainGridStyle"
+		   TargetType="Grid">
+		<Setter Property="Background"
+				Value="{StaticResource LightBlurColor}" />
+	</Style>
+
+	<Style x:Key="LightDialogCotentGridStyle"
+		   TargetType="Grid">
+		<Setter Property="Width"
+				Value="1280" />
+		<Setter Property="Height"
+				Value="720" />
+		<Setter Property="HorizontalAlignment"
+				Value="Center" />
+		<Setter Property="VerticalAlignment"
+				Value="Center" />
+		<Setter Property="Background"
+				Value="{StaticResource LightRegionColor}" />
+	</Style>
+
+	<Style x:Key="LightDialogGridHeaderStyle"
+		   TargetType="Grid">
+		<Setter Property="VerticalAlignment"
+				Value="Center" />
+		<Setter Property="HorizontalAlignment"
+				Value="Stretch" />
+		<Setter Property="Background"
+				Value="{StaticResource LightBase200Color}" />
+	</Style>
+
+	<Style x:Key="LightDialogTextBlockHeaderStyle"
+		   TargetType="TextBlock"
+		   BasedOn="{StaticResource TitleLargeTextBlockStyle}">
+		<Setter Property="HorizontalAlignment"
+				Value="Center" />
+		<Setter Property="VerticalAlignment"
+				Value="Center" />
+		<Setter Property="Margin"
+				Value="36" />
+	</Style>
+
+	<Style x:Key="LightComboBoxItemContainerStyle"
+		   TargetType="ComboBoxItem">
+		<Setter Property="HorizontalContentAlignment"
+				Value="Stretch" />
+		<Setter Property="VerticalContentAlignment"
+				Value="Stretch" />
+		<Setter Property="Padding"
+				Value="0" />
+		<Setter Property="Background"
+				Value="{StaticResource LightBase200Color}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ComboBoxItem">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal" />
+								<VisualState x:Name="PointerOver">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightPointerOverItemColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Selected">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightSelectedItemColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Border x:Name="ListViewItemBorder"
+								Padding="6"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="BorderBackground"
+												 Color="{StaticResource LightBase200Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="LightComboBoxStyle"
+		   TargetType="ComboBox"
+		   BasedOn="{StaticResource DefaultComboBoxStyle}">
+		<Setter Property="MinWidth"
+				Value="120" />
+		<Setter Property="MinHeight"
+				Value="32" />
+		<Setter Property="Foreground"
+				Value="{ThemeResource ComboBoxForeground}" />
+		<Setter Property="BorderThickness"
+				Value="1" />
+		<Setter Property="ItemContainerStyle"
+				Value="{StaticResource LightComboBoxItemContainerStyle}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ComboBox">
+					<Grid x:Name="MainGrid">
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBrush"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightBase900Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="PointerOver">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBrush"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightBase1100Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Pressed">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightBase600Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Disabled">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="BorderBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightRegionAltColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+
+						</VisualStateManager.VisualStateGroups>
+
+						<Border x:Name="Background"
+								Background="Transparent"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								MinWidth="{TemplateBinding MinWidth}"
+								MinHeight="{TemplateBinding MinHeight}">
+							<Border.BorderBrush>
+								<SolidColorBrush x:Name="BorderBrush"
+												 Color="{StaticResource LightBase900Color}" />
+							</Border.BorderBrush>
+							<Grid>
+								<Grid.Background>
+									<SolidColorBrush x:Name="BorderBackground"
+													 Color="{StaticResource LightRegionColor}" />
+								</Grid.Background>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="32" />
+								</Grid.ColumnDefinitions>
+
+								<ContentPresenter x:Name="ContentPresenter"
+												  Grid.Column="0"
+												  Content="{TemplateBinding SelectionBoxItem}"
+												  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+												  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+												  Padding="{TemplateBinding Padding}"
+												  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+												  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+
+								<FontIcon Grid.Column="1"
+										  Glyph="&#xE0E5;"
+										  FontFamily="{ThemeResource SymbolThemeFontFamily}"
+										  FontSize="12"
+										  HorizontalAlignment="Center"
+										  VerticalAlignment="Center"
+										  Foreground="{ThemeResource ComboBoxForeground}" />
+
+								<Popup x:Name="Popup"
+									   IsLightDismissEnabled="True"
+									   LightDismissOverlayMode="On"
+									   PlacementTarget="{Binding ElementName=MainGrid}">
+									<Border x:Name="PopupBorder"
+											Background="{StaticResource LightRegionColor}"
+											BorderBrush="{StaticResource LightBase900Color}"
+											BorderThickness="1">
+										<ScrollViewer x:Name="ScrollViewer"
+													  MaxHeight="{TemplateBinding MaxDropDownHeight}"
+													  MinWidth="{Binding ElementName=Background, Path=ActualWidth}"
+													  VerticalScrollMode="Auto"
+													  VerticalScrollBarVisibility="Auto">
+											<ItemsPresenter Margin="0,4,0,4" />
+										</ScrollViewer>
+									</Border>
+								</Popup>
+							</Grid>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 </ResourceDictionary>

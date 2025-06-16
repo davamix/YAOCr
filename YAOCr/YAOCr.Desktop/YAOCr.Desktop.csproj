@@ -11,12 +11,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="Controls\ConversationItem.xaml" />
     <None Remove="Controls\ConversationMessageItem.xaml" />
     <None Remove="Controls\Prompt.xaml" />
     <None Remove="Themes\Dark.xaml" />
     <None Remove="Themes\ThemeAwareStyles.xaml" />
     <None Remove="Views\ConversationView.xaml" />
+    <None Remove="Views\SettingsView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="Controls\Prompt.xaml" />
@@ -24,6 +26,9 @@
     <Page Remove="Themes\Light.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Themes\Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Content>
@@ -38,7 +43,10 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Markdown" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4188" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250513003" />
@@ -51,6 +59,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\YAOCr.Core\YAOCr.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
