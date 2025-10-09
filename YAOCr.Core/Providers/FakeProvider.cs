@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YAOCr.Core.Models;
 
 namespace YAOCr.Core.Providers;
-
-public interface IConversationProvider {
-    Task<List<Conversation>> GetConversationsAsync();
-}
 
 public class FakeConversationProvider : IConversationProvider {
     private List<Conversation> _conversations = new();
@@ -32,7 +29,7 @@ public class FakeConversationProvider : IConversationProvider {
             Name = "Conversation " + (_conversations.Count + 1),
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now,
-            Messages = new List<Message> {
+            Messages = new ObservableCollection<Message> {
                 new Message {
                     Id = Guid.NewGuid().ToString(),
                     Sender = SenderEnum.User,

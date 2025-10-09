@@ -10,4 +10,6 @@ public class Settings {
     public string OllamaServerAddress { get; set; } = string.Empty;
     public string QdrantServerAddress { get; set; } = string.Empty;
     public string LlmModelName { get; set; } = string.Empty;
+    public string EmbeddingsModelName { get; set; } = string.Empty;
+    public string OutputVectorSize { get; set; } = "768";
 }

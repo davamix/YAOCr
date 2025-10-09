@@ -592,6 +592,16 @@
 				Value="100" />
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility"
 				Value="Auto" />
+		<Setter Property="ToolTipService.ToolTip">
+			<Setter.Value>
+				<ToolTip>
+					<StackPanel>
+						<TextBlock Text="Press 'Enter' to send the message." />
+						<TextBlock Text="Press 'Shift + Enter' to add a new line." />
+					</StackPanel>
+				</ToolTip>
+			</Setter.Value>
+		</Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="TextBox">
@@ -696,6 +706,9 @@
 										AutomationProperties.AccessibilityView="Raw"
 										HorizontalAlignment="Stretch"
 										VerticalAlignment="Stretch">
+									<ToolTipService.ToolTip>
+										<TextBlock Text="Click to send the message" />
+									</ToolTipService.ToolTip>
 									<FontIcon Glyph="&#xE724;" />
 								</Button>
 

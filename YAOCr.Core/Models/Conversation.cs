@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +18,5 @@ public class Conversation {
     public string Name { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public List<Message> Messages { get; set; } = new();
+    public ObservableCollection<Message> Messages { get; set; } = new();
 }

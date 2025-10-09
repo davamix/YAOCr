@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YAOCr.Core.Providers;
+using YAOCr.Core.Services;
 using YAOCr.Services;
 using YAOCr.ViewModels;
 
@@ -22,6 +23,8 @@ public static class IocConfiguration {
     public static IServiceCollection RegisterServices(this IServiceCollection services) {
         services.AddSingleton<ThemeService>();
         services.AddSingleton<DialogService>();
+        services.AddSingleton<ILlmProvider, LlamaCppProvider>();
+        services.AddSingleton<IConversationsService, ConversationsService>();
 
         return services;
     }

@@ -36,15 +36,7 @@
 								   Margin="0, 16, 0, 12"
 								   Style="{StaticResource SubtitleTextBlockStyle}" />
 
-
-						<controls:SettingsCard Header="Ollama Server Url"
-											   Description="Set the address of Ollama server">
-							<TextBox Text="{Binding Settings.OllamaServerAddress, Mode=TwoWay}"
-									 Style="{ThemeResource ThemedTextBoxStyle}"
-									 Width="250"
-									 MaxWidth="250" />
-						</controls:SettingsCard>
-
+						<!-- Qdrant settings -->
 						<controls:SettingsCard Header="Qdrant Server Url"
 											   Description="Set the address of Qdrant server">
 							<TextBox Text="{Binding Settings.QdrantServerAddress, Mode=TwoWay}"
@@ -53,6 +45,33 @@
 									 MaxWidth="250" />
 						</controls:SettingsCard>
 
+						<!-- Ollama settings -->
+						<controls:SettingsExpander Header="Ollama Server Url"
+												   Description="Set the address of Ollama server">
+							<TextBox Text="{Binding Settings.OllamaServerAddress, Mode=TwoWay}"
+									 Style="{ThemeResource ThemedTextBoxStyle}"
+									 Width="250"
+									 MaxWidth="250" />
+
+							<controls:SettingsExpander.Items>
+								<controls:SettingsCard Header="Embeddings model"
+													   Description="Set the name of the model to generate the embeddings">
+									<TextBox Text="{Binding Settings.EmbeddingsModelName, Mode=TwoWay}"
+											 Style="{ThemeResource ThemedTextBoxStyle}"
+											 Width="250"
+											 MaxWidth="250" />
+								</controls:SettingsCard>
+
+								<controls:SettingsCard Header="Output vector size"
+													   Description="Set the value of output vector size">
+									<TextBox Text="{Binding Settings.OutputVectorSize, Mode=TwoWay}"
+											 Style="{ThemeResource ThemedTextBoxStyle}"
+											 Width="250" />
+								</controls:SettingsCard>
+							</controls:SettingsExpander.Items>
+						</controls:SettingsExpander>
+
+						<!-- Appereance settings -->
 						<TextBlock Text="Appereance"
 								   Margin="0, 16, 0, 12"
 								   Style="{StaticResource SubtitleTextBlockStyle}" />
@@ -74,7 +93,6 @@
 						</controls:SettingsCard>
 					</StackPanel>
 				</ScrollViewer>
-
 
 			</StackPanel>
 		</Grid>

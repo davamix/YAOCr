@@ -41,6 +41,6 @@ public sealed partial class ConversationMessageItem : UserControl
     }
 
     private void conversationMessageItemControl_Loaded(object sender, RoutedEventArgs e) {
-        this.ConversationMessageItemFadeInStoryboard. Begin();
+        this.ConversationMessageItemFadeInStoryboard.Begin();
     }
 }
