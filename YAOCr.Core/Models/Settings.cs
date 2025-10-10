@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace YAOCr.Core.Models;
 public class Settings {
     public string Theme { get; set; } = string.Empty;
-    public string OllamaServerAddress { get; set; } = string.Empty;
     public string QdrantServerAddress { get; set; } = string.Empty;
-    public string LlmModelName { get; set; } = string.Empty;
-    public string EmbeddingsModelName { get; set; } = string.Empty;
-    public string OutputVectorSize { get; set; } = "768";
+    public string CompletionAddress { get; set; } = string.Empty;
+    public string ChatAddress { get; set; } = string.Empty;
+    public string EmbeddingsAddress { get; set; } = string.Empty;
+    public string ModelName { get; set; } = string.Empty;
 }

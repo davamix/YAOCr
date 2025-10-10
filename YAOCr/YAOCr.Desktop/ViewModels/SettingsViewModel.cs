@@ -21,21 +21,21 @@ public partial class SettingsViewModel: ObservableObject {
     private void LoadConfiguration() {
         Settings = new Settings {
             Theme = _configuration["AppSettings:Theme"] ?? "Light",
-            OllamaServerAddress = _configuration["AppSettings:Ollama:Server"] ?? string.Empty,
             QdrantServerAddress = _configuration["AppSettings:Qdrant:Server"] ?? string.Empty,
-            LlmModelName = _configuration["AppSettings:Ollama:LlmModel"] ?? string.Empty,
-            EmbeddingsModelName = _configuration["AppSettings:Ollama:EmbeddingsModel"] ?? string.Empty,
-            OutputVectorSize = _configuration["AppSettings:Ollama:OutputVectorSize"] ?? "768"
+            CompletionAddress = _configuration["AppSettings:LlamaCpp:CompletionAddress"] ?? string.Empty,
+            ChatAddress = _configuration["AppSettings:LlamaCpp:ChatAddress"] ?? string.Empty,
+            EmbeddingsAddress = _configuration["AppSettings:LlamaCpp:EmbeddingsAddress"] ?? string.Empty,
+            ModelName = _configuration["AppSettings:LlamaCpp:ModelName"] ?? string.Empty
         };
     }
 
     [RelayCommand]
     private void SaveSettings() {
         _configuration["AppSettings:Theme"] = Settings.Theme;
-        _configuration["AppSettings:Ollama:Server"] = Settings.OllamaServerAddress;
         _configuration["AppSettings:Qdrant:Server"] = Settings.QdrantServerAddress;
-        _configuration["AppSettings:Ollama:LlmModel"] = Settings.LlmModelName;
-        _configuration["AppSettings:Ollama:EmbeddingsModel"] = Settings.EmbeddingsModelName;
-        _configuration["AppSettings:Ollama:OutputVectorSize"] = Settings.OutputVectorSize;
+        _configuration["AppSettings:LlamaCpp:ChatAddress"] = Settings.ChatAddress;
+        _configuration["AppSettings:LlamaCpp:CompletionAddress"] = Settings.CompletionAddress;
+        _configuration["AppSettings:LlamaCpp:EmbeddingsAddress"] = Settings.EmbeddingsAddress;
+        _configuration["AppSettings:LlamaCpp:ModelName"] = Settings.ModelName;
     }
 }

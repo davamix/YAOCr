@@ -41,32 +41,37 @@
 											   Description="Set the address of Qdrant server">
 							<TextBox Text="{Binding Settings.QdrantServerAddress, Mode=TwoWay}"
 									 Style="{ThemeResource ThemedTextBoxStyle}"
-									 Width="250"
-									 MaxWidth="250" />
+									 Width="320"
+									 MaxWidth="320" />
 						</controls:SettingsCard>
 
-						<!-- Ollama settings -->
-						<controls:SettingsExpander Header="Ollama Server Url"
-												   Description="Set the address of Ollama server">
-							<TextBox Text="{Binding Settings.OllamaServerAddress, Mode=TwoWay}"
-									 Style="{ThemeResource ThemedTextBoxStyle}"
-									 Width="250"
-									 MaxWidth="250" />
-
+						<!-- LLM Backend settings -->
+						<controls:SettingsExpander Header="LLM Backend"
+												   Description="Configure the LLM backend options">
 							<controls:SettingsExpander.Items>
-								<controls:SettingsCard Header="Embeddings model"
-													   Description="Set the name of the model to generate the embeddings">
-									<TextBox Text="{Binding Settings.EmbeddingsModelName, Mode=TwoWay}"
+								<controls:SettingsCard Header="Completion address">
+									<TextBox Text="{Binding Settings.CompletionAddress, Mode=TwoWay}"
 											 Style="{ThemeResource ThemedTextBoxStyle}"
-											 Width="250"
-											 MaxWidth="250" />
+											 Width="320"
+											 MaxWidth="320" />
 								</controls:SettingsCard>
-
-								<controls:SettingsCard Header="Output vector size"
-													   Description="Set the value of output vector size">
-									<TextBox Text="{Binding Settings.OutputVectorSize, Mode=TwoWay}"
+								<controls:SettingsCard Header="Chat address">
+									<TextBox Text="{Binding Settings.ChatAddress, Mode=TwoWay}"
 											 Style="{ThemeResource ThemedTextBoxStyle}"
-											 Width="250" />
+											 Width="320"
+											 MaxWidth="320" />
+								</controls:SettingsCard>
+								<controls:SettingsCard Header="Embeddings address">
+									<TextBox Text="{Binding Settings.EmbeddingsAddress, Mode=TwoWay}"
+											 Style="{ThemeResource ThemedTextBoxStyle}"
+											 Width="320"
+											 MaxWidth="320" />
+								</controls:SettingsCard>
+								<controls:SettingsCard Header="Model name">
+									<TextBox Text="{Binding Settings.ModelName, Mode=TwoWay}"
+											 Style="{ThemeResource ThemedTextBoxStyle}"
+											 Width="320"
+											 MaxWidth="320" />
 								</controls:SettingsCard>
 							</controls:SettingsExpander.Items>
 						</controls:SettingsExpander>

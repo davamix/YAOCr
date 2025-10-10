@@ -12,25 +12,12 @@ using YAOCr.Core.Dtos;
 
 namespace YAOCr.Core.Providers;
 
-public class MessageApi {
-    public string role { get; set; }
-    public string content { get; set; }
-}
-
-public class MessageContent {
-    public string model { get; set; }
-    public List<MessageApi> messages { get; set; }
-}
-
-
 public class LlamaCppProvider : ILlmProvider {
 
     private readonly IConfiguration _configuration;
     private readonly HttpClient _httpClient = new();
     private string _llmCompletionAddress;
     private string _llmChatAddress;
-
-
 
     public LlamaCppProvider(IConfiguration configuration) {
         _configuration = configuration;
