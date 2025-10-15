@@ -3,7 +3,11 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using YAOCr.Core.Models;
+using YAOCr.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Windows.Storage.Pickers;
+using System;
+using System.IO;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,6 +32,22 @@ public sealed partial class ConversationItem : UserControl {
                 new PropertyMetadata(null)
             );
 
+    public static readonly DependencyProperty DeleteCommandProperty =
+            DependencyProperty.RegisterAttached(
+                "DeleteCommand",
+                typeof(RelayCommand<Conversation>),
+                typeof(ConversationItem),
+                new PropertyMetadata(null)
+            );
+
+    public static readonly DependencyProperty ExportCommandProperty =
+            DependencyProperty.RegisterAttached(
+                "ExportCommand",
+                typeof(RelayCommand<Conversation>),
+                typeof(ConversationItem),
+                new PropertyMetadata(null)
+            );
+
     public Conversation Conversation {
         get { return (Conversation)GetValue(ConversationProperty); }
         set { SetValue(ConversationProperty, value); }
@@ -38,15 +58,25 @@ public sealed partial class ConversationItem : UserControl {
         set { SetValue(SaveCommandProperty, value); }
     }
 
+    public RelayCommand<Conversation> DeleteCommand {
+        get { return (RelayCommand<Conversation>)GetValue(DeleteCommandProperty); }
+        set { SetValue(DeleteCommandProperty, value); }
+    }
+
+    public RelayCommand<Conversation> ExportCommand {
+        get { return (RelayCommand<Conversation>)GetValue(ExportCommandProperty); }
+        set { SetValue(ExportCommandProperty, value); }
+    }
+
     public ConversationItem() {
         InitializeComponent();
     }
 
-    private void btnConversation_PointerEntered(object sender, PointerRoutedEventArgs e) {
+    private void btn_PointerEntered(object sender, PointerRoutedEventArgs e) {
         this.ProtectedCursor = InputSystemCursor.Create(InputSystemCursorShape.Hand);
     }
 
-    private void btnConversation_PointerExited(object sender, PointerRoutedEventArgs e) {
+    private void btn_PointerExited(object sender, PointerRoutedEventArgs e) {
         this.ProtectedCursor = InputSystemCursor.Create(InputSystemCursorShape.Arrow);
     }
 
@@ -72,11 +102,11 @@ public sealed partial class ConversationItem : UserControl {
     }
 
     private void gridReadItem_PointerEntered(object sender, PointerRoutedEventArgs e) {
-        fadeInButtonStoryboard.Begin();
+        fadeInRenameButtonStoryboard.Begin();
     }
 
     private void gridReadItem_PointerExited(object sender, PointerRoutedEventArgs e) {
-        fadeOutButtonStoryboard.Begin();
+        fadeOutRenameButtonStoryboard.Begin();
     }
 
     private void SaveConversationName(string newValue) {
@@ -86,4 +116,26 @@ public sealed partial class ConversationItem : UserControl {
         txtConversationName.Text = Conversation.Name;
     }
 
+    private async void btnExportConversation_Click(object sender, RoutedEventArgs e) {
+        var button = sender as Button;
+
+        if (button == null) return;
+
+        var picker = new FileSavePicker(button.XamlRoot.ContentIslandEnvironment.AppWindowId);
+
+        picker.FileTypeChoices.Add("JSON files", new[] { ".json" });
+        picker.DefaultFileExtension = ".json";
+        picker.SuggestedFileName = Conversation.Name;
+        picker.CommitButtonText = "Save file";
+        picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        picker.SuggestedFolder = "";
+
+        var result = await picker.PickSaveFileAsync();
+
+        if(result != null) {
+            string savePath = result.Path;
+            await File.WriteAllTextAsync(savePath, Conversation.ToJson());
+
+        }
+    }
 }

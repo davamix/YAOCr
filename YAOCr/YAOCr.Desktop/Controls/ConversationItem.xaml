@@ -14,17 +14,17 @@
 		  Padding="10">
 		<Grid x:Name="gridReadItem">
 			<Grid.Resources>
-				<Storyboard x:Name="fadeInButtonStoryboard">
-					<DoubleAnimation Storyboard.TargetProperty="Opacity"
-									 Storyboard.TargetName="btnRenameConversation"
+				<Storyboard x:Name="fadeInRenameButtonStoryboard">
+					<DoubleAnimation Storyboard.TargetName="panelTools"
+									 Storyboard.TargetProperty="Opacity"
 									 From="0"
 									 To="1"
 									 Duration="0:0:0.5" />
 				</Storyboard>
 
-				<Storyboard x:Name="fadeOutButtonStoryboard">
-					<DoubleAnimation Storyboard.TargetProperty="Opacity"
-									 Storyboard.TargetName="btnRenameConversation"
+				<Storyboard x:Name="fadeOutRenameButtonStoryboard">
+					<DoubleAnimation Storyboard.TargetName="panelTools"
+									 Storyboard.TargetProperty="Opacity"
 									 From="1"
 									 To="0"
 									 Duration="0:0:0.5" />
@@ -40,16 +40,37 @@
 					   Text="{Binding ElementName=conversationItemControl, Path=Conversation.Name}"
 					   VerticalAlignment="Center" />
 
-			<Button x:Name="btnRenameConversation"
-					Grid.Column="1"
-					Style="{ThemeResource ThemedButtonStyle}"
-					ToolTipService.ToolTip="Rename conversation"
-					Opacity="0"
-					PointerEntered="btnConversation_PointerEntered"
-					PointerExited="btnConversation_PointerExited"
-					Click="btnRenameConversation_Click">
-				<FontIcon Glyph="&#xE8AC;" />
-			</Button>
+			<StackPanel x:Name="panelTools"
+						Grid.Column="1"
+						Orientation="Horizontal"
+						Opacity="0">
+				<Button x:Name="btnRenameConversation"
+						Style="{ThemeResource ThemedButtonStyle}"
+						ToolTipService.ToolTip="Rename conversation"
+						PointerEntered="btn_PointerEntered"
+						PointerExited="btn_PointerExited"
+						Click="btnRenameConversation_Click">
+					<FontIcon Glyph="&#xE8AC;" />
+				</Button>
+
+				<Button x:Name="btnDeleteConversation"
+						Style="{ThemeResource ThemedButtonStyle}"
+						ToolTipService.ToolTip="Delete conversation"
+						PointerEntered="btn_PointerEntered"
+						PointerExited="btn_PointerExited">
+					<FontIcon Glyph="&#xE74D;" />
+				</Button>
+
+				<Button x:Name="btnExportConversation"
+						Style="{ThemeResource ThemedButtonStyle}"
+						ToolTipService.ToolTip="Export conversation"
+						PointerEntered="btn_PointerEntered"
+						PointerExited="btn_PointerExited"
+						Click="btnExportConversation_Click">
+					<FontIcon Glyph="&#xEDE1;" />
+				</Button>
+			</StackPanel>
+
 		</Grid>
 
 		<Grid x:Name="gridEditItem"
@@ -63,7 +84,7 @@
 					 Grid.Column="0"
 					 Style="{ThemeResource ThemedTextBoxStyle}"
 					 Text="{Binding ElementName=conversationItemControl, Path=Conversation.Name, Mode=TwoWay}"
-					 KeyUp="txtEditConversationName_KeyUp"/>
+					 KeyUp="txtEditConversationName_KeyUp" />
 
 			<Button x:Name="btnSave"
 					Grid.Column="1"
@@ -71,8 +92,8 @@
 					Margin="10,0,0,0"
 					Command="{Binding ElementName=conversationItemControl, Path=SaveCommand}"
 					CommandParameter="{Binding ElementName=conversationItemControl, Path=Conversation}"
-					PointerEntered="btnConversation_PointerEntered"
-					PointerExited="btnConversation_PointerExited"
+					PointerEntered="btn_PointerEntered"
+					PointerExited="btn_PointerExited"
 					Click="btnSave_Click">
 				<FontIcon Glyph="&#xE74E;" />
 			</Button>

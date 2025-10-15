@@ -55,7 +55,14 @@ public partial class ConversationsViewModel : ObservableObject {
 
     [RelayCommand]
     private void SaveConversation(Conversation conversation) {
+        //TODO: Save conversation name to DB
+    }
 
+    [RelayCommand]
+    private void DeleteConvesation(Conversation conversation) {
+        Conversations.Remove(conversation);
+
+        //TODO: Delete conversation from DB
     }
 
     [RelayCommand]

@@ -54,7 +54,8 @@
 						<DataTemplate>
 							<Border>
 								<controls:ConversationItem Conversation="{Binding Mode=TwoWay}"
-														   SaveCommand="{Binding ElementName=lstConversations, Path=DataContext.SaveConversationCommand}" />
+														   SaveCommand="{Binding ElementName=lstConversations, Path=DataContext.SaveConversationCommand}"
+														   DeleteCommand="{Binding ElementName=lstCoversations, Path=DataContext.DeleteConversationCommand}" />
 
 							</Border>
 						</DataTemplate>
