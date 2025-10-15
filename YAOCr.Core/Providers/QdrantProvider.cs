@@ -3,6 +3,7 @@ using Qdrant.Client;
 using Qdrant.Client.Grpc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using YAOCr.Core.Models;
@@ -37,7 +38,8 @@ public class QdrantProvider : IConversationProvider {
                 Size = _embeddingsVectorSize,
                 Distance = Distance.Cosine
             });
-        } catch {
+        } catch(Exception ex) {
+            Debug.WriteLine(ex.Message);
             throw;
         }
     }
