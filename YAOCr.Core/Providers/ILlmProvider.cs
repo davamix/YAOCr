@@ -11,4 +11,5 @@ public interface ILlmProvider {
     //Chat CreateChat();
     //IAsyncEnumerable<string> SendMessage(string message);
     Task<string> SendMessage(SendMessageRequest message);
+    Task<List<float[]>> GenerateEmbeddings(string text);
 }

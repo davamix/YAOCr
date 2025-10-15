@@ -16,7 +16,8 @@ public static class IocConfiguration {
     }
 
     public static IServiceCollection RegisterProviders(this IServiceCollection services) {
-        services.AddTransient<IConversationProvider, FakeConversationProvider>();
+        //services.AddTransient<IConversationProvider, FakeConversationProvider>();
+        services.AddSingleton<IConversationProvider, QdrantProvider>();
         return services;
     }
 

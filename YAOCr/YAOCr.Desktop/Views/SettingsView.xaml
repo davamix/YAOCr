@@ -94,7 +94,6 @@
 								<x:String>Light</x:String>
 								<x:String>Dark</x:String>
 							</ComboBox>
-
 						</controls:SettingsCard>
 					</StackPanel>
 				</ScrollViewer>

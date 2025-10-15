@@ -17,6 +17,9 @@ public partial class ConversationsViewModel : ObservableObject {
     [ObservableProperty]
     private Conversation? _selectedConversation = null;
 
+    [ObservableProperty]
+    private bool _isLoading = false;
+
     public ObservableCollection<Conversation> Conversations { get; set; } = new();
 
     public ConversationsViewModel(IConversationsService conversationService, IConversationProvider conversationProvider,
@@ -24,7 +27,7 @@ public partial class ConversationsViewModel : ObservableObject {
         _conversationService = conversationService;
         _conversationProvider = conversationProvider;
         _dialogService = dialogService;
-        
+
         InitializeConversations();
     }
 
@@ -39,7 +42,7 @@ public partial class ConversationsViewModel : ObservableObject {
     [RelayCommand]
     private void CreateConversation() {
         var newConversation = new Conversation {
-            Id = Guid.NewGuid().ToString(),
+            Id = Guid.NewGuid(),
             Name = $"New [{DateTime.Now.ToShortDateString()}]",
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now,
@@ -59,18 +62,30 @@ public partial class ConversationsViewModel : ObservableObject {
     private async void SendMessage(string message) {
         if (SelectedConversation == null) return;
 
-        var m = new Message {
-            Id = Guid.NewGuid().ToString(),
-            Sender = SenderEnum.User,
-            Content = message,
-            CreatedAt = DateTime.Now
-        };
+        IsLoading = true;
 
-        SelectedConversation.Messages.Add(m);
+        var m = new Message(
+            Id: Guid.NewGuid(),
+            Content: message,
+            Sender: SenderEnum.User,
+            CreatedAt: DateTime.Now,
+            UpdatedAt: DateTime.Now
+        );
 
-        var response = await _conversationService.SendMessage(SelectedConversation.Messages.ToList());
+        try {
+            // Save message then add to the list
+            //await _conversationService.SaveMessage(m, SelectedConversation.Id);
+            SelectedConversation.Messages.Add(m);
 
-        SelectedConversation.Messages.Add(response);
+            var response = await _conversationService.SendMessage(SelectedConversation.Messages.ToList());
+            //await _conversationService.SaveMessage(response, SelectedConversation.Id);
+            SelectedConversation.Messages.Add(response);
+        } catch {
+            throw;
+        } finally {
+            IsLoading = false;
+        }
+
     }
 
     [RelayCommand]

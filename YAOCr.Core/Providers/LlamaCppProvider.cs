@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -18,6 +16,7 @@ public class LlamaCppProvider : ILlmProvider {
     private readonly HttpClient _httpClient = new();
     private string _llmCompletionAddress;
     private string _llmChatAddress;
+    private string _llmEmbeddingsAddress;
 
     public LlamaCppProvider(IConfiguration configuration) {
         _configuration = configuration;
@@ -28,6 +27,21 @@ public class LlamaCppProvider : ILlmProvider {
     private void Initialize() {
         //_llmCompletionAddress = _configuration["AppSettings:LlamaCpp:CompletionAddress"];
         _llmChatAddress = _configuration["AppSettings:LlamaCpp:ChatAddress"];
+        _llmEmbeddingsAddress = _configuration["AppSettings:LlamaCpp:EmbeddingsAddress"];
+    }
+
+    public async Task<List<float[]>> GenerateEmbeddings(string text) {
+        throw new NotImplementedException();
+
+        var message = new StringContent(text);
+
+        var response = await _httpClient.PostAsync(_llmEmbeddingsAddress, message);
+        response.EnsureSuccessStatusCode();
+
+        //TODO: Run an embeddings model with LlamaCpp
+
+
+
     }
 
     public async Task<string> SendMessage(SendMessageRequest message) {

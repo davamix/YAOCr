@@ -42,9 +42,7 @@
 								   Margin="0,0,16,0" />
 						<FontIcon Glyph="&#xE8BD;" />
 					</StackPanel>
-
 				</Button>
-
 
 				<ListView x:Name="lstConversations"
 						  Grid.Row="1"
@@ -85,36 +83,36 @@
 		<!-- Messages panel (right side) -->
 		<Border Grid.Column="1">
 			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
 
-				<ListView x:Name="lstMessages"
-						  Grid.Row="0"
-						  ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}">
-					<ListView.ItemContainerStyleSelector>
-						<selectors:MessageStyleSelector />
-					</ListView.ItemContainerStyleSelector>
-					<ListView.ItemTemplate>
-						<DataTemplate>
-							<controls:ConversationMessageItem Message="{Binding}" />
-						</DataTemplate>
-					</ListView.ItemTemplate>
-				</ListView>
+					<ListView x:Name="lstMessages"
+							  Grid.Row="0"
+							  ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}">
+						<ListView.ItemContainerStyleSelector>
+							<selectors:MessageStyleSelector />
+						</ListView.ItemContainerStyleSelector>
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<controls:ConversationMessageItem Message="{Binding}" />
+							</DataTemplate>
+						</ListView.ItemTemplate>
+					</ListView>
 
-				<controls:Prompt Grid.Row="0"
-								 SendCommand="{Binding SendMessageCommand}"
-								 PlaceholderText="Type your message"
-								 HorizontalAlignment="Stretch"
-								 HorizontalContentAlignment="Stretch"
-								 VerticalAlignment="Bottom"/>
+					<controls:Prompt Grid.Row="0"
+									 SendCommand="{Binding SendMessageCommand}"
+									 PlaceholderText="Type your message"
+									 HorizontalAlignment="Stretch"
+									 HorizontalContentAlignment="Stretch"
+									 VerticalAlignment="Bottom" />
 
+				</Grid>
+
+				<ProgressRing IsActive="{Binding IsLoading}" />
 			</Grid>
-
 		</Border>
-
 	</Grid>
-
-
 </UserControl>
