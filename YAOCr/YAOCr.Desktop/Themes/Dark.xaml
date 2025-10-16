@@ -955,12 +955,16 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="SplitButton">
-					<Grid>
+					<Grid x:Name="RootGrid">
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="CommonStates">
 								<VisualState x:Name="Normal">
 									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+										<ColorAnimation Storyboard.TargetName="PrimaryButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkBase600Color}"
+														Duration="0:0:0.1" />
+										<ColorAnimation Storyboard.TargetName="SecondaryButtonBackground"
 														Storyboard.TargetProperty="Color"
 														To="{StaticResource DarkBase600Color}"
 														Duration="0:0:0.1" />
@@ -968,7 +972,11 @@
 								</VisualState>
 								<VisualState x:Name="PointerOver">
 									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+										<ColorAnimation Storyboard.TargetName="PrimaryButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkRegionAltColor}"
+														Duration="0:0:0.1" />
+										<ColorAnimation Storyboard.TargetName="SecondaryButtonBackground"
 														Storyboard.TargetProperty="Color"
 														To="{StaticResource DarkRegionAltColor}"
 														Duration="0:0:0.1" />
@@ -976,7 +984,21 @@
 								</VisualState>
 								<VisualState x:Name="Pressed">
 									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+										<ColorAnimation Storyboard.TargetName="PrimaryButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkBase1100Color}"
+														Duration="0:0:0.1" />
+										<ColorAnimation Storyboard.TargetName="SecondaryButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkBase1100Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+							<VisualStateGroup x:Name="FlyoutStates">
+								<VisualState x:Name="FlyoutOpen">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="SecondaryButtonBackground"
 														Storyboard.TargetProperty="Color"
 														To="{StaticResource DarkBase1100Color}"
 														Duration="0:0:0.1" />
@@ -984,23 +1006,65 @@
 								</VisualState>
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
-						<Border x:Name="ButtonBorder"
-								BorderThickness="0"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								Padding="{TemplateBinding Padding}"
-								CornerRadius="0">
-							<Border.Background>
-								<SolidColorBrush x:Name="ButtonBackground"
-												 Color="{StaticResource DarkBase600Color}" />
-							</Border.Background>
-							<ContentPresenter x:Name="ContentPresenter"
-											  Content="{TemplateBinding Content}"
-											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
-						</Border>
+
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto" />
+							</Grid.ColumnDefinitions>
+
+							<!-- Primary Button -->
+							<Button x:Name="PrimaryButton"
+									Grid.Column="0"
+									Style="{StaticResource DarkButtonStyle}"
+									HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+									Padding="{TemplateBinding Padding}"
+									AutomationProperties.Name="{TemplateBinding AutomationProperties.Name}"
+									BorderThickness="0"
+									IsTabStop="False"
+									AutomationProperties.AccessibilityView="Raw">
+								<Button.Background>
+									<SolidColorBrush x:Name="PrimaryButtonBackground"
+													 Color="{StaticResource DarkBase600Color}" />
+								</Button.Background>
+								<ContentPresenter x:Name="ContentPresenter"
+												  Content="{TemplateBinding Content}"
+												  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+												  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+							</Button>
+
+							<!-- Secondary Button (Flyout) -->
+							<Button x:Name="SecondaryButton"
+									Grid.Column="1"
+									Style="{StaticResource DarkButtonStyle}"
+									Padding="{TemplateBinding Padding}"
+									BorderThickness="0"
+									IsTabStop="False"
+									AutomationProperties.AccessibilityView="Raw"
+									HorizontalAlignment="Stretch"
+									VerticalAlignment="Stretch">
+								<Button.Background>
+									<SolidColorBrush x:Name="SecondaryButtonBackground"
+													 Color="{StaticResource DarkBase600Color}" />
+								</Button.Background>
+								<FontIcon Glyph="&#xE70D;"
+										  FontFamily="{ThemeResource SymbolThemeFontFamily}"
+										  FontSize="12"
+										  Height="12" />
+							</Button>
+
+							<Popup x:Name="FlyoutPopup">
+								<Border x:Name="FlyoutBorder"
+										Background="{StaticResource DarkRegionColor}"
+										BorderBrush="{StaticResource DarkBase900Color}">
+									<ContentPresenter x:Name="FlyoutPresenter"
+													  Content="{TemplateBinding Flyout}" />
+								</Border>
+							</Popup>
+						</Grid>
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-		   </Style>
+	</Style>
 </ResourceDictionary>
