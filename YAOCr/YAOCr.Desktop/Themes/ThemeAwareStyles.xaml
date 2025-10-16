@@ -60,6 +60,12 @@
 			<Style x:Key="ThemedComboBoxStyle"
 				   TargetType="ComboBox"
 				   BasedOn="{StaticResource LightComboBoxStyle}" />
+			<Style x:Key="ThemedFlyoutPresenterStyle"
+				   TargetType="FlyoutPresenter"
+				   BasedOn="{StaticResource LightFlyoutPresenterStyle}" />
+			<Style x:Key="ThemedSplitButtonStyle"
+				   TargetType="SplitButton"
+				   BasedOn="{StaticResource LightSplitButtonStyle}" />
 		</ResourceDictionary>
 
 		<ResourceDictionary x:Key="Dark">
@@ -117,6 +123,12 @@
 			<Style x:Key="ThemedComboBoxStyle"
 				   TargetType="ComboBox"
 				   BasedOn="{StaticResource DarkComboBoxStyle}" />
+			<Style x:Key="ThemedFlyoutPresenterStyle"
+				   TargetType="FlyoutPresenter"
+				   BasedOn="{StaticResource DarkFlyoutPresenterStyle}" />
+			<Style x:Key="ThemedSplitButtonStyle"
+				   TargetType="SplitButton"
+				   BasedOn="{StaticResource DarkSplitButtonStyle}" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

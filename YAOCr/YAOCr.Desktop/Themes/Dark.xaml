@@ -934,4 +934,73 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+
+	<Style x:Key="DarkFlyoutPresenterStyle"
+		   TargetType="FlyoutPresenter"
+		   BasedOn="{StaticResource DefaultFlyoutPresenterStyle}">
+		<Setter Property="Background"
+				Value="{StaticResource LightRegionColor}" />
+		<Setter Property="Padding"
+				Value="0" />
+		<Setter Property="BorderThickness"
+				Value="0" />
+		<Setter Property="CornerRadius"
+				Value="0" />
+		<Setter Property="Margin"
+				Value="0, -5, 0, 0" />
+	</Style>
+
+	<Style x:Key="DarkSplitButtonStyle"
+		   TargetType="SplitButton">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="SplitButton">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkBase600Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="PointerOver">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkRegionAltColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Pressed">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkBase1100Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Border x:Name="ButtonBorder"
+								BorderThickness="0"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								Padding="{TemplateBinding Padding}"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="ButtonBackground"
+												 Color="{StaticResource DarkBase600Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		   </Style>
 </ResourceDictionary>

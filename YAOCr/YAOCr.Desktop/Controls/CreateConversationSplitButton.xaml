@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="YAOCr.Controls.CreateConversationSplitButton"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="using:YAOCr.Controls"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+			 x:Name="createConversationSplitButtonControl">
+
+	<SplitButton x:Name="splitButtonMain" Grid.Row="0"
+				 Style="{ThemeResource ThemedSplitButtonStyle}"
+				 HorizontalAlignment="{Binding ElementName=createConversationSplitButtonControl, Path=HorizontalAlignment}"
+				 Padding="{Binding ElementName=createConversationSplitButtonControl, Path=Padding}"
+				 PointerEntered="btn_PointerEntered"
+				 PointerExited="btn_PointerExited"
+				 Click="SplitButton_Click">
+		<StackPanel Orientation="Horizontal"
+					HorizontalAlignment="Center">
+			<TextBlock Text="New Conversation"
+					   TextAlignment="Center"
+					   Margin="0,0,16,0" />
+			<FontIcon Glyph="&#xE8BD;" />
+		</StackPanel>
+		<SplitButton.Flyout>
+			<Flyout Placement="Bottom"
+					FlyoutPresenterStyle="{ThemeResource ThemedFlyoutPresenterStyle}"
+					Opened="Flyout_Opened">
+				<Button Style="{ThemeResource ThemedButtonStyle}"
+						HorizontalAlignment="{Binding ElementName=createConversationSplitButtonControl, Path=HorizontalAlignment}"
+						Padding="16"
+						PointerEntered="btn_PointerEntered"
+						PointerExited="btn_PointerExited"
+						Command="{Binding CreateConversationCommand}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+						<TextBlock Text="Import Conversation"
+								   Margin="0,0,16,0" />
+						<FontIcon Glyph="&#xE8B5;" />
+					</StackPanel>
+				</Button>
+			</Flyout>
+		</SplitButton.Flyout>
+	</SplitButton>
+
+</UserControl>

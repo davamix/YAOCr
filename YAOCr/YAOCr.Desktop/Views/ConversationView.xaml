@@ -27,22 +27,10 @@
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
-				<Button x:Name="btnNewConversation"
-						Grid.Row="0"
-						Style="{ThemeResource ThemedButtonStyle}"
-						HorizontalAlignment="Stretch"
-						Padding="16"
-						PointerEntered="btn_PointerEntered"
-						PointerExited="btn_PointerExited"
-						Command="{Binding CreateConversationCommand}">
-					<StackPanel Orientation="Horizontal"
-								HorizontalAlignment="Center">
-						<TextBlock Text="New Conversation"
-								   TextAlignment="Center"
-								   Margin="0,0,16,0" />
-						<FontIcon Glyph="&#xE8BD;" />
-					</StackPanel>
-				</Button>
+				<controls:CreateConversationSplitButton Grid.Row="0"
+														HorizontalAlignment="Stretch"
+														Padding="16"
+														Command="{Binding CreateConversationCommand}" />
 
 				<ListView x:Name="lstConversations"
 						  Grid.Row="1"
