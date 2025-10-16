@@ -26,6 +26,7 @@ public static class IocConfiguration {
         services.AddSingleton<DialogService>();
         services.AddSingleton<ILlmProvider, LlamaCppProvider>();
         services.AddSingleton<IConversationsService, ConversationsService>();
+        services.AddSingleton<IFileStorageService, FileStorageService>();
 
         return services;
     }

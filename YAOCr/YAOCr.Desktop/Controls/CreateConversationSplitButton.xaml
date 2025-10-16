@@ -8,13 +8,14 @@
 			 mc:Ignorable="d"
 			 x:Name="createConversationSplitButtonControl">
 
-	<SplitButton x:Name="splitButtonMain" Grid.Row="0"
+	<SplitButton x:Name="splitButtonMain"
+				 Grid.Row="0"
 				 Style="{ThemeResource ThemedSplitButtonStyle}"
 				 HorizontalAlignment="{Binding ElementName=createConversationSplitButtonControl, Path=HorizontalAlignment}"
 				 Padding="{Binding ElementName=createConversationSplitButtonControl, Path=Padding}"
 				 PointerEntered="btn_PointerEntered"
 				 PointerExited="btn_PointerExited"
-				 Click="SplitButton_Click">
+				 Click="splitButtonMain_Click">
 		<StackPanel Orientation="Horizontal"
 					HorizontalAlignment="Center">
 			<TextBlock Text="New Conversation"
@@ -26,13 +27,16 @@
 			<Flyout Placement="Bottom"
 					FlyoutPresenterStyle="{ThemeResource ThemedFlyoutPresenterStyle}"
 					Opened="Flyout_Opened">
-				<Button Style="{ThemeResource ThemedButtonStyle}"
+				<Button x:Name="btnImportButton"
+						Style="{ThemeResource ThemedButtonStyle}"
 						HorizontalAlignment="{Binding ElementName=createConversationSplitButtonControl, Path=HorizontalAlignment}"
 						Padding="16"
 						PointerEntered="btn_PointerEntered"
 						PointerExited="btn_PointerExited"
-						Command="{Binding CreateConversationCommand}">
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+						Command="{Binding ElementName=createConversationSplitButtonControl, Path=ImportConversationCommand}"
+						Click="btnImportButton_Click">
+					<StackPanel Orientation="Horizontal"
+								HorizontalAlignment="Right">
 						<TextBlock Text="Import Conversation"
 								   Margin="0,0,16,0" />
 						<FontIcon Glyph="&#xE8B5;" />

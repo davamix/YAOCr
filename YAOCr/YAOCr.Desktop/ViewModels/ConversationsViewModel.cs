@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using YAOCr.Core.Models;
 using YAOCr.Core.Providers;
@@ -51,6 +52,15 @@ public partial class ConversationsViewModel : ObservableObject {
         Conversations.Add(newConversation);
 
         SelectedConversation = newConversation;
+    }
+
+    [RelayCommand]
+    private void ImportConversation(Conversation conversation) {
+        if(conversation == null) return;
+
+        if (Conversations.Any(c => c.Id == conversation.Id)) return;
+
+        Conversations.Add(conversation);
     }
 
     [RelayCommand]

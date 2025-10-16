@@ -3,11 +3,12 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using YAOCr.Core.Models;
-using YAOCr.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Windows.Storage.Pickers;
 using System;
-using System.IO;
+using YAOCr.Core.Services;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -15,6 +16,7 @@ using System.IO;
 namespace YAOCr.Controls;
 
 public sealed partial class ConversationItem : UserControl {
+    private IFileStorageService _fileStorageService;
 
     public static readonly DependencyProperty ConversationProperty =
         DependencyProperty.RegisterAttached(
@@ -70,6 +72,8 @@ public sealed partial class ConversationItem : UserControl {
 
     public ConversationItem() {
         InitializeComponent();
+
+        _fileStorageService = Ioc.Default.GetService<IFileStorageService>();
     }
 
     private void btn_PointerEntered(object sender, PointerRoutedEventArgs e) {
@@ -133,9 +137,7 @@ public sealed partial class ConversationItem : UserControl {
         var result = await picker.PickSaveFileAsync();
 
         if(result != null) {
-            string savePath = result.Path;
-            await File.WriteAllTextAsync(savePath, Conversation.ToJson());
-
+            await _fileStorageService.ExportConversation(Conversation, result.Path);
         }
     }
 }

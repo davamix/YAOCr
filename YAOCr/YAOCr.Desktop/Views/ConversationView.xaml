@@ -30,7 +30,8 @@
 				<controls:CreateConversationSplitButton Grid.Row="0"
 														HorizontalAlignment="Stretch"
 														Padding="16"
-														Command="{Binding CreateConversationCommand}" />
+														CreateNewConversationCommand="{Binding CreateConversationCommand}"
+														ImportConversationCommand="{Binding ImportConversationCommand}"/>
 
 				<ListView x:Name="lstConversations"
 						  Grid.Row="1"
