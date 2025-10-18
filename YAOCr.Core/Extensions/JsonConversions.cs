@@ -4,7 +4,7 @@ using YAOCr.Core.Models;
 
 namespace YAOCr.Core.Extensions;
 
-public static class ConversationToJson {
+public static class JsonConversions {
     private static readonly JsonSerializerOptions _writeOptions = new() {
         WriteIndented = true,
         IncludeFields = true,

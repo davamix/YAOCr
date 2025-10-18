@@ -17,6 +17,7 @@ using Windows.Services.Maps;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI.Core;
+using YAOCr.Core.Models;
 using YAOCr.Services;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -39,7 +40,7 @@ public class Prompt : TextBox {
         ".csv",
         ".sql",
     };
-    
+
     public ObservableCollection<string> FilePaths { get; private set; } = new();
 
     public static readonly DependencyProperty SendCommandProperty =
@@ -69,7 +70,7 @@ public class Prompt : TextBox {
     }
 
     private void FilePaths_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) {
-        if(e.Action == NotifyCollectionChangedAction.Add) {
+        if (e.Action == NotifyCollectionChangedAction.Add) {
             _listViewFilePaths.Visibility = Visibility.Visible;
         }
 
@@ -80,7 +81,7 @@ public class Prompt : TextBox {
         }
     }
 
-    private async void Prompt_PreviewKeyDown(object sender, KeyRoutedEventArgs e) {
+    private void Prompt_PreviewKeyDown(object sender, KeyRoutedEventArgs e) {
         // https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.input.inputkeyboardsource.getkeystateforcurrentthread?view=windows-app-sdk-1.7
         // https://learn.microsoft.com/en-us/uwp/api/windows.ui.core.corevirtualkeystates?view=winrt-26100
         // https://github.com/microsoft/microsoft-ui-xaml/issues/6535#issuecomment-1057237421
@@ -97,9 +98,8 @@ public class Prompt : TextBox {
                 e.Handled = true;
             }
         } else if (e.Key == VirtualKey.Enter) {
-            if (this.SendCommand != null && this.SendCommand.CanExecute(this.Text)) {
-                await SendMessage();
-            }
+            SendMessage();
+
             e.Handled = true;
         }
     }
@@ -111,7 +111,7 @@ public class Prompt : TextBox {
             if (resources.ContainsKey("ThemedPromptStyle")) {
                 this.Style = resources["ThemedPromptStyle"] as Style;
             }
-        }        
+        }
     }
 
     private void Prompt_DragOver(object sender, DragEventArgs e) {
@@ -122,17 +122,17 @@ public class Prompt : TextBox {
         if (e.DataView.Contains(StandardDataFormats.StorageItems)) {
             var storageItems = await e.DataView.GetStorageItemsAsync();
 
-            foreach(var item in storageItems) {
+            foreach (var item in storageItems) {
                 if (!item.IsOfType(StorageItemTypes.File)) return;
 
                 var storageFile = item as StorageFile;
 
-                if(_contentTypesAllowed.Any(x=>x == storageFile.ContentType) ||
-                        _fileTypesAllowed.Any(x=>x == storageFile.FileType)){
-                    
+                if (_contentTypesAllowed.Any(x => x == storageFile.ContentType) ||
+                        _fileTypesAllowed.Any(x => x == storageFile.FileType)) {
+
                     FilePaths.Add(item.Path);
                 }
-                
+
             }
         }
     }
@@ -149,9 +149,9 @@ public class Prompt : TextBox {
         ApplyTemplate();
     }
 
-    private async void SendButton_Click(object sender, RoutedEventArgs e) {
+    private void SendButton_Click(object sender, RoutedEventArgs e) {
         if (_sendButton != null) {
-            await SendMessage();            
+            SendMessage();
         }
     }
 
@@ -182,7 +182,7 @@ public class Prompt : TextBox {
     }
 
     private void InitializeListViewFilePaths() {
-        if(_listViewFilePaths != null) {
+        if (_listViewFilePaths != null) {
             _listViewFilePaths.ItemsSource = FilePaths;
             if (FilePaths.Any()) {
                 _listViewFilePaths.Visibility = Visibility.Visible;
@@ -190,20 +190,17 @@ public class Prompt : TextBox {
         }
     }
 
-    private async Task SendMessage() {
-        var content = "\nFILES ATTACHED\n";
+    private void SendMessage() {
+        var promptMessage = new PromptMessage(
+            Message: this.Text,
+            FilePaths: FilePaths.ToList());
 
-        foreach (var file in FilePaths) {
-            content += String.Format($"File: {file}\n");
-            content += "Content:\n";
-            content += await File.ReadAllTextAsync(file);
-            content += "\n\n";
+        if (this.SendCommand != null && this.SendCommand.CanExecute(promptMessage)) {
+            this.SendCommand.Execute(promptMessage);
+
+            this.Text = string.Empty;
+            FilePaths.Clear();
+            _listViewFilePaths.Visibility = Visibility.Collapsed;
         }
-
-        //_sendButton.CommandParameter = this.Text + content;
-        this.SendCommand.Execute(this.Text + content);
-
-        this.Text = string.Empty;
-        FilePaths.Clear();
     }
 }

@@ -12,6 +12,7 @@ namespace YAOCr.Core.Services;
 public interface IFileStorageService {
     Task ExportConversation(Conversation conversation, string filePath);
     Task<Conversation> ImportConversation(string filePath);
+    Task<string>ReadTextFile(string filePath);
 }
 
 public class FileStorageService : IFileStorageService {
@@ -40,5 +41,17 @@ public class FileStorageService : IFileStorageService {
         } catch {
             throw;
         }
+    }
+
+    public async Task<string> ReadTextFile(string filePath) {
+        if(string.IsNullOrEmpty(filePath)) {
+            throw new ArgumentException("filePath cannot be empty");
+        }
+
+        if(!File.Exists(filePath)) {
+            throw new FileNotFoundException("File not found", filePath);
+        }
+
+        return await File.ReadAllTextAsync(filePath);
     }
 }

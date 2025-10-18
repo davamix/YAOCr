@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace YAOCr.Core.Models;
 
@@ -15,4 +16,5 @@ public record Message(
     string Content,
     SenderEnum Sender,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt,
+    List<(string Path, string Content)> FilesContent);

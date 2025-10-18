@@ -21,7 +21,25 @@
 	</UserControl.Resources>
 
 	<Grid>
-		<control:MarkdownTextBlock Text="{Binding ElementName=conversationMessageItemControl, Path=Message.Content}"
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<control:MarkdownTextBlock Grid.Row="0"
+								   Text="{Binding ElementName=conversationMessageItemControl, Path=Message.Content}"
 								   Style="{ThemeResource ThemedMarkdownTextBlockStyle}" />
+
+		<ListView Grid.Row="1"
+				  ItemsSource="{Binding ElementName=conversationMessageItemControl, Path=FilesPath}"
+				  SelectionMode="None">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding}"
+							   Style="{StaticResource CaptionTextBlockStyle}" />
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
 	</Grid>
 </UserControl>

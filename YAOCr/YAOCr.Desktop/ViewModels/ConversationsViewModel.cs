@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace YAOCr.ViewModels;
 public partial class ConversationsViewModel : ObservableObject {
     private readonly IConversationsService _conversationService;
     private readonly IConversationProvider _conversationProvider;
+    private readonly ILlmService _llmService;
+    private readonly IFileStorageService _fileStorageService;
     private readonly DialogService _dialogService;
 
     [ObservableProperty]
@@ -23,10 +26,15 @@ public partial class ConversationsViewModel : ObservableObject {
 
     public ObservableCollection<Conversation> Conversations { get; set; } = new();
 
-    public ConversationsViewModel(IConversationsService conversationService, IConversationProvider conversationProvider,
+    public ConversationsViewModel(IConversationsService conversationService,
+        IConversationProvider conversationProvider,
+        ILlmService llmService,
+        IFileStorageService fileStorageService,
         DialogService dialogService) {
         _conversationService = conversationService;
         _conversationProvider = conversationProvider;
+        _llmService = llmService;
+        _fileStorageService = fileStorageService;
         _dialogService = dialogService;
 
         InitializeConversations();
@@ -56,7 +64,7 @@ public partial class ConversationsViewModel : ObservableObject {
 
     [RelayCommand]
     private void ImportConversation(Conversation conversation) {
-        if(conversation == null) return;
+        if (conversation == null) return;
 
         if (Conversations.Any(c => c.Id == conversation.Id)) return;
 
@@ -76,17 +84,24 @@ public partial class ConversationsViewModel : ObservableObject {
     }
 
     [RelayCommand]
-    private async void SendMessage(string message) {
+    private async void SendMessage(PromptMessage promptMessage) {
         if (SelectedConversation == null) return;
 
         IsLoading = true;
 
+        var filesContent = new List<(string Path, string Content)>();
+        foreach(var f in promptMessage.FilePaths) {
+            var content = await _fileStorageService.ReadTextFile(f);
+            filesContent.Add((f, content));
+        }
+
         var m = new Message(
             Id: Guid.NewGuid(),
-            Content: message,
+            Content: promptMessage.Message,
             Sender: SenderEnum.User,
             CreatedAt: DateTime.Now,
-            UpdatedAt: DateTime.Now
+            UpdatedAt: DateTime.Now,
+            FilesContent: filesContent
         );
 
         try {

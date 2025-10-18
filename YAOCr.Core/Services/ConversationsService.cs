@@ -19,21 +19,26 @@ public interface IConversationsService
 }
 
 public class ConversationsService : IConversationsService {
+    private readonly ILlmService _llmService;
     private readonly ILlmProvider _llmProvider;
     private readonly IConversationProvider _conversationProvider;
 
-    public ConversationsService(ILlmProvider llmProvider, IConversationProvider conversationProvider) {
+    public ConversationsService(ILlmService llmService, 
+        ILlmProvider llmProvider, 
+        IConversationProvider conversationProvider) {
+        _llmService = llmService;
         _llmProvider = llmProvider;
         _conversationProvider = conversationProvider;
     }
 
 
-    public async Task<Message> SendMessage(List<Message> PreviousMessages) {
+    public async Task<Message> SendMessage(List<Message> previousMessages) {
+
         var dto = new SendMessageRequest {
             Model = "Gemma-3-4B-It",
-            Messages = PreviousMessages.Select(m => new MessageDto {
+            Messages = previousMessages.Select(m => new MessageDto {
                 Role = m.Sender == SenderEnum.User ? "user" : "assistant",
-                Content = m.Content
+                Content = _llmService.CreateLlmMessage(m.Content, m.FilesContent)
             }).ToList()
         };
 
@@ -44,7 +49,8 @@ public class ConversationsService : IConversationsService {
             Content: response,
             Sender: SenderEnum.Assistant,
             CreatedAt: DateTime.Now,
-            UpdatedAt: DateTime.Now
+            UpdatedAt: DateTime.Now,
+            FilesContent: []
         );
     }
 
