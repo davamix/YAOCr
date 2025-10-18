@@ -4,12 +4,16 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Services.Maps;
+using Windows.Storage;
 using Windows.System;
 using Windows.UI.Core;
 using YAOCr.Services;
@@ -23,6 +27,16 @@ public class Prompt : TextBox {
     private ThemeService _themeService;
     private Button? _sendButton;
     private ListView? _listViewFilePaths;
+
+    private readonly List<string> _contentTypesAllowed = new() {
+        "text/plain",
+        "application/json"
+    };
+
+    private readonly List<string> _fileTypesAllowed = new() {
+        ".csv",
+        ".sql",
+    };
     
     public ObservableCollection<string> FilePaths { get; private set; } = new();
 
@@ -108,8 +122,16 @@ public class Prompt : TextBox {
             var storageItems = await e.DataView.GetStorageItemsAsync();
 
             foreach(var item in storageItems) {
-                Debug.WriteLine(item.Path);
-                FilePaths.Add(item.Path);
+                if (!item.IsOfType(StorageItemTypes.File)) return;
+
+                var storageFile = item as StorageFile;
+                
+                if(_contentTypesAllowed.Any(x=>x == storageFile.ContentType) ||
+                        _fileTypesAllowed.Any(x=>x == storageFile.FileType)){
+                    
+                    FilePaths.Add(item.Path);
+                }
+                
             }
         }
     }
@@ -129,6 +151,9 @@ public class Prompt : TextBox {
     private void SendButton_Click(object sender, RoutedEventArgs e) {
         if (_sendButton != null) {
             _sendButton.CommandParameter = this.Text;
+
+            if (FilePaths.Any()) {
+            }
             this.Text = string.Empty;
         }
     }
