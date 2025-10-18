@@ -589,7 +589,7 @@
 		<Setter Property="TextWrapping"
 				Value="Wrap" />
 		<Setter Property="MaxHeight"
-				Value="100" />
+				Value="300" />
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility"
 				Value="Auto" />
 		<Setter Property="ToolTipService.ToolTip">
@@ -598,6 +598,7 @@
 					<StackPanel>
 						<TextBlock Text="Press 'Enter' to send the message." />
 						<TextBlock Text="Press 'Shift + Enter' to add a new line." />
+						<TextBlock Text="Drag text files to attach them to the conversation." />
 					</StackPanel>
 				</ToolTip>
 			</Setter.Value>
@@ -673,9 +674,14 @@
 									<ColumnDefinition Width="*" />
 									<ColumnDefinition Width="Auto" />
 								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition MaxHeight="100" />
+									<RowDefinition Height="*" />
+								</Grid.RowDefinitions>
 
 								<ScrollViewer x:Name="ContentElement"
 											  Grid.Column="0"
+											  Grid.Row="0"
 											  HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
 											  VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
 											  HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
@@ -691,6 +697,7 @@
 
 								<TextBlock x:Name="PlaceholderTextContentPresenter"
 										   Grid.Column="0"
+										   Grid.Row="0"
 										   Text="{TemplateBinding PlaceholderText}"
 										   Foreground="{ThemeResource TextControlPlaceholderForeground}"
 										   IsHitTestVisible="False"
@@ -700,6 +707,7 @@
 
 								<Button x:Name="SendButton"
 										Grid.Column="1"
+										Grid.Row="0"
 										Style="{StaticResource DarkButtonStyle}"
 										BorderThickness="0"
 										IsTabStop="False"
@@ -711,6 +719,23 @@
 									</ToolTipService.ToolTip>
 									<FontIcon Glyph="&#xE724;" />
 								</Button>
+
+								<ListView x:Name="ListViewFilePaths"
+										  Grid.Column="0"
+										  Grid.Row="1"
+										  Background="{StaticResource DarkPrimary100Color}"
+										  SelectionMode="None"
+										  Height="200"
+										  Visibility="Collapsed"
+										  Margin="0"
+										  Padding="{TemplateBinding Padding}">
+
+									<ListView.ItemTemplate>
+										<DataTemplate>
+											<custom:PromptItem />
+										</DataTemplate>
+									</ListView.ItemTemplate>
+								</ListView>
 
 							</Grid>
 						</Border>

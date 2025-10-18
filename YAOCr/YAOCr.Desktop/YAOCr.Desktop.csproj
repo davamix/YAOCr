@@ -15,6 +15,7 @@
     <None Remove="Controls\ConversationItem.xaml" />
     <None Remove="Controls\ConversationMessageItem.xaml" />
     <None Remove="Controls\Prompt.xaml" />
+    <None Remove="Controls\PromptItem.xaml" />
     <None Remove="Themes\Dark.xaml" />
     <None Remove="Themes\ThemeAwareStyles.xaml" />
     <None Remove="Views\ConversationView.xaml" />
@@ -60,6 +61,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\YAOCr.Core\YAOCr.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Controls\PromptItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
