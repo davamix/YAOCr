@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Services.Maps;
@@ -28,6 +29,7 @@ public class Prompt : TextBox {
     private Button? _sendButton;
     private ListView? _listViewFilePaths;
 
+    //TODO: Move the lists of types allowed to an external component to allow changed via config
     private readonly List<string> _contentTypesAllowed = new() {
         "text/plain",
         "application/json"
@@ -78,7 +80,7 @@ public class Prompt : TextBox {
         }
     }
 
-    private void Prompt_PreviewKeyDown(object sender, KeyRoutedEventArgs e) {
+    private async void Prompt_PreviewKeyDown(object sender, KeyRoutedEventArgs e) {
         // https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.input.inputkeyboardsource.getkeystateforcurrentthread?view=windows-app-sdk-1.7
         // https://learn.microsoft.com/en-us/uwp/api/windows.ui.core.corevirtualkeystates?view=winrt-26100
         // https://github.com/microsoft/microsoft-ui-xaml/issues/6535#issuecomment-1057237421
@@ -96,8 +98,7 @@ public class Prompt : TextBox {
             }
         } else if (e.Key == VirtualKey.Enter) {
             if (this.SendCommand != null && this.SendCommand.CanExecute(this.Text)) {
-                this.SendCommand.Execute(this.Text);
-                this.Text = string.Empty;
+                await SendMessage();
             }
             e.Handled = true;
         }
@@ -125,7 +126,7 @@ public class Prompt : TextBox {
                 if (!item.IsOfType(StorageItemTypes.File)) return;
 
                 var storageFile = item as StorageFile;
-                
+
                 if(_contentTypesAllowed.Any(x=>x == storageFile.ContentType) ||
                         _fileTypesAllowed.Any(x=>x == storageFile.FileType)){
                     
@@ -148,13 +149,9 @@ public class Prompt : TextBox {
         ApplyTemplate();
     }
 
-    private void SendButton_Click(object sender, RoutedEventArgs e) {
+    private async void SendButton_Click(object sender, RoutedEventArgs e) {
         if (_sendButton != null) {
-            _sendButton.CommandParameter = this.Text;
-
-            if (FilePaths.Any()) {
-            }
-            this.Text = string.Empty;
+            await SendMessage();            
         }
     }
 
@@ -178,7 +175,6 @@ public class Prompt : TextBox {
 
     private void InitializeSendButton() {
         if (_sendButton != null) {
-            _sendButton.Command = this.SendCommand;
             _sendButton.Click += SendButton_Click;
             _sendButton.PointerEntered += btn_PointerEntered;
             _sendButton.PointerExited += btn_PointerExited;
@@ -192,5 +188,22 @@ public class Prompt : TextBox {
                 _listViewFilePaths.Visibility = Visibility.Visible;
             }
         }
+    }
+
+    private async Task SendMessage() {
+        var content = "\nFILES ATTACHED\n";
+
+        foreach (var file in FilePaths) {
+            content += String.Format($"File: {file}\n");
+            content += "Content:\n";
+            content += await File.ReadAllTextAsync(file);
+            content += "\n\n";
+        }
+
+        //_sendButton.CommandParameter = this.Text + content;
+        this.SendCommand.Execute(this.Text + content);
+
+        this.Text = string.Empty;
+        FilePaths.Clear();
     }
 }
