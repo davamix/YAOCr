@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,12 +11,11 @@ using YAOCr.Core.Providers;
 
 namespace YAOCr.Core.Services;
 
-public interface IConversationsService
-{
-    Task<Message> SendMessage(List<Message> PreviuousMessages);
+public interface IConversationsService {
+    IAsyncEnumerable<string> SendMessage(List<Message> conversationMessages);
     [Experimental("NotImplemented")]
     Task SaveConversation(Conversation conversation);
-    [Experimental("NotImplemented")]
+    
     Task SaveMessage(Message message, Guid conversationId);
 }
 
@@ -22,51 +23,67 @@ public class ConversationsService : IConversationsService {
     private readonly ILlmService _llmService;
     private readonly ILlmProvider _llmProvider;
     private readonly IConversationProvider _conversationProvider;
+    private readonly IConfiguration _configuration;
+    private string _llmModel;
+    private string _embeddingsModel;
 
-    public ConversationsService(ILlmService llmService, 
-        ILlmProvider llmProvider, 
-        IConversationProvider conversationProvider) {
+    public ConversationsService(ILlmService llmService,
+        ILlmProvider llmProvider,
+        IConversationProvider conversationProvider,
+        IConfiguration configuration) {
         _llmService = llmService;
         _llmProvider = llmProvider;
         _conversationProvider = conversationProvider;
+        _configuration = configuration;
+
+        Initialze();
     }
 
+    private void Initialze() {
+        _llmModel = _configuration["AppSettings:LlamaCpp:ModelName"];
+        _embeddingsModel = _configuration["AppSettings:LlamaCpp:EmbeddingsModelName"];
+    }
 
-    public async Task<Message> SendMessage(List<Message> previousMessages) {
-
-        var dto = new SendMessageRequest {
-            Model = "Gemma-3-4B-It",
-            Messages = previousMessages.Select(m => new MessageDto {
+    public async IAsyncEnumerable<string> SendMessage(List<Message> conversationMessages) {
+        var request = new SendMessageRequest {
+            Stream = true,
+            Model = _llmModel,
+            Messages = conversationMessages.Select(m => new MessageDto {
                 Role = m.Sender == SenderEnum.User ? "user" : "assistant",
-                Content = _llmService.CreateLlmMessage(m.Content, m.FilesContent)
+                Content = m.FilesContent.Any()
+                    ? _llmService.CreateLlmMessage(m.Content, m.FilesContent)
+                    : m.Content
             }).ToList()
         };
 
-        var response = await _llmProvider.SendMessage(dto);
-
-        return new Message(
-            Id: Guid.NewGuid(),
-            Content: response,
-            Sender: SenderEnum.Assistant,
-            CreatedAt: DateTime.Now,
-            UpdatedAt: DateTime.Now,
-            FilesContent: []
-        );
+        await foreach (var chunk in _llmProvider.SendMessage(request)) {
+            yield return chunk;
+        }
     }
 
     public async Task SaveConversation(Conversation conversation) {
         throw new NotImplementedException();
+        var request = new EmbeddingRequest {
+            Content = conversation.Name,
+            ModelName = _configuration["AppSettings:LlamaCpp:EmbeddingsModelName"],
+            EncodingFormat = "float"
+        };
         // Generate embeddings with conversation's Name
-        var embeddings = await _llmProvider.GenerateEmbeddings(conversation.Name);
+        var embeddings = await _llmProvider.GenerateEmbeddings(request);
 
         // Save conversation with embeddings
         await _conversationProvider.SaveConversation(conversation, embeddings);
     }
 
     public async Task SaveMessage(Message message, Guid conversationId) {
-        throw new NotImplementedException();
+        var request = new EmbeddingRequest {
+            Content = message.Content,
+            ModelName = _embeddingsModel,
+            EncodingFormat = "float"
+        };
+
         // Generate embeddings with message's Content
-        var embeddings = await _llmProvider.GenerateEmbeddings(message.Content);
+        var embeddings = await _llmProvider.GenerateEmbeddings(request);
 
         // Save message with embeddings
         await _conversationProvider.SaveMessage(message, embeddings, conversationId);

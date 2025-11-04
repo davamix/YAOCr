@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace YAOCr.Core.Services;
 
@@ -24,6 +25,6 @@ public class LlmService : ILlmService {
             content += "\n\n";
         }
 
-        return content;
+        return content.Trim();
     }
 }

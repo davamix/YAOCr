@@ -10,6 +10,6 @@ namespace YAOCr.Core.Providers;
 public interface ILlmProvider {
     //Chat CreateChat();
     //IAsyncEnumerable<string> SendMessage(string message);
-    Task<string> SendMessage(SendMessageRequest message);
-    Task<List<float[]>> GenerateEmbeddings(string text);
+    IAsyncEnumerable<string> SendMessage(SendMessageRequest message);
+    Task<float[]> GenerateEmbeddings(EmbeddingRequest request);
 }

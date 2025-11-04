@@ -7,9 +7,15 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 			 xmlns:controls="using:YAOCr.Controls"
+			 xmlns:ctControls="using:CommunityToolkit.WinUI.UI.Controls"
 			 xmlns:models="using:YAOCr.Core.Models"
 			 xmlns:selectors="using:YAOCr.Themes.Selectors"
+			 xmlns:converters="using:YAOCr.Converters"
 			 mc:Ignorable="d">
+
+	<UserControl.Resources>
+		<converters:StringContentToVisibilityConverter x:Key="StringContentToVisibilityConverter" />
+	</UserControl.Resources>
 
 
 	<Grid ColumnSpacing="36">
@@ -31,7 +37,7 @@
 														HorizontalAlignment="Stretch"
 														Padding="16"
 														CreateNewConversationCommand="{Binding CreateConversationCommand}"
-														ImportConversationCommand="{Binding ImportConversationCommand}"/>
+														ImportConversationCommand="{Binding ImportConversationCommand}" />
 
 				<ListView x:Name="lstConversations"
 						  Grid.Row="1"
@@ -79,20 +85,31 @@
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 
-					<ListView x:Name="lstMessages"
-							  Grid.Row="0"
-							  ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}">
-						<ListView.ItemContainerStyleSelector>
-							<selectors:MessageStyleSelector />
-						</ListView.ItemContainerStyleSelector>
-						<ListView.ItemTemplate>
-							<DataTemplate>
-								<controls:ConversationMessageItem Message="{Binding}" />
-							</DataTemplate>
-						</ListView.ItemTemplate>
-					</ListView>
+					<ScrollViewer Grid.Row="0">
+						<StackPanel>
+							<ListView x:Name="lstMessages"
+									  Grid.Row="0"
+									  ItemsSource="{Binding ElementName=lstConversations, Path=SelectedItem.Messages}">
+								<ListView.ItemContainerStyleSelector>
+									<selectors:MessageStyleSelector />
+								</ListView.ItemContainerStyleSelector>
+								<ListView.ItemTemplate>
+									<DataTemplate>
+										<controls:ConversationMessageItem Message="{Binding}" />
+									</DataTemplate>
+								</ListView.ItemTemplate>
+							</ListView>
 
-					<controls:Prompt Grid.Row="0"
+							<ctControls:MarkdownTextBlock x:Name="txtAssistantMessage"
+														  Grid.Row="1"
+														  Text="{Binding AssistantMessage}"
+														  Style="{ThemeResource ThemedMarkdownAssistantBlockStyle}"
+														  Visibility="{Binding AssistantMessage, Converter={StaticResource StringContentToVisibilityConverter}}"/>
+
+						</StackPanel>
+					</ScrollViewer>
+
+					<controls:Prompt Grid.Row="1"
 									 SendCommand="{Binding SendMessageCommand}"
 									 PlaceholderText="Type your message"
 									 HorizontalAlignment="Stretch"

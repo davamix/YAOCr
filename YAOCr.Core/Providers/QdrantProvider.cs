@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using YAOCr.Core.Models;
 
@@ -38,7 +39,7 @@ public class QdrantProvider : IConversationProvider {
                 Size = _embeddingsVectorSize,
                 Distance = Distance.Cosine
             });
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             Debug.WriteLine(ex.Message);
             throw;
         }
@@ -48,14 +49,14 @@ public class QdrantProvider : IConversationProvider {
         return Task.FromResult(new List<Conversation>());
     }
 
-    public async Task SaveConversation(Conversation conversation, List<float[]> embeddings) {
+    public async Task SaveConversation(Conversation conversation, float[] embeddings) {
         try {
             var result = await _client.UpsertAsync(
                 collectionName: _collectionName,
                 points: new List<PointStruct> {
                     new() {
                         Id = conversation.Id,
-                        Vectors = embeddings.SelectMany(x=>x).ToArray(),
+                        Vectors = embeddings,
                         Payload = {
                             ["Name"] = conversation.Name,
                             ["CreatedAt"] = conversation.CreatedAt.ToString(),
@@ -68,27 +69,29 @@ public class QdrantProvider : IConversationProvider {
         }
     }
 
-    public async Task SaveMessage(Message message, List<float[]> embeddings, Guid conversationId) {
+    public async Task SaveMessage(Message message, float[] embeddings, Guid conversationId) {
         try {
             var result = await _client.UpsertAsync(
                 collectionName: _collectionName,
                 points: new List<PointStruct> {
                     new() {
                         Id = message.Id,
-                        Vectors = embeddings.SelectMany(x=>x).ToArray(),
+                        Vectors = embeddings,
                         Payload = {
                             ["ConversationId"] = conversationId.ToString(),
                             ["Content"] = message.Content,
                             ["Sender"] = message.Sender.ToString(),
                             ["CreatedAt"] = message.CreatedAt.ToString(),
-                            ["UpdatedAt"] = message.UpdatedAt.ToString()
-                        }
-                    }
-                });
+                            ["UpdatedAt"] = message.UpdatedAt.ToString(),
+                            ["Attachments"] = new Value() {
+                                StringValue = JsonSerializer.Serialize(message.FilesContent.Select(x => new { x.Path, x.Content }))
+                                }
+                            }
 
-            //return message;
+                        }
+                    });
         } catch {
-            throw;
+            throw;  
         }
     }
 }

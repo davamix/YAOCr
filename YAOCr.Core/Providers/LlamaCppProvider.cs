@@ -1,6 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.UI.Composition;
+using Qdrant.Client.Grpc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -30,33 +34,83 @@ public class LlamaCppProvider : ILlmProvider {
         _llmEmbeddingsAddress = _configuration["AppSettings:LlamaCpp:EmbeddingsAddress"];
     }
 
-    public async Task<List<float[]>> GenerateEmbeddings(string text) {
-        throw new NotImplementedException();
+    public async Task<float[]> GenerateEmbeddings(EmbeddingRequest request) {
+        var messageContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 
-        var message = new StringContent(text);
+        try {
+            var jsonResponse = await RequestPost(_llmEmbeddingsAddress, messageContent);
+            var embeddings = jsonResponse["data"][0]["embedding"];
 
-        var response = await _httpClient.PostAsync(_llmEmbeddingsAddress, message);
-        response.EnsureSuccessStatusCode();
-
-        //TODO: Run an embeddings model with LlamaCpp
-
-
-
+            return JsonSerializer.Deserialize<float[]>(embeddings);
+        } catch (Exception ex) {
+            Debug.WriteLine(ex.Message);
+            throw;
+        }
     }
 
-    public async Task<string> SendMessage(SendMessageRequest message) {
+    public async IAsyncEnumerable<string> SendMessage(SendMessageRequest message) {
         var messageContent = new StringContent(JsonSerializer.Serialize(message), Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync(_llmChatAddress, messageContent);
+        await foreach (var chunk in RequestStreamPost(_llmChatAddress, messageContent)) {
+            yield return chunk;
+        }
+    }
 
+    private async Task<JsonObject> RequestPost(string address, StringContent content) {
+        var response = await _httpClient.PostAsync(address, content);
         response.EnsureSuccessStatusCode();
 
         var responseContent = await response.Content.ReadAsStringAsync();
+        var returnValue = JsonSerializer.Deserialize<JsonObject>(responseContent);
 
-        var jsonResponse = JsonSerializer.Deserialize<JsonObject>(responseContent);
+        return returnValue;
+    }
 
-        // Go straight to the message content field
-        return jsonResponse["choices"][0]["message"]["content"].GetValue<string>();
+    private async IAsyncEnumerable<string> RequestStreamPost(string address, StringContent content) {
+        var requestMessage = new HttpRequestMessage(HttpMethod.Post, address);
+        requestMessage.Content = content;
 
+        var response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+
+        response.EnsureSuccessStatusCode();
+
+        using (var stream = await response.Content.ReadAsStreamAsync()) {
+            using (var reader = new StreamReader(stream)) {
+                await foreach (var chunk in ProcessResponseStream(reader)) {
+                    yield return chunk;
+                }
+            }
+        }
+    }
+
+    private async IAsyncEnumerable<string> ProcessResponseStream(StreamReader reader) {
+        while (!reader.EndOfStream) {
+            var line = await reader.ReadLineAsync();
+            if (string.IsNullOrEmpty(line)) {
+                continue;
+            }
+
+            var jsonData = line;
+            if (line.StartsWith("data: ")) {
+                jsonData = line.Substring("data: ".Length);
+            }
+
+            var doc = JsonSerializer.Deserialize<JsonObject>(jsonData);
+
+            var isFinished = doc["choices"][0]["finish_reason"] == null
+            ? false
+            : doc["choices"][0]["finish_reason"].GetValue<string>() == "stop";
+
+            if (isFinished) {
+                break;
+            }
+
+            var deltaContent = doc["choices"][0]["delta"]["content"];
+            if (deltaContent == null) {
+                continue;
+            }
+
+            yield return deltaContent.GetValue<string>();
+        }
     }
 }

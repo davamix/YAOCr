@@ -36,6 +36,9 @@
 			<Style x:Key="ThemedMarkdownTextBlockStyle"
 				   TargetType="controls:MarkdownTextBlock"
 				   BasedOn="{StaticResource LightMarkdownTextBlockStyle}" />
+			<Style x:Key="ThemedMarkdownAssistantBlockStyle"
+				   TargetType="controls:MarkdownTextBlock"
+				   BasedOn="{StaticResource LightMarkDownAssistantBlockStyle}" />
 			<Style x:Key="ThemedPromptStyle"
 				   TargetType="custom:Prompt"
 				   BasedOn="{StaticResource LightPromptStyle}" />
@@ -99,6 +102,9 @@
 			<Style x:Key="ThemedMarkdownTextBlockStyle"
 				   TargetType="controls:MarkdownTextBlock"
 				   BasedOn="{StaticResource DarkMarkdownTextBlockStyle}" />
+			<Style x:Key="ThemedMarkdownAssistantBlockStyle"
+				   TargetType="controls:MarkdownTextBlock"
+				   BasedOn="{StaticResource DarkMarkDownAssistantBlockStyle}" />
 			<Style x:Key="ThemedPromptStyle"
 				   TargetType="custom:Prompt"
 				   BasedOn="{StaticResource DarkPromptStyle}" />

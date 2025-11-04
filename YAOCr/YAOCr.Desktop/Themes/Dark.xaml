@@ -454,7 +454,7 @@
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource DarkListViewItemContainerStyle}">
 		<Setter Property="Margin"
-				Value="0, 5, 36, 10" />
+				Value="20, 10, 36, 10" />
 		<Setter Property="HorizontalAlignment"
 				Value="Right" />
 		<Setter Property="Template">
@@ -514,7 +514,7 @@
 		   TargetType="ListViewItem"
 		   BasedOn="{StaticResource DarkListViewItemContainerStyle}">
 		<Setter Property="Margin"
-				Value="0,10,36,0" />
+				Value="0,10,56,10" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ListViewItem">
@@ -577,6 +577,15 @@
 				Value="{StaticResource DarkRegionAltColor}" />
 		<Setter Property="CodeForeground"
 				Value="#FFFFFFFF" />
+	</Style>
+
+	<Style x:Key="DarkMarkDownAssistantBlockStyle"
+		   TargetType="controls:MarkdownTextBlock"
+		   BasedOn="{StaticResource DarkMarkdownTextBlockStyle}">
+		<Setter Property="BorderThickness"
+				Value="1" />
+		<Setter Property="Background"
+				Value="{StaticResource DarkRegionColor}" />
 	</Style>
 
 	<Style x:Key="DarkPromptStyle"

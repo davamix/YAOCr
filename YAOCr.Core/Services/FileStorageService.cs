@@ -52,6 +52,13 @@ public class FileStorageService : IFileStorageService {
             throw new FileNotFoundException("File not found", filePath);
         }
 
-        return await File.ReadAllTextAsync(filePath);
+        var content = await File.ReadAllTextAsync(filePath);
+
+        return content
+            .Replace("\r\n", "\n")  // Normalize line endings
+            .Replace("\r", "\n")    // Handle any remaining lone \r
+            .Replace("\u0085", "\n") // Handle next line character
+            .Replace("\u2028", "\n") // Handle line separator
+            .Replace("\u2029", "\n"); // Handle paragraph separator;
     }
 }

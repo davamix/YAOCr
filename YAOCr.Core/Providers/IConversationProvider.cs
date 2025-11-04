@@ -8,6 +8,6 @@ namespace YAOCr.Core.Providers;
 
 public interface IConversationProvider {
     Task<List<Conversation>> GetConversationsAsync();
-    Task SaveMessage(Message message, List<float[]> embeddings, Guid conversationId);
-    Task SaveConversation(Conversation conversation, List<float[]> embeddings);
+    Task SaveMessage(Message message, float[] embeddings, Guid conversationId);
+    Task SaveConversation(Conversation conversation, float[] embeddings);
 }
