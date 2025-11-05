@@ -15,6 +15,7 @@
 
 	<UserControl.Resources>
 		<converters:StringContentToVisibilityConverter x:Key="StringContentToVisibilityConverter" />
+		<converters:NullToBooleanConverter x:Key="NullToBooleanConverter" />
 	</UserControl.Resources>
 
 
@@ -118,7 +119,8 @@
 									 PlaceholderText="Type your message"
 									 HorizontalAlignment="Stretch"
 									 HorizontalContentAlignment="Stretch"
-									 VerticalAlignment="Bottom" />
+									 VerticalAlignment="Bottom" 
+									 IsEnabled="{Binding ElementName=lstConversations, Path=SelectedItem, Converter={StaticResource NullToBooleanConverter}}"/>
 
 				</Grid>
 

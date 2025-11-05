@@ -148,10 +148,10 @@ public partial class ConversationsViewModel : ObservableObject {
             var filesContent = await ExtractFilesContent(promptMessage.FilePaths);
 
             // Add user message to the conversation
-            AddNewMessageToConversation(promptMessage.Message, SenderEnum.User, filesContent);
+            var message = AddNewMessageToConversation(promptMessage.Message, SenderEnum.User, filesContent);
 
             // Save message then add to the list
-            //await _conversationService.SaveMessage(m, SelectedConversation.Id);
+            await _conversationService.SaveMessage(message, SelectedConversation.Id);
         } catch {
             throw;
         } finally {
@@ -169,10 +169,11 @@ public partial class ConversationsViewModel : ObservableObject {
                 await ProcessAssistantMessageResponse();
 
                 // Add assistant message to the conversation
-                AddNewMessageToConversation(AssistantMessage, SenderEnum.Assistant, []);
+                var message = AddNewMessageToConversation(AssistantMessage, SenderEnum.Assistant, []);
 
                 // Save assistant message to db
-                //await _conversationService.SaveMessage(AssistantMessage, SelectedConversation.Id);
+                await _conversationService.SaveMessage(message, SelectedConversation.Id);
+                
                 _assistantMessageStream.Clear();
                 RefreshProperty(AssistantMessage);
             } catch (Exception ex) {
@@ -213,9 +214,7 @@ public partial class ConversationsViewModel : ObservableObject {
         return filesContent;
     }
 
-    private void AddNewMessageToConversation(string messageContent, SenderEnum sender, List<(string Path, string Content)> filesContent) {
-        if (SelectedConversation == null) return;
-
+    private Message AddNewMessageToConversation(string messageContent, SenderEnum sender, List<(string Path, string Content)> filesContent) {
         var message = new Message(
             Id: Guid.NewGuid(),
             Content: messageContent,
@@ -226,6 +225,8 @@ public partial class ConversationsViewModel : ObservableObject {
         );
 
         SelectedConversation.Messages.Add(message);
+
+        return message;
     }
 
     private void StartWaitingForResponse() {
@@ -239,7 +240,7 @@ public partial class ConversationsViewModel : ObservableObject {
     }
 
     private void SetStatusMessage(string message) {
-        _ = DispatcherQueue.GetForCurrentThread().TryEnqueue(async () => {
+        _ = DispatcherQueue.GetForCurrentThread().TryEnqueue(() => {
             StatusMessage = message;
             RefreshProperty(nameof(StatusMessage));
         });
