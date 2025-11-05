@@ -104,10 +104,14 @@
 														  Grid.Row="1"
 														  Text="{Binding AssistantMessage}"
 														  Style="{ThemeResource ThemedMarkdownAssistantBlockStyle}"
-														  Visibility="{Binding AssistantMessage, Converter={StaticResource StringContentToVisibilityConverter}}"/>
+														  Visibility="{Binding AssistantMessage, Converter={StaticResource StringContentToVisibilityConverter}}" />
 
 						</StackPanel>
 					</ScrollViewer>
+
+					<TextBlock Grid.Row="1"
+							   Text="{Binding StatusMessage}"
+							   Style="{StaticResource CaptionTextBlockStyle}" />
 
 					<controls:Prompt Grid.Row="1"
 									 SendCommand="{Binding SendMessageCommand}"
@@ -118,7 +122,9 @@
 
 				</Grid>
 
-				<ProgressRing IsActive="{Binding IsLoading}" />
+
+
+				<ProgressRing IsActive="{Binding IsWaitingForResponse}" />
 			</Grid>
 		</Border>
 	</Grid>

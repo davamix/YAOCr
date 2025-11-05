@@ -26,7 +26,10 @@ public partial class ConversationsViewModel : ObservableObject {
     private Conversation? _selectedConversation = null;
 
     [ObservableProperty]
-    private bool _isLoading = false;
+    private bool _isWaitingForResponse = false;
+
+    [ObservableProperty]
+    private string _statusMessage = string.Empty;
 
 
     private StringBuilder _assistantMessageStream = new();
@@ -64,6 +67,7 @@ public partial class ConversationsViewModel : ObservableObject {
         }
     }
 
+    // TODO: To be removed
     private void GenerateFakeConversation() {
         var msg = """
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse efficitur viverra metus, hendrerit sagittis elit pellentesque eu. Suspendisse non elit fermentum justo ultricies mollis. Cras quis interdum arcu. Nam varius urna non aliquet eleifend. Nunc eleifend nibh in tristique aliquet. Aliquam sed orci placerat, vulputate eros a, aliquet lectus. Duis aliquet tortor mi, vitae posuere ligula commodo cursus. Sed iaculis fringilla ante, et sollicitudin lorem molestie eu. Integer vehicula rhoncus neque quis fermentum. Vestibulum efficitur malesuada mi non eleifend. Suspendisse nec finibus justo. Ut arcu enim, venenatis ac ullamcorper in, ultricies vitae nulla. Nulla in mauris nec quam feugiat gravida. Nulla accumsan eu mi at pretium.
@@ -128,36 +132,74 @@ public partial class ConversationsViewModel : ObservableObject {
     private async void SendMessage(PromptMessage promptMessage) {
         if (SelectedConversation == null) return;
 
-        IsLoading = true;
-
         try {
             await ProcesssUserMessage(promptMessage);
             await ProcessAssistantMessage();
         } catch {
             throw;
-        } finally {
-            IsLoading = false;
         }
-
     }
 
     private async Task ProcesssUserMessage(PromptMessage promptMessage) {
-        var filesContent = await ExtractFilesContent(promptMessage.FilePaths);
+        try {
+            StartWaitingForResponse();
 
-        // Add user message to the conversation
-        var m = new Message(
-            Id: Guid.NewGuid(),
-            Content: promptMessage.Message,
-            Sender: SenderEnum.User,
-            CreatedAt: DateTime.Now,
-            UpdatedAt: DateTime.Now,
-            FilesContent: filesContent
-        );
+            SetStatusMessage("Processing user message...");
+            var filesContent = await ExtractFilesContent(promptMessage.FilePaths);
 
-        // Save message then add to the list
-        //await _conversationService.SaveMessage(m, SelectedConversation.Id);
+            // Add user message to the conversation
+            AddNewMessageToConversation(promptMessage.Message, SenderEnum.User, filesContent);
 
-        SelectedConversation?.Messages.Add(m);
+            // Save message then add to the list
+            //await _conversationService.SaveMessage(m, SelectedConversation.Id);
+        } catch {
+            throw;
+        } finally {
+            SetStatusMessage(string.Empty);
+            StopWaitingForResponse();
+        }
+    }
+
+    private async Task ProcessAssistantMessage() {
+        _ = DispatcherQueue.GetForCurrentThread().TryEnqueue(async () => {
+            StartWaitingForResponse();
+            SetStatusMessage("Waiting for assistant response...");
+
+            try {
+                await ProcessAssistantMessageResponse();
+
+                // Add assistant message to the conversation
+                AddNewMessageToConversation(AssistantMessage, SenderEnum.Assistant, []);
+
+                // Save assistant message to db
+                //await _conversationService.SaveMessage(AssistantMessage, SelectedConversation.Id);
+                _assistantMessageStream.Clear();
+                RefreshProperty(AssistantMessage);
+            } catch (Exception ex) {
+                Debug.WriteLine(ex.Message);
+            } finally {
+                StopWaitingForResponse();
+                SetStatusMessage(string.Empty);
+            }
+        });
+    }
+
+    private async Task ProcessAssistantMessageResponse() {
+        await foreach (var response in _conversationService.SendMessage(SelectedConversation?.Messages.ToList())) {
+            if (IsWaitingForResponse) {
+                SetStatusMessage("Receiving assistant response...");
+                StopWaitingForResponse();
+            }
+
+            await Task.Delay(1);
+
+            AssistantMessage = response;
+        }
+    }
+
+    [RelayCommand]
+    private void OpenSettingsDialog() {
+        _dialogService.OpenDialogSettings();
     }
 
     private async Task<List<(string Path, string Content)>> ExtractFilesContent(IEnumerable<string> filesPath) {
@@ -171,36 +213,36 @@ public partial class ConversationsViewModel : ObservableObject {
         return filesContent;
     }
 
-    private async Task ProcessAssistantMessage() {
-        _ = DispatcherQueue.GetForCurrentThread().TryEnqueue(async () => {
-            await foreach (var response in _conversationService.SendMessage(SelectedConversation?.Messages.ToList())) {
-                await Task.Delay(1);
+    private void AddNewMessageToConversation(string messageContent, SenderEnum sender, List<(string Path, string Content)> filesContent) {
+        if (SelectedConversation == null) return;
 
-                AssistantMessage = response;
-            }
+        var message = new Message(
+            Id: Guid.NewGuid(),
+            Content: messageContent,
+            Sender: sender,
+            CreatedAt: DateTime.Now,
+            UpdatedAt: DateTime.Now,
+            FilesContent: filesContent
+        );
 
-            // Add assistant message to the conversation
-            var msg = new Message(
-                    Id: Guid.NewGuid(),
-                    Content: AssistantMessage,
-                    Sender: SenderEnum.Assistant,
-                    CreatedAt: DateTime.Now,
-                    UpdatedAt: DateTime.Now,
-                    FilesContent: []
-                );
-
-            SelectedConversation?.Messages.Add(msg);
-
-            // Save assistant message to db
-            //await _conversationService.SaveMessage(AssistantMessage, SelectedConversation.Id);
-            _assistantMessageStream.Clear();
-            RefreshProperty(AssistantMessage);
-        });
+        SelectedConversation.Messages.Add(message);
     }
 
-    [RelayCommand]
-    private void OpenSettingsDialog() {
-        _dialogService.OpenDialogSettings();
+    private void StartWaitingForResponse() {
+        IsWaitingForResponse = true;
+        RefreshProperty(nameof(IsWaitingForResponse));
+    }
+
+    private void StopWaitingForResponse() {
+        IsWaitingForResponse = false;
+        RefreshProperty(nameof(IsWaitingForResponse));
+    }
+
+    private void SetStatusMessage(string message) {
+        _ = DispatcherQueue.GetForCurrentThread().TryEnqueue(async () => {
+            StatusMessage = message;
+            RefreshProperty(nameof(StatusMessage));
+        });
     }
 
     private void RefreshProperty(string propertyName) {
