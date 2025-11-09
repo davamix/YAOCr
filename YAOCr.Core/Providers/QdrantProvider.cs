@@ -37,7 +37,7 @@ public class QdrantProvider : IConversationProvider {
             if (await _client.CollectionExistsAsync(_collectionName)) return;
 
             await _client.CreateCollectionAsync(
-                _collectionName, 
+                _collectionName,
                 new VectorParams {
                     Size = _embeddingsVectorSize,
                     Distance = Distance.Cosine
@@ -53,14 +53,13 @@ public class QdrantProvider : IConversationProvider {
             await _client.CreatePayloadIndexAsync(
                 _collectionName,
                 "ConversationId",
-                schemaType:PayloadSchemaType.Keyword,
+                schemaType: PayloadSchemaType.Keyword,
                 indexParams: new PayloadIndexParams {
-                    KeywordIndexParams =new KeywordIndexParams {
+                    KeywordIndexParams = new KeywordIndexParams {
                         IsTenant = true
                     }
                 });
-        } catch (Exception ex) {
-            Debug.WriteLine(ex.Message);
+        } catch {
             throw;
         }
     }
@@ -76,13 +75,33 @@ public class QdrantProvider : IConversationProvider {
                 payloadSelector: true);
 
             //TODO: Map response to IEnumerable<Conversation>
-            foreach(var result in response.Result) {
+            foreach (var result in response.Result) {
                 var conversation = result.ToConversation();
 
                 conversations.Add(conversation);
             }
 
             return conversations;
+        } catch {
+            throw;
+        }
+    }
+
+    public async Task<List<Message>> GetMessages(Guid conversationId) {
+        var messages = new List<Message>();
+
+        try {
+            var response = await _client.ScrollAsync(
+                _collectionName,
+                filter: Conditions.MatchKeyword("ConversationId", conversationId.ToString()),
+                payloadSelector: true);
+
+            foreach (var result in response.Result) {
+                messages.Add(result.ToMessage());
+            }
+
+            return messages.OrderBy(x => x.CreatedAt).ToList();
+
         } catch {
             throw;
         }
@@ -124,13 +143,13 @@ public class QdrantProvider : IConversationProvider {
                             ["CreatedAt"] = message.CreatedAt.ToString(),
                             ["UpdatedAt"] = message.UpdatedAt.ToString(),
                             ["Attachments"] = new Value() {
-                                StringValue = JsonSerializer.Serialize(message.FilesContent.Select(x => new { x.Path, x.Content }))
-                                }
+                                StringValue = JsonSerializer.Serialize(message.Attachments)
                             }
-
                         }
-                    });
-        } catch {
+                    }
+                });
+        } catch(Exception ex) {
+            Debug.WriteLine($"[SaveMessage]: {ex.Message}");
             throw;
         }
     }

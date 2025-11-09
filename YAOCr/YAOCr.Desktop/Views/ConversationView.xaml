@@ -45,7 +45,8 @@
 						  ItemsSource="{Binding Conversations}"
 						  SelectedItem="{Binding SelectedConversation, Mode=TwoWay}"
 						  SelectionMode="Single"
-						  Style="{ThemeResource ThemedListViewStyle}">
+						  Style="{ThemeResource ThemedListViewStyle}"
+						  SelectionChanged="lstConversations_SelectionChanged">
 					<ListView.ItemTemplate>
 						<DataTemplate>
 							<Border>
@@ -119,8 +120,8 @@
 									 PlaceholderText="Type your message"
 									 HorizontalAlignment="Stretch"
 									 HorizontalContentAlignment="Stretch"
-									 VerticalAlignment="Bottom" 
-									 IsEnabled="{Binding ElementName=lstConversations, Path=SelectedItem, Converter={StaticResource NullToBooleanConverter}}"/>
+									 VerticalAlignment="Bottom"
+									 IsEnabled="{Binding ElementName=lstConversations, Path=SelectedItem, Converter={StaticResource NullToBooleanConverter}}" />
 
 				</Grid>
 

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YAOCr.Core.Models;
 
 namespace YAOCr.Core.Services;
 
 public interface ILlmService {
-    string CreateLlmMessage(string message, List<(string Path, string Content)> filesContent);
+    string CreateLlmMessage(string message, List<MessageAttachment> attachments);
 }
 public class LlmService : ILlmService {
     private readonly IFileStorageService _fileStorageService;
@@ -14,11 +15,11 @@ public class LlmService : ILlmService {
         _fileStorageService = fileStorageService;
     }
 
-    public string CreateLlmMessage(string message, List<(string Path, string Content)> filesContent) {
+    public string CreateLlmMessage(string message, List<MessageAttachment> attachments) {
         var content = message;
         content += "\n\nFILES ATTACHED\n";
 
-        foreach (var file in filesContent) {
+        foreach (var file in attachments) {
             content += String.Format($"File: {file.Path}\n");
             content += "Content:\n";
             content += file.Content;

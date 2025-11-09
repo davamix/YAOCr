@@ -8,21 +8,9 @@ public static class ToConversationMapper {
         
         return new Conversation {
             Id = Guid.Parse(point.Id.Uuid),
-            Name = GetPayloadStringValue(point, "Name"),
-            CreatedAt = GetPayloadDateTimeValue(point, "CreatedAt"),
-            UpdatedAt = GetPayloadDateTimeValue(point, "UpdatedAt")
+            Name = point.GetPayloadStringValue("Name"),
+            CreatedAt = point.GetPayloadDateTimeValue("CreatedAt"),
+            UpdatedAt = point.GetPayloadDateTimeValue("UpdatedAt")
         };
-    }
-
-    private static DateTime GetPayloadDateTimeValue(RetrievedPoint point, string key) =>
-        DateTime.Parse(GetPayloadStringValue(point, key));
-    
-
-    private static string GetPayloadStringValue(RetrievedPoint point, string key) {
-        if(point.Payload.ContainsKey(key)) {
-            return point.Payload[key].StringValue;
-        }
-
-        throw new Exception($"Key '{key}' not found in payload.");
     }
 }

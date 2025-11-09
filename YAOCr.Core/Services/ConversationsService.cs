@@ -17,6 +17,7 @@ public interface IConversationsService {
     Task SaveConversation(Conversation conversation);
     Task SaveMessage(Message message, Guid conversationId);
     Task<IEnumerable<Conversation>> GetConversations();
+    Task<IEnumerable<Message>> GetConversationMessages(Guid conversationId);
 }
 
 public class ConversationsService : IConversationsService {
@@ -50,8 +51,8 @@ public class ConversationsService : IConversationsService {
             Model = _llmModel,
             Messages = conversationMessages.Select(m => new MessageDto {
                 Role = m.Sender == SenderEnum.User ? "user" : "assistant",
-                Content = m.FilesContent.Any()
-                    ? _llmService.CreateLlmMessage(m.Content, m.FilesContent)
+                Content = m.Attachments.Any()
+                    ? _llmService.CreateLlmMessage(m.Content, m.Attachments)
                     : m.Content
             }).ToList()
         };
@@ -90,5 +91,9 @@ public class ConversationsService : IConversationsService {
 
     public async Task<IEnumerable<Conversation>> GetConversations() {
         return await _conversationProvider.GetConversationsAsync();
+    }
+
+    public async Task<IEnumerable<Message>> GetConversationMessages(Guid conversationId) {
+        return await _conversationProvider.GetMessages(conversationId);
     }
 }

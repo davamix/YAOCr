@@ -23,4 +23,4 @@ public record Message(
     SenderEnum Sender,
     DateTime CreatedAt,
     DateTime UpdatedAt,
-    List<(string Path, string Content)> FilesContent);
+    List<MessageAttachment> Attachments);

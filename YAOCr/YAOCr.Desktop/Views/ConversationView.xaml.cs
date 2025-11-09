@@ -2,6 +2,8 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using System.Linq;
+using YAOCr.Core.Models;
 using YAOCr.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -25,4 +27,17 @@ public sealed partial class ConversationView : UserControl {
         this.ProtectedCursor = InputSystemCursor.Create(InputSystemCursorShape.Arrow);
     }
 
+    // EventTriggerBehavior and InvokeCommandActions from XAML doesn't work.
+    // Need to call command via event handler.
+    private void lstConversations_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        if (!e.AddedItems.Any()) return;
+
+        var context = this.DataContext as ConversationsViewModel;
+
+        if (context == null) return;
+
+        var item = e.AddedItems[0] as Conversation;
+
+        context.LoadConversationMessagesCommand.Execute(item);
+    }
 }

@@ -85,7 +85,7 @@ public partial class ConversationsViewModel : ObservableObject {
                 Sender: x % 2 == 0 ? SenderEnum.User : SenderEnum.Assistant,
                 CreatedAt: DateTime.Now,
                 UpdatedAt: DateTime.Now,
-                FilesContent: []
+                Attachments: []
             ));
         }
 
@@ -147,6 +147,17 @@ public partial class ConversationsViewModel : ObservableObject {
         Conversations.Remove(conversation);
 
         //TODO: Delete conversation from DB
+    }
+
+    [RelayCommand]
+    private async Task LoadConversationMessages(Conversation conversation) {
+        if (SelectedConversation.Messages.Any()) return;
+
+        var messages = await _conversationService.GetConversationMessages(conversation.Id);
+
+        foreach(var msg in messages) {
+            SelectedConversation.Messages.Add(msg);
+        }
     }
 
     [RelayCommand]
@@ -224,25 +235,30 @@ public partial class ConversationsViewModel : ObservableObject {
         _dialogService.OpenDialogSettings();
     }
 
-    private async Task<List<(string Path, string Content)>> ExtractFilesContent(IEnumerable<string> filesPath) {
-        var filesContent = new List<(string Path, string Content)>();
+    private async Task<List<MessageAttachment>> ExtractFilesContent(IEnumerable<string> filesPath) {
+        var filesContent = new List<MessageAttachment>();
 
         foreach (var f in filesPath) {
             var content = await _fileStorageService.ReadTextFile(f);
-            filesContent.Add((f, content));
+            var attachment = new MessageAttachment {
+                Path = f,
+                Content = content
+            };
+
+            filesContent.Add(attachment);
         }
 
         return filesContent;
     }
 
-    private Message AddNewMessageToConversation(string messageContent, SenderEnum sender, List<(string Path, string Content)> filesContent) {
+    private Message AddNewMessageToConversation(string messageContent, SenderEnum sender, List<MessageAttachment> attachments) {
         var message = new Message(
             Id: Guid.NewGuid(),
             Content: messageContent,
             Sender: sender,
             CreatedAt: DateTime.Now,
             UpdatedAt: DateTime.Now,
-            FilesContent: filesContent
+            Attachments: attachments
         );
 
         SelectedConversation.Messages.Add(message);

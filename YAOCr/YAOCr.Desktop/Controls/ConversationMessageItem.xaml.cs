@@ -37,9 +37,9 @@ public sealed partial class ConversationMessageItem : UserControl {
     private static void OnMessageReceived(DependencyObject d, DependencyPropertyChangedEventArgs e) {
         var message = e.NewValue as Message;
 
-        if ((message != null) && (message.FilesContent.Any())) {
-            foreach (var file in message.FilesContent) {
-                ((ConversationMessageItem)d).FilesPath.Add(file.Path);
+        if ((message != null) && (message.Attachments.Any())) {
+            foreach (var att in message.Attachments) {
+                ((ConversationMessageItem)d).FilesPath.Add(att.Path);
             }
         }
     }
