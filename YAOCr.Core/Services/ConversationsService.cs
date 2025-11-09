@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Devices.Bluetooth.Advertisement;
 using YAOCr.Core.Dtos;
 using YAOCr.Core.Models;
 using YAOCr.Core.Providers;
@@ -13,10 +14,9 @@ namespace YAOCr.Core.Services;
 
 public interface IConversationsService {
     IAsyncEnumerable<string> SendMessage(List<Message> conversationMessages);
-    [Experimental("NotImplemented")]
     Task SaveConversation(Conversation conversation);
-    
     Task SaveMessage(Message message, Guid conversationId);
+    Task<IEnumerable<Conversation>> GetConversations();
 }
 
 public class ConversationsService : IConversationsService {
@@ -62,7 +62,6 @@ public class ConversationsService : IConversationsService {
     }
 
     public async Task SaveConversation(Conversation conversation) {
-        throw new NotImplementedException();
         var request = new EmbeddingRequest {
             Content = conversation.Name,
             ModelName = _configuration["AppSettings:LlamaCpp:EmbeddingsModelName"],
@@ -87,5 +86,9 @@ public class ConversationsService : IConversationsService {
 
         // Save message with embeddings
         await _conversationProvider.SaveMessage(message, embeddings, conversationId);
+    }
+
+    public async Task<IEnumerable<Conversation>> GetConversations() {
+        return await _conversationProvider.GetConversationsAsync();
     }
 }

@@ -29,7 +29,7 @@ public sealed partial class ConversationItem : UserControl {
     public static readonly DependencyProperty SaveCommandProperty =
             DependencyProperty.RegisterAttached(
                 "SaveCommand",
-                typeof(RelayCommand<Conversation>),
+                typeof(IAsyncRelayCommand<Conversation>),
                 typeof(ConversationItem),
                 new PropertyMetadata(null)
             );
@@ -55,8 +55,8 @@ public sealed partial class ConversationItem : UserControl {
         set { SetValue(ConversationProperty, value); }
     }
 
-    public RelayCommand<Conversation> SaveCommand {
-        get { return (RelayCommand<Conversation>)GetValue(SaveCommandProperty); }
+    public IAsyncRelayCommand<Conversation> SaveCommand {
+        get { return (IAsyncRelayCommand<Conversation>)GetValue(SaveCommandProperty); }
         set { SetValue(SaveCommandProperty, value); }
     }
 

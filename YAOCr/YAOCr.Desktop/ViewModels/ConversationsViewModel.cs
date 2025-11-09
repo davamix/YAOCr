@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Dispatching;
-using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -58,9 +57,9 @@ public partial class ConversationsViewModel : ObservableObject {
     }
 
     private async void InitializeConversations() {
-        GenerateFakeConversation();
-        return;
-        var conversations = await _conversationProvider.GetConversationsAsync();
+        //GenerateFakeConversation();
+        //return;
+        var conversations = await _conversationService.GetConversations();// _conversationProvider.GetConversationsAsync();
 
         foreach (var conversation in conversations) {
             Conversations.Add(conversation);
@@ -94,7 +93,7 @@ public partial class ConversationsViewModel : ObservableObject {
     }
 
     [RelayCommand]
-    private void CreateConversation() {
+    private async void CreateConversation() {
         var newConversation = new Conversation {
             Id = Guid.NewGuid(),
             Name = $"New [{DateTime.Now.ToShortDateString()}]",
@@ -102,9 +101,20 @@ public partial class ConversationsViewModel : ObservableObject {
             UpdatedAt = DateTime.Now,
         };
 
-        Conversations.Add(newConversation);
+        try {
+            SetStatusMessage("Creating new conversation...");
 
-        SelectedConversation = newConversation;
+            await _conversationService.SaveConversation(newConversation);
+
+            Conversations.Add(newConversation);
+
+            SelectedConversation = newConversation;
+        } catch {
+            SetStatusMessage("Failed to create new conversation.");
+            throw;
+        } finally {
+            SetStatusMessage(string.Empty);
+        }
     }
 
     [RelayCommand]
@@ -117,8 +127,19 @@ public partial class ConversationsViewModel : ObservableObject {
     }
 
     [RelayCommand]
-    private void SaveConversation(Conversation conversation) {
-        //TODO: Save conversation name to DB
+    private async Task SaveConversation(Conversation conversation) {
+        try {
+            SetStatusMessage("Saving conversation...");
+
+            conversation.UpdatedAt = DateTime.Now;
+
+            await _conversationService.SaveConversation(conversation);
+        } catch {
+            SetStatusMessage("Failed to save conversation.");
+            throw;
+        } finally {
+            SetStatusMessage(string.Empty);
+        }
     }
 
     [RelayCommand]

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using YAOCr.Core.Models;
+using YAOCr.Core.Mappers;
 
 namespace YAOCr.Core.Providers;
 public class QdrantProvider : IConversationProvider {
@@ -35,18 +36,56 @@ public class QdrantProvider : IConversationProvider {
         try {
             if (await _client.CollectionExistsAsync(_collectionName)) return;
 
-            await _client.CreateCollectionAsync(_collectionName, new VectorParams {
-                Size = _embeddingsVectorSize,
-                Distance = Distance.Cosine
-            });
+            await _client.CreateCollectionAsync(
+                _collectionName, 
+                new VectorParams {
+                    Size = _embeddingsVectorSize,
+                    Distance = Distance.Cosine
+                },
+                // Disable global index
+                hnswConfig: new HnswConfigDiff {
+                    PayloadM = 16,
+                    M = 0
+                }
+            );
+
+            // Set index by payload attribute "ConversationId"
+            await _client.CreatePayloadIndexAsync(
+                _collectionName,
+                "ConversationId",
+                schemaType:PayloadSchemaType.Keyword,
+                indexParams: new PayloadIndexParams {
+                    KeywordIndexParams =new KeywordIndexParams {
+                        IsTenant = true
+                    }
+                });
         } catch (Exception ex) {
             Debug.WriteLine(ex.Message);
             throw;
         }
     }
 
-    public Task<List<Conversation>> GetConversationsAsync() {
-        return Task.FromResult(new List<Conversation>());
+    public async Task<List<Conversation>> GetConversationsAsync() {
+        var conversations = new List<Conversation>();
+
+        try {
+            var response = await _client.ScrollAsync(
+                _collectionName,
+                filter: Conditions.MatchKeyword("IsConversation", true.ToString()),
+                //limit: 5, // Default limit = 10
+                payloadSelector: true);
+
+            //TODO: Map response to IEnumerable<Conversation>
+            foreach(var result in response.Result) {
+                var conversation = result.ToConversation();
+
+                conversations.Add(conversation);
+            }
+
+            return conversations;
+        } catch {
+            throw;
+        }
     }
 
     public async Task SaveConversation(Conversation conversation, float[] embeddings) {
@@ -59,6 +98,7 @@ public class QdrantProvider : IConversationProvider {
                         Vectors = embeddings,
                         Payload = {
                             ["Name"] = conversation.Name,
+                            ["IsConversation"] = true.ToString(),
                             ["CreatedAt"] = conversation.CreatedAt.ToString(),
                             ["UpdatedAt"] = conversation.UpdatedAt.ToString()
                         }
@@ -91,7 +131,7 @@ public class QdrantProvider : IConversationProvider {
                         }
                     });
         } catch {
-            throw;  
+            throw;
         }
     }
 }
