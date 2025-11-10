@@ -1,5 +1,51 @@
 # YAOCr
 
+YAOCr is a RAG tool for windows desktop ([WinUI 3](https://github.com/microsoft/microsoft-ui-xaml)) that allows you to chat with an LLM model and work with your own documents (.txt, .json...).
+
+### Tools
+- LLM Backend: [Llama.cpp](https://github.com/ggml-org/llama.cpp)
+- Vector DB: [Qdrant](https://qdrant.tech/documentation/)
+- LLM model: [Gemma 3](https://huggingface.co/unsloth/gemma-3-4b-it-GGUF)
+- Embedding model: [Embedding Gemma](https://huggingface.co/unsloth/embeddinggemma-300m-GGUF)
+
+### Docker
+- Replace `d:\\llama.cpp\\models` by the path where the models are saved
+
+Llama.cpp
+```
+docker run --name llama_cpp -p 8010:8010 -v d:\\llama.cpp\\models:/models ghcr.io/ggml-org/llama.cpp:server -m /models/gemma-3-4b-it-UD-Q4_K_XL.gguf --host 0.0.0.0 --port 8010
+```
+
+Llama.cpp GPU version
+```
+docker run --name llama_cpp_gpu -p 8010:8010 -v d:\\llama.cpp\\models:/models --gpus all ghcr.io/ggml-org/llama.cpp:server-cuda -m /models/gemma-3-4b-it-UD-Q4_K_XL.gguf --host 0.0.0.0 --port 8010 --n-gpu-layers 99
+```
+
+Embeddings
+```
+docker run --name embeddings -p 8001:8001 -v d:\\llama.cpp\\models:/models ghcr.io/ggml-org/llama.cpp:server -m /models/embeddinggemma-300M-BF16.gguf -c 2048 -ub 2048 --host 0.0.0.0 --port 8001 --embeddings -ngl 99
+```
+
+Embeddings GPU version
+```
+docker run --name embeddings_gpu -p 8001:8001 -v d:\\llama.cpp\\models:/models --gpus all ghcr.io/ggml-org/llama.cpp:server-cuda -m /models/embeddinggemma-300M-BF16.gguf -c 2048 -ub 2048 --host 0.0.0.0 --port 8001 --embeddings -ngl 99
+```
+
+Qdrant (https://qdrant.tech/documentation/quickstart/)
+```
+docker run -p 6333:6333 -p 6334:6334 -v "$(pwd)/qdrant_storage:/qdrant/storage:z" qdrant/qdrant
+```
+
+### Documents support
+Only support the following types:
+- `text/plain`
+- `application/json`
+- `.csv`
+- `.sql`
+
+## Demo
+[YAOCr_demo.webm](https://github.com/user-attachments/assets/66168b9d-8d9a-49cb-8da4-3c64840ad4f0)
+
 ## Chat window
 <img width="1080" height="720" alt="yaocr_chat" src="https://github.com/user-attachments/assets/9c025855-8bef-4998-b835-21ba836f38de" />
 
