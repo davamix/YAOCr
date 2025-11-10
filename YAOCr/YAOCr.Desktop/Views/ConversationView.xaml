@@ -87,7 +87,7 @@
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 
-					<ScrollViewer Grid.Row="0">
+					<ScrollViewer Grid.Row="0" VerticalAnchorRatio="1">
 						<StackPanel>
 							<ListView x:Name="lstMessages"
 									  Grid.Row="0"
