@@ -33,7 +33,7 @@ public sealed partial class ConversationItem : UserControl {
                 typeof(ConversationItem),
                 new PropertyMetadata(null)
             );
-
+    
     public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.RegisterAttached(
                 "DeleteCommand",
@@ -95,6 +95,27 @@ public sealed partial class ConversationItem : UserControl {
         SaveConversationName(Conversation.Name);
     }
 
+    private async void btnExportConversation_Click(object sender, RoutedEventArgs e) {
+        var button = sender as Button;
+
+        if (button == null) return;
+
+        var picker = new FileSavePicker(button.XamlRoot.ContentIslandEnvironment.AppWindowId);
+
+        picker.FileTypeChoices.Add("JSON files", new[] { ".json" });
+        picker.DefaultFileExtension = ".json";
+        picker.SuggestedFileName = Conversation.Name;
+        picker.CommitButtonText = "Save file";
+        picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        picker.SuggestedFolder = "";
+
+        var result = await picker.PickSaveFileAsync();
+
+        if (result != null) {
+            await _fileStorageService.ExportConversation(Conversation, result.Path);
+        }
+    }
+
     private void txtEditConversationName_KeyUp(object sender, KeyRoutedEventArgs e) {
         if(e.Key == Windows.System.VirtualKey.Enter) {
             Conversation.Name = txtEditConversationName.Text;
@@ -118,26 +139,5 @@ public sealed partial class ConversationItem : UserControl {
         gridEditItem.Visibility = Visibility.Collapsed;
 
         txtConversationName.Text = Conversation.Name;
-    }
-
-    private async void btnExportConversation_Click(object sender, RoutedEventArgs e) {
-        var button = sender as Button;
-
-        if (button == null) return;
-
-        var picker = new FileSavePicker(button.XamlRoot.ContentIslandEnvironment.AppWindowId);
-
-        picker.FileTypeChoices.Add("JSON files", new[] { ".json" });
-        picker.DefaultFileExtension = ".json";
-        picker.SuggestedFileName = Conversation.Name;
-        picker.CommitButtonText = "Save file";
-        picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-        picker.SuggestedFolder = "";
-
-        var result = await picker.PickSaveFileAsync();
-
-        if(result != null) {
-            await _fileStorageService.ExportConversation(Conversation, result.Path);
-        }
     }
 }

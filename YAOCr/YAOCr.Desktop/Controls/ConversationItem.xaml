@@ -57,7 +57,9 @@
 						Style="{ThemeResource ThemedButtonStyle}"
 						ToolTipService.ToolTip="Delete conversation"
 						PointerEntered="btn_PointerEntered"
-						PointerExited="btn_PointerExited">
+						PointerExited="btn_PointerExited"
+						Command="{Binding ElementName=conversationItemControl, Path=DeleteCommand}"
+						CommandParameter="{Binding ElementName=conversationItemControl, Path=Conversation}">
 					<FontIcon Glyph="&#xE74D;" />
 				</Button>
 

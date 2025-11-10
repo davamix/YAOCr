@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using YAOCr.Core.Providers;
 using YAOCr.Core.Services;
 using YAOCr.Services;
+using YAOCr.Services.Dialogs;
 using YAOCr.ViewModels;
 
 namespace YAOCr.Bootstrap;

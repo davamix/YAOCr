@@ -64,7 +64,7 @@ public class QdrantProvider : IConversationProvider {
         }
     }
 
-    public async Task<List<Conversation>> GetConversationsAsync() {
+    public async Task<List<Conversation>> GetConversations() {
         var conversations = new List<Conversation>();
 
         try {
@@ -82,6 +82,23 @@ public class QdrantProvider : IConversationProvider {
             }
 
             return conversations;
+        } catch {
+            throw;
+        }
+    }
+
+    public async Task DeleteConversation(Guid conversationId) {
+        try {
+            // Delete messages associated with the conversation
+            var response = await _client.DeleteAsync(
+                _collectionName,
+                filter: Conditions.MatchKeyword("ConversationId", conversationId.ToString())
+            );
+
+            // Delete the conversation
+            await _client.DeleteAsync(
+                _collectionName,
+                ids: new List<PointId>() { conversationId });
         } catch {
             throw;
         }
@@ -148,9 +165,10 @@ public class QdrantProvider : IConversationProvider {
                         }
                     }
                 });
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             Debug.WriteLine($"[SaveMessage]: {ex.Message}");
             throw;
         }
     }
+
 }

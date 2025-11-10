@@ -180,62 +180,7 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="LightCloseDialogButtonStyle"
-		   TargetType="Button">
-		<Setter Property="Foreground"
-				Value="{StaticResource LightRegionForegroundColor}" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="Button">
-					<Grid>
-						<VisualStateManager.VisualStateGroups>
-							<VisualStateGroup x:Name="CommonStates">
-								<VisualState x:Name="Normal">
-									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
-														Storyboard.TargetProperty="Color"
-														To="{StaticResource LightPrimary600Color}"
-														Duration="0:0:0.1" />
-									</Storyboard>
-								</VisualState>
-								<VisualState x:Name="PointerOver">
-									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
-														Storyboard.TargetProperty="Color"
-														To="{StaticResource LightSecondaryColor}"
-														Duration="0:0:0.1" />
-									</Storyboard>
-								</VisualState>
-								<VisualState x:Name="Pressed">
-									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
-														Storyboard.TargetProperty="Color"
-														To="{StaticResource LightSecondaryAltColor}"
-														Duration="0:0:0.1" />
-									</Storyboard>
-								</VisualState>
-							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
-
-						<Border x:Name="ButtonBorder"
-								BorderThickness="0"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								Padding="{TemplateBinding Padding}"
-								CornerRadius="0">
-							<Border.Background>
-								<SolidColorBrush x:Name="ButtonBackground"
-												 Color="{StaticResource LightPrimary600Color}" />
-							</Border.Background>
-							<ContentPresenter x:Name="ContentPresenter"
-											  Content="{TemplateBinding Content}"
-											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
-						</Border>
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+	
 
 	<Style x:Key="LightTextBoxDeleteButtonStyle"
 		   TargetType="Button">
@@ -734,19 +679,99 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="LightScrollViewerSettingsStyle"
-		   TargetType="ScrollViewer">
-		<Setter Property="Background"
-				Value="{StaticResource LightRegionColor}" />
-	</Style>
-
 	<Style x:Key="LightDialogMainGridStyle"
 		   TargetType="Grid">
 		<Setter Property="Background"
 				Value="{StaticResource LightBlurColor}" />
 	</Style>
 
-	<Style x:Key="LightDialogCotentGridStyle"
+	<Style x:Key="LightDialogContentGridStyle"
+		   TargetType="Grid">
+		<Setter Property="Width"
+				Value="640" />
+		<Setter Property="Height"
+				Value="360" />
+		<Setter Property="HorizontalAlignment"
+				Value="Center" />
+		<Setter Property="VerticalAlignment"
+				Value="Center" />
+		<Setter Property="Background"
+				Value="{StaticResource LightRegionColor}" />
+	</Style>
+
+	<Style x:Key="LightDialogButtonStyle"
+		   TargetType="Button"
+		   BasedOn="{StaticResource LightButtonStyle}">
+		<Setter Property="Width"
+				Value="128" />
+		<Setter Property="Padding"
+				Value="10" />
+	</Style>
+
+	<Style x:Key="LightCloseDialogButtonStyle"
+		   TargetType="Button">
+		<Setter Property="Foreground"
+				Value="{StaticResource LightRegionForegroundColor}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightPrimary600Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="PointerOver">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightSecondaryColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Pressed">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource LightSecondaryAltColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+
+						<Border x:Name="ButtonBorder"
+								BorderThickness="0"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								Padding="{TemplateBinding Padding}"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="ButtonBackground"
+												 Color="{StaticResource LightPrimary600Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="LightScrollViewerSettingsStyle"
+		   TargetType="ScrollViewer">
+		<Setter Property="Background"
+				Value="{StaticResource LightRegionColor}" />
+	</Style>
+
+	<Style x:Key="LightSettingsCotentGridStyle"
 		   TargetType="Grid">
 		<Setter Property="Width"
 				Value="1280" />
@@ -760,7 +785,7 @@
 				Value="{StaticResource LightRegionColor}" />
 	</Style>
 
-	<Style x:Key="LightDialogGridHeaderStyle"
+	<Style x:Key="LightSettingsGridHeaderStyle"
 		   TargetType="Grid">
 		<Setter Property="VerticalAlignment"
 				Value="Center" />
@@ -770,7 +795,7 @@
 				Value="{StaticResource LightBase200Color}" />
 	</Style>
 
-	<Style x:Key="LightDialogTextBlockHeaderStyle"
+	<Style x:Key="LightSettingsTextBlockHeaderStyle"
 		   TargetType="TextBlock"
 		   BasedOn="{StaticResource TitleLargeTextBlockStyle}">
 		<Setter Property="HorizontalAlignment"

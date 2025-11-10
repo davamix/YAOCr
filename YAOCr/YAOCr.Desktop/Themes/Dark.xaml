@@ -180,61 +180,7 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="DarkCloseDialogButtonStyle"
-		   TargetType="Button">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="Button">
-					<Grid>
-						<VisualStateManager.VisualStateGroups>
-							<VisualStateGroup x:Name="CommonStates">
-								<VisualState x:Name="Normal">
-									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
-														Storyboard.TargetProperty="Color"
-														To="{StaticResource DarkPrimary600Color}"
-														Duration="0:0:0.1" />
-									</Storyboard>
-								</VisualState>
-								<VisualState x:Name="PointerOver">
-									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
-														Storyboard.TargetProperty="Color"
-														To="{StaticResource DarkSecondaryColor}"
-														Duration="0:0:0.1" />
-									</Storyboard>
-								</VisualState>
-								<VisualState x:Name="Pressed">
-									<Storyboard>
-										<ColorAnimation Storyboard.TargetName="ButtonBackground"
-														Storyboard.TargetProperty="Color"
-														To="{StaticResource DarkSecondaryAltColor}"
-														Duration="0:0:0.1" />
-									</Storyboard>
-								</VisualState>
-							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
-
-						<Border x:Name="ButtonBorder"
-								BorderThickness="0"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								Padding="{TemplateBinding Padding}"
-								CornerRadius="0">
-							<Border.Background>
-								<SolidColorBrush x:Name="ButtonBackground"
-												 Color="{StaticResource DarkPrimary600Color}" />
-							</Border.Background>
-							<ContentPresenter x:Name="ContentPresenter"
-											  Content="{TemplateBinding Content}"
-											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
-						</Border>
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-
+	
 	<Style x:Key="DarkTextBoxStyle"
 		   TargetType="TextBox">
 		<Setter Property="Template">
@@ -754,19 +700,97 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="DarkScrollViewerSettingsStyle"
-		   TargetType="ScrollViewer">
-		<Setter Property="Background"
-				Value="{StaticResource DarkRegionColor}" />
-	</Style>
-
 	<Style x:Key="DarkDialogMainGridStyle"
 		   TargetType="Grid">
 		<Setter Property="Background"
 				Value="{StaticResource DarkBlurColor}" />
 	</Style>
 
-	<Style x:Key="DarkDialogCotentGridStyle"
+	<Style x:Key="DarkDialogContentGridStyle"
+		   TargetType="Grid">
+		<Setter Property="Width"
+				Value="640" />
+		<Setter Property="Height"
+				Value="360" />
+		<Setter Property="HorizontalAlignment"
+				Value="Center" />
+		<Setter Property="VerticalAlignment"
+				Value="Center" />
+		<Setter Property="Background"
+				Value="{StaticResource DarkRegionColor}" />
+	</Style>
+
+	<Style x:Key="DarkDialogButtonStyle"
+		   TargetType="Button"
+		   BasedOn="{StaticResource DarkButtonStyle}">
+		<Setter Property="Width"
+				Value="128" />
+		<Setter Property="Padding"
+				Value="10" />
+	</Style>
+
+	<Style x:Key="DarkCloseDialogButtonStyle"
+		   TargetType="Button">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkPrimary600Color}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="PointerOver">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkSecondaryColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Pressed">
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetName="ButtonBackground"
+														Storyboard.TargetProperty="Color"
+														To="{StaticResource DarkSecondaryAltColor}"
+														Duration="0:0:0.1" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+
+						<Border x:Name="ButtonBorder"
+								BorderThickness="0"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								Padding="{TemplateBinding Padding}"
+								CornerRadius="0">
+							<Border.Background>
+								<SolidColorBrush x:Name="ButtonBackground"
+												 Color="{StaticResource DarkPrimary600Color}" />
+							</Border.Background>
+							<ContentPresenter x:Name="ContentPresenter"
+											  Content="{TemplateBinding Content}"
+											  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="DarkScrollViewerSettingsStyle"
+		   TargetType="ScrollViewer">
+		<Setter Property="Background"
+				Value="{StaticResource DarkRegionColor}" />
+	</Style>
+
+	<Style x:Key="DarkSettingsCotentGridStyle"
 		   TargetType="Grid">
 		<Setter Property="Width"
 				Value="1280" />
@@ -780,7 +804,7 @@
 				Value="{StaticResource DarkRegionColor}" />
 	</Style>
 
-	<Style x:Key="DarkDialogGridHeaderStyle"
+	<Style x:Key="DarkSettingsGridHeaderStyle"
 		   TargetType="Grid">
 		<Setter Property="VerticalAlignment"
 				Value="Center" />
@@ -790,7 +814,7 @@
 				Value="{StaticResource DarkBase900Color}" />
 	</Style>
 
-	<Style x:Key="DarkDialogTextBlockHeaderStyle"
+	<Style x:Key="DarkSettingsTextBlockHeaderStyle"
 		   TargetType="TextBlock"
 		   BasedOn="{StaticResource TitleLargeTextBlockStyle}">
 		<Setter Property="HorizontalAlignment"

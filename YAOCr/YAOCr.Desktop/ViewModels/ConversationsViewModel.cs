@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using YAOCr.Core.Models;
 using YAOCr.Core.Providers;
 using YAOCr.Core.Services;
-using YAOCr.Services;
+using YAOCr.Services.Dialogs;
 
 namespace YAOCr.ViewModels;
 public partial class ConversationsViewModel : ObservableObject {
@@ -57,39 +57,11 @@ public partial class ConversationsViewModel : ObservableObject {
     }
 
     private async void InitializeConversations() {
-        //GenerateFakeConversation();
-        //return;
         var conversations = await _conversationService.GetConversations();// _conversationProvider.GetConversationsAsync();
 
         foreach (var conversation in conversations) {
             Conversations.Add(conversation);
         }
-    }
-
-    // TODO: To be removed
-    private void GenerateFakeConversation() {
-        var msg = """
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse efficitur viverra metus, hendrerit sagittis elit pellentesque eu. Suspendisse non elit fermentum justo ultricies mollis. Cras quis interdum arcu. Nam varius urna non aliquet eleifend. Nunc eleifend nibh in tristique aliquet. Aliquam sed orci placerat, vulputate eros a, aliquet lectus. Duis aliquet tortor mi, vitae posuere ligula commodo cursus. Sed iaculis fringilla ante, et sollicitudin lorem molestie eu. Integer vehicula rhoncus neque quis fermentum. Vestibulum efficitur malesuada mi non eleifend. Suspendisse nec finibus justo. Ut arcu enim, venenatis ac ullamcorper in, ultricies vitae nulla. Nulla in mauris nec quam feugiat gravida. Nulla accumsan eu mi at pretium.
-            """;
-        var c = new Conversation {
-            Id = Guid.NewGuid(),
-            Name = "Fake Conversation",
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
-
-        for (var x = 0; x < 10; x++) {
-            c.Messages.Add(new Message(
-                Id: Guid.NewGuid(),
-                Content: msg,
-                Sender: x % 2 == 0 ? SenderEnum.User : SenderEnum.Assistant,
-                CreatedAt: DateTime.Now,
-                UpdatedAt: DateTime.Now,
-                Attachments: []
-            ));
-        }
-
-        Conversations.Add(c);
     }
 
     [RelayCommand]
@@ -143,10 +115,28 @@ public partial class ConversationsViewModel : ObservableObject {
     }
 
     [RelayCommand]
-    private void DeleteConvesation(Conversation conversation) {
-        Conversations.Remove(conversation);
+    private void DeleteConversation(Conversation conversation) {
+        var message = DialogMessages.ConfirmDeleteConversationMessage(conversation.Name);
 
-        //TODO: Delete conversation from DB
+        _dialogService.OpenYesNoDialog(new YesNoDialogArgs {
+            Title = message.Title,
+            Message = message.Message,
+            YesAction = async ()=> await DeleteConversationConfirmed(conversation)
+        });
+    }
+
+    private async Task DeleteConversationConfirmed(Conversation conversation) {
+        try {
+            SetStatusMessage("Deleting conversation...");
+
+            await _conversationService.DeleteConversation(conversation.Id);
+
+            Conversations.Remove(conversation);
+        } catch {
+            throw;
+        } finally {
+            SetStatusMessage(string.Empty);
+        }
     }
 
     [RelayCommand]
@@ -155,7 +145,7 @@ public partial class ConversationsViewModel : ObservableObject {
 
         var messages = await _conversationService.GetConversationMessages(conversation.Id);
 
-        foreach(var msg in messages) {
+        foreach (var msg in messages) {
             SelectedConversation.Messages.Add(msg);
         }
     }
@@ -205,7 +195,7 @@ public partial class ConversationsViewModel : ObservableObject {
 
                 // Save assistant message to db
                 await _conversationService.SaveMessage(message, SelectedConversation.Id);
-                
+
                 _assistantMessageStream.Clear();
                 RefreshProperty(AssistantMessage);
             } catch (Exception ex) {

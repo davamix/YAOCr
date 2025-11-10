@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using YAOCr.Services;
+using YAOCr.Services.Dialogs;
 using YAOCr.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,

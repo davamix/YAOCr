@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Devices.Bluetooth.Advertisement;
 using YAOCr.Core.Dtos;
 using YAOCr.Core.Models;
 using YAOCr.Core.Providers;
@@ -18,6 +15,7 @@ public interface IConversationsService {
     Task SaveMessage(Message message, Guid conversationId);
     Task<IEnumerable<Conversation>> GetConversations();
     Task<IEnumerable<Message>> GetConversationMessages(Guid conversationId);
+    Task DeleteConversation(Guid conversationId);
 }
 
 public class ConversationsService : IConversationsService {
@@ -90,10 +88,14 @@ public class ConversationsService : IConversationsService {
     }
 
     public async Task<IEnumerable<Conversation>> GetConversations() {
-        return await _conversationProvider.GetConversationsAsync();
+        return await _conversationProvider.GetConversations();
     }
 
     public async Task<IEnumerable<Message>> GetConversationMessages(Guid conversationId) {
         return await _conversationProvider.GetMessages(conversationId);
+    }
+
+    public async Task DeleteConversation(Guid conversationId) {
+        await _conversationProvider.DeleteConversation(conversationId);
     }
 }

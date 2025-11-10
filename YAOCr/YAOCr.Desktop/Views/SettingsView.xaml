@@ -10,12 +10,12 @@
 			 Visibility="Collapsed">
 
 	<Grid Style="{ThemeResource ThemedDialogMainGridStyle}">
-		<Grid Style="{ThemeResource ThemedDialogCotentGridStyle}">
+		<Grid Style="{ThemeResource ThemedSettingsCotentGridStyle}">
 			<StackPanel>
 				<!-- HEADER -->
-				<Grid Style="{ThemeResource ThemedDialogGridHeaderStyle}">
+				<Grid Style="{ThemeResource ThemedSettingsGridHeaderStyle}">
 					<TextBlock Text="Settings"
-							   Style="{ThemeResource ThemedDialogTextBlockHeaderStyle}" />
+							   Style="{ThemeResource ThemedSettingsTextBlockHeaderStyle}" />
 
 					<Button x:Name="btnClose"
 							HorizontalAlignment="Right"
