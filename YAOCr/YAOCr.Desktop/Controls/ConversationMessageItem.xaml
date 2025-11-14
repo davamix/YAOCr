@@ -11,19 +11,37 @@
 			 Loaded="conversationMessageItemControl_Loaded">
 
 	<UserControl.Resources>
-		<Storyboard x:Name="ConversationMessageItemFadeInStoryboard">
+		<Storyboard x:Name="FadeInMessageItemStoryboard">
 			<DoubleAnimation Storyboard.TargetName="conversationMessageItemControl"
 							 Storyboard.TargetProperty="Opacity"
 							 From="0.0"
 							 To="1.0"
 							 Duration="0:0:0.2" />
 		</Storyboard>
+
+		<Storyboard x:Name="FadeInReloadButtonStoryboard">
+			<DoubleAnimation Storyboard.TargetName="btnReload"
+							 Storyboard.TargetProperty="Opacity"
+							 From="0.0"
+							 To="1.0"
+							 Duration="0:0:0.3" />
+		</Storyboard>
+		<Storyboard x:Name="FadeOutReloadButtonStoryboard">
+			<DoubleAnimation Storyboard.TargetName="btnReload"
+							 Storyboard.TargetProperty="Opacity"
+							 From="1.0"
+							 To="0.0"
+							 Duration="0:0:0.3" />
+		</Storyboard>
 	</UserControl.Resources>
 
-	<Grid>
+	<Grid x:Name="gridMain"
+		  PointerEntered="gridMain_PointerEntered"
+		  PointerExited="gridMain_PointerExited">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
 		<control:MarkdownTextBlock Grid.Row="0"
@@ -40,6 +58,19 @@
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+
+		<Button x:Name="btnReload"
+				Style="{ThemeResource ThemedButtonStyle}"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Bottom"
+				Opacity="0"
+				ToolTipService.ToolTip="Regenate response"
+				Command="{Binding ElementName=conversationMessageItemControl, Path=ReloadMessageCommand}"
+				CommandParameter="{Binding ElementName=conversationMessageItemControl, Path=Message}"
+				PointerEntered="btn_PointerEntered"
+				PointerExited="btn_PointerExited">
+			<FontIcon Glyph="&#xE72C;" />
+		</Button>
 
 	</Grid>
 </UserControl>

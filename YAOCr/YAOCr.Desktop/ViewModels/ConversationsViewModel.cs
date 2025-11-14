@@ -8,16 +8,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Isolation;
 using YAOCr.Core.Models;
-using YAOCr.Core.Providers;
 using YAOCr.Core.Services;
 using YAOCr.Services.Dialogs;
 
 namespace YAOCr.ViewModels;
 public partial class ConversationsViewModel : ObservableObject {
     private readonly IConversationsService _conversationService;
-    private readonly IConversationProvider _conversationProvider;
-    private readonly ILlmService _llmService;
     private readonly IFileStorageService _fileStorageService;
     private readonly DialogService _dialogService;
 
@@ -43,20 +41,17 @@ public partial class ConversationsViewModel : ObservableObject {
     public ObservableCollection<Conversation> Conversations { get; set; } = new();
 
     public ConversationsViewModel(IConversationsService conversationService,
-        IConversationProvider conversationProvider,
-        ILlmService llmService,
         IFileStorageService fileStorageService,
         DialogService dialogService) {
+
         _conversationService = conversationService;
-        _conversationProvider = conversationProvider;
-        _llmService = llmService;
         _fileStorageService = fileStorageService;
         _dialogService = dialogService;
 
-        InitializeConversations();
+        LoadConversations();
     }
 
-    private async void InitializeConversations() {
+    private async void LoadConversations() {
         var conversations = await _conversationService.GetConversations();// _conversationProvider.GetConversationsAsync();
 
         foreach (var conversation in conversations) {
@@ -121,7 +116,7 @@ public partial class ConversationsViewModel : ObservableObject {
         _dialogService.OpenYesNoDialog(new YesNoDialogArgs {
             Title = message.Title,
             Message = message.Message,
-            YesAction = async ()=> await DeleteConversationConfirmed(conversation)
+            YesAction = async () => await DeleteConversationConfirmed(conversation)
         });
     }
 
@@ -156,7 +151,7 @@ public partial class ConversationsViewModel : ObservableObject {
 
         try {
             await ProcesssUserMessage(promptMessage);
-            await ProcessAssistantMessage();
+            await ProcessAssistantMessage(SelectedConversation.Messages.ToList());
         } catch {
             throw;
         }
@@ -170,7 +165,8 @@ public partial class ConversationsViewModel : ObservableObject {
             var filesContent = await ExtractFilesContent(promptMessage.FilePaths);
 
             // Add user message to the conversation
-            var message = AddNewMessageToConversation(promptMessage.Message, SenderEnum.User, filesContent);
+            var message = CreateConversationMessage(promptMessage.Message, SenderEnum.User, filesContent);
+            SelectedConversation.Messages.Add(message);
 
             // Save message then add to the list
             await _conversationService.SaveMessage(message, SelectedConversation.Id);
@@ -182,16 +178,21 @@ public partial class ConversationsViewModel : ObservableObject {
         }
     }
 
-    private async Task ProcessAssistantMessage() {
+    private async Task ProcessAssistantMessage(List<Message> conversationMessages, Message? messageToReload = null) {
         _ = DispatcherQueue.GetForCurrentThread().TryEnqueue(async () => {
             StartWaitingForResponse();
             SetStatusMessage("Waiting for assistant response...");
 
             try {
-                await ProcessAssistantMessageResponse();
+                // Generate response
+                await ProcessAssistantMessageResponse(conversationMessages);
 
                 // Add assistant message to the conversation
-                var message = AddNewMessageToConversation(AssistantMessage, SenderEnum.Assistant, []);
+                var message = messageToReload == null
+                    ? CreateConversationMessage(AssistantMessage, SenderEnum.Assistant, [])
+                    : UpdateConversationMessage(messageToReload, AssistantMessage);
+
+                AddAssistantMessageToConversation(conversationMessages, message);
 
                 // Save assistant message to db
                 await _conversationService.SaveMessage(message, SelectedConversation.Id);
@@ -206,9 +207,9 @@ public partial class ConversationsViewModel : ObservableObject {
             }
         });
     }
-
-    private async Task ProcessAssistantMessageResponse() {
-        await foreach (var response in _conversationService.SendMessage(SelectedConversation?.Messages.ToList())) {
+    
+    private async Task ProcessAssistantMessageResponse(List<Message> conversationMessages) {
+        await foreach (var response in _conversationService.SendMessage(conversationMessages)) {
             if (IsWaitingForResponse) {
                 SetStatusMessage("Receiving assistant response...");
                 StopWaitingForResponse();
@@ -217,6 +218,14 @@ public partial class ConversationsViewModel : ObservableObject {
             await Task.Delay(1);
 
             AssistantMessage = response;
+        }
+    }
+
+    private void AddAssistantMessageToConversation(List<Message> conversationMessages, Message message) {
+        if (conversationMessages.Count < SelectedConversation.Messages.Count) {
+            SelectedConversation.Messages.Insert(conversationMessages.Count, message);
+        } else {
+            SelectedConversation.Messages.Add(message);
         }
     }
 
@@ -241,7 +250,7 @@ public partial class ConversationsViewModel : ObservableObject {
         return filesContent;
     }
 
-    private Message AddNewMessageToConversation(string messageContent, SenderEnum sender, List<MessageAttachment> attachments) {
+    private Message CreateConversationMessage(string messageContent, SenderEnum sender, List<MessageAttachment> attachments) {
         var message = new Message(
             Id: Guid.NewGuid(),
             Content: messageContent,
@@ -251,9 +260,35 @@ public partial class ConversationsViewModel : ObservableObject {
             Attachments: attachments
         );
 
-        SelectedConversation.Messages.Add(message);
-
         return message;
+    }
+
+    private Message UpdateConversationMessage(Message oldMessage, string messageContent) {
+        return oldMessage with {
+            Content = messageContent,
+            UpdatedAt = DateTime.Now
+        };
+    }
+
+    [RelayCommand]
+    private async Task ReloadMessage(Message message) {
+        try {
+            SetStatusMessage("Reloadig message...");
+
+            // Get all messages before the selected message
+            var collectionToProcess = SelectedConversation.Messages.Take(SelectedConversation.Messages.IndexOf(message)).ToList();
+
+            await _conversationService.DeleteMessage(message.Id);
+
+            SelectedConversation.Messages.Remove(message);
+
+            await ProcessAssistantMessage(collectionToProcess, message);
+        } catch (Exception ex) {
+            Debug.WriteLine(ex.Message);
+        } finally {
+            SetStatusMessage(string.Empty);
+        }
+
     }
 
     private void StartWaitingForResponse() {

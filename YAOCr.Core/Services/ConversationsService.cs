@@ -16,6 +16,7 @@ public interface IConversationsService {
     Task<IEnumerable<Conversation>> GetConversations();
     Task<IEnumerable<Message>> GetConversationMessages(Guid conversationId);
     Task DeleteConversation(Guid conversationId);
+    Task DeleteMessage(Guid messageId);
 }
 
 public class ConversationsService : IConversationsService {
@@ -97,5 +98,9 @@ public class ConversationsService : IConversationsService {
 
     public async Task DeleteConversation(Guid conversationId) {
         await _conversationProvider.DeleteConversation(conversationId);
+    }
+
+    public async Task DeleteMessage(Guid messageId) {
+        await _conversationProvider.DeleteMessage(messageId);
     }
 }

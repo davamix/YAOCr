@@ -97,7 +97,8 @@
 								</ListView.ItemContainerStyleSelector>
 								<ListView.ItemTemplate>
 									<DataTemplate>
-										<controls:ConversationMessageItem Message="{Binding}" />
+										<controls:ConversationMessageItem Message="{Binding}"
+																		  ReloadMessageCommand="{Binding ElementName=lstConversations, Path=DataContext.ReloadMessageCommand}"/>
 									</DataTemplate>
 								</ListView.ItemTemplate>
 							</ListView>

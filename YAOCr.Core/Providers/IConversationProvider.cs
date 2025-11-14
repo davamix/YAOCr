@@ -12,4 +12,5 @@ public interface IConversationProvider {
     Task SaveMessage(Message message, float[] embeddings, Guid conversationId);
     Task SaveConversation(Conversation conversation, float[] embeddings);
     Task DeleteConversation(Guid conversationId);
+    Task DeleteMessage(Guid messageId);
 }

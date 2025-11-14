@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using YAOCr.Core.Models;
 using YAOCr.Core.Mappers;
+using Microsoft.UI.Xaml.Hosting;
 
 namespace YAOCr.Core.Providers;
 public class QdrantProvider : IConversationProvider {
@@ -171,4 +172,13 @@ public class QdrantProvider : IConversationProvider {
         }
     }
 
+    public async Task DeleteMessage(Guid messageId) {
+        try {
+            await _client.DeleteAsync(
+                _collectionName,
+                ids: new List<PointId>() { messageId });
+        } catch {
+            throw;
+        }
+    }
 }
