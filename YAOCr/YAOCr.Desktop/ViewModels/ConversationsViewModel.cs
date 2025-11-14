@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Isolation;
+using YAOCr.Core.Dtos;
 using YAOCr.Core.Models;
 using YAOCr.Core.Services;
 using YAOCr.Services.Dialogs;
@@ -289,6 +290,13 @@ public partial class ConversationsViewModel : ObservableObject {
             SetStatusMessage(string.Empty);
         }
 
+    }
+
+    [RelayCommand]
+    private void EditMessage(EditMessage message) {
+        var msgIndex = SelectedConversation.Messages.IndexOf(message.Message);
+        var updatedMessage = UpdateConversationMessage(message.Message, message.NewContent);
+        SelectedConversation.Messages[msgIndex] = updatedMessage;
     }
 
     private void StartWaitingForResponse() {

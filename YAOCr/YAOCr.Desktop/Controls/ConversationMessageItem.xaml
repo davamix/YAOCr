@@ -33,6 +33,21 @@
 							 To="0.0"
 							 Duration="0:0:0.3" />
 		</Storyboard>
+
+		<Storyboard x:Name="FadeInEditButtonStoryboard">
+			<DoubleAnimation Storyboard.TargetName="btnEdit"
+							 Storyboard.TargetProperty="Opacity"
+							 From="0.0"
+							 To="1.0"
+							 Duration="0:0:0.3" />
+		</Storyboard>
+		<Storyboard x:Name="FadeOutEditButtonStoryboard">
+			<DoubleAnimation Storyboard.TargetName="btnEdit"
+							 Storyboard.TargetProperty="Opacity"
+							 From="1.0"
+							 To="0.0"
+							 Duration="0:0:0.3" />
+		</Storyboard>
 	</UserControl.Resources>
 
 	<Grid x:Name="gridMain"
@@ -44,9 +59,31 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<control:MarkdownTextBlock Grid.Row="0"
+		<control:MarkdownTextBlock x:Name="mkdMessage"
+								   Grid.Row="0"
 								   Text="{Binding ElementName=conversationMessageItemControl, Path=Message.Content}"
 								   Style="{ThemeResource ThemedMarkdownTextBlockStyle}" />
+
+		<StackPanel x:Name="stackEditMessage"
+					Orientation="Horizontal"
+					Grid.Row="0"
+					Visibility="Collapsed">
+			<TextBox x:Name="txtMessage"
+					 Text="{Binding  ElementName=conversationMessageItemControl, Path=EditedMessage.NewContent, Mode=TwoWay}"
+					 Style="{ThemeResource ThemedTextBoxStyle}"
+					 AcceptsReturn="True"
+					 TextWrapping="Wrap" />
+
+			<Button x:Name="btnSave"
+					Style="{ThemeResource ThemedButtonStyle}"
+					Margin="5,0,0,0"
+					Command="{Binding ElementName=conversationMessageItemControl, Path=EditMessageCommand}"
+					CommandParameter="{Binding  ElementName=conversationMessageItemControl, Path=EditedMessage}"
+					Click="btnSave_Click">
+				<FontIcon Glyph="&#xE74E;" />
+			</Button>
+		</StackPanel>
+
 
 		<ListView Grid.Row="1"
 				  ItemsSource="{Binding ElementName=conversationMessageItemControl, Path=FilesPath}"
@@ -59,18 +96,32 @@
 			</ListView.ItemTemplate>
 		</ListView>
 
-		<Button x:Name="btnReload"
-				Style="{ThemeResource ThemedButtonStyle}"
-				HorizontalAlignment="Right"
-				VerticalAlignment="Bottom"
-				Opacity="0"
-				ToolTipService.ToolTip="Regenate response"
-				Command="{Binding ElementName=conversationMessageItemControl, Path=ReloadMessageCommand}"
-				CommandParameter="{Binding ElementName=conversationMessageItemControl, Path=Message}"
-				PointerEntered="btn_PointerEntered"
-				PointerExited="btn_PointerExited">
-			<FontIcon Glyph="&#xE72C;" />
-		</Button>
+		<StackPanel x:Name="toolbar"
+					Orientation="Horizontal"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Bottom">
+			<Button x:Name="btnReload"
+					Style="{ThemeResource ThemedButtonStyle}"
+					Opacity="0"
+					ToolTipService.ToolTip="Regenate response"
+					Command="{Binding ElementName=conversationMessageItemControl, Path=ReloadMessageCommand}"
+					CommandParameter="{Binding ElementName=conversationMessageItemControl, Path=Message}"
+					PointerEntered="btn_PointerEntered"
+					PointerExited="btn_PointerExited">
+				<FontIcon Glyph="&#xE72C;" />
+			</Button>
+
+			<Button x:Name="btnEdit"
+					Style="{ThemeResource ThemedButtonStyle}"
+					Opacity="0"
+					ToolTipService.ToolTip="Edit message"
+					PointerEntered="btn_PointerEntered"
+					PointerExited="btn_PointerExited"
+					Click="btnEdit_Click">
+				<FontIcon Glyph="&#xE70F;" />
+			</Button>
+		</StackPanel>
+
 
 	</Grid>
 </UserControl>
