@@ -47,7 +47,8 @@ Only support the following types:
 [YAOCr_demo.webm](https://github.com/user-attachments/assets/66168b9d-8d9a-49cb-8da4-3c64840ad4f0)
 
 ## Chat window
-<img width="1080" height="720" alt="yaocr_chat" src="https://github.com/user-attachments/assets/9c025855-8bef-4998-b835-21ba836f38de" />
+<img width="1431" height="764" alt="yaocr_chat" src="https://github.com/user-attachments/assets/7f5ed80d-5524-4903-b9f3-ad89a0bb73a7" />
+
 
 ## Conversation tools (Rename, Delete, Export)
 <img width="370" height="235" alt="yaocr_chat_tools" src="https://github.com/user-attachments/assets/b56e53fd-f865-43da-beaa-dcd09aaafa74" />
@@ -56,5 +57,8 @@ Only support the following types:
 <img width="1080" height="720" alt="yaocr_settings" src="https://github.com/user-attachments/assets/707f203e-9bb4-4ac5-898c-d7e7f155a1a3" />
 
 ## Dark mode
-<img width="2862" height="1528" alt="image" src="https://github.com/user-attachments/assets/3a39ce71-16d8-4362-87c8-619332299b45" />
+<img width="1431" height="764" alt="yaocr_chat_dark" src="https://github.com/user-attachments/assets/88f91669-976d-4ca0-9960-617512d0fb47" />
+
+
+
 
