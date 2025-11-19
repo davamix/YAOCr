@@ -79,6 +79,8 @@
 					Margin="5,0,0,0"
 					Command="{Binding ElementName=conversationMessageItemControl, Path=EditMessageCommand}"
 					CommandParameter="{Binding  ElementName=conversationMessageItemControl, Path=EditedMessage}"
+					PointerEntered="btn_PointerEntered"
+					PointerExited="btn_PointerExited"
 					Click="btnSave_Click">
 				<FontIcon Glyph="&#xE74E;" />
 			</Button>

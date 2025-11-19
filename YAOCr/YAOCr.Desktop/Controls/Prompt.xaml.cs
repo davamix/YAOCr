@@ -39,6 +39,7 @@ public class Prompt : TextBox {
     private readonly List<string> _fileTypesAllowed = new() {
         ".csv",
         ".sql",
+        ".yaml"
     };
 
     public ObservableCollection<string> FilePaths { get; private set; } = new();

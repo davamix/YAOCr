@@ -95,7 +95,13 @@ public class LlamaCppProvider : ILlmProvider {
                 jsonData = line.Substring("data: ".Length);
             }
 
-            var doc = JsonSerializer.Deserialize<JsonObject>(jsonData);
+            var doc = new JsonObject();
+            try {
+                doc = JsonSerializer.Deserialize<JsonObject>(jsonData);
+            }catch {
+                // line -> "data: [DONE]"
+                continue;
+            }
 
             var isFinished = doc["choices"][0]["finish_reason"] == null
             ? false
