@@ -62,7 +62,8 @@
 		<control:MarkdownTextBlock x:Name="mkdMessage"
 								   Grid.Row="0"
 								   Text="{Binding ElementName=conversationMessageItemControl, Path=Message.Content}"
-								   Style="{ThemeResource ThemedMarkdownTextBlockStyle}" />
+								   Style="{ThemeResource ThemedMarkdownTextBlockStyle}"
+								   LinkClicked="mkdMessage_LinkClicked"/>
 
 		<StackPanel x:Name="stackEditMessage"
 					Orientation="Horizontal"

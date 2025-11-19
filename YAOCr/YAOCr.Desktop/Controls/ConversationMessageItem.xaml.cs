@@ -3,8 +3,10 @@ using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.System;
 using YAOCr.Core.Dtos;
 using YAOCr.Core.Models;
 
@@ -125,5 +127,9 @@ public sealed partial class ConversationMessageItem : UserControl {
         toolbar.Visibility = Visibility.Visible;
 
         _isEditMode = false;
+    }
+
+    private async void mkdMessage_LinkClicked(object sender, CommunityToolkit.WinUI.UI.Controls.LinkClickedEventArgs e) {
+        await Launcher.LaunchUriAsync(new Uri(e.Link));
     }
 }
