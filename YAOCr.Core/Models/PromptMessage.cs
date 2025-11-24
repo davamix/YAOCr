@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace YAOCr.Core.Models;
 public record PromptMessage (
     string Message,
-    List<string> FilePaths);
+    List<FileParserContent> FileParsersContent);

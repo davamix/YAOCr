@@ -7,17 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Services.Maps;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI.Core;
 using YAOCr.Core.Models;
+using YAOCr.Core.Plugins;
+using YAOCr.Plugins.Parsers;
 using YAOCr.Services;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -30,19 +28,11 @@ public class Prompt : TextBox {
     private Button? _sendButton;
     private ListView? _listViewFilePaths;
 
-    //TODO: Move the lists of types allowed to an external component to allow changed via config
-    private readonly List<string> _contentTypesAllowed = new() {
-        "text/plain",
-        "application/json"
-    };
+    private readonly Dictionary<string, string[]> _contentTypesAllowed = new();
 
-    private readonly List<string> _fileTypesAllowed = new() {
-        ".csv",
-        ".sql",
-        ".yaml"
-    };
+    private readonly Dictionary<string, string[]> _fileTypesAllowed = new();
 
-    public ObservableCollection<string> FilePaths { get; private set; } = new();
+    public ObservableCollection<FileParserContent> FileParsersContent { get; private set; } = new();
 
     public static readonly DependencyProperty SendCommandProperty =
                DependencyProperty.Register(
@@ -67,16 +57,29 @@ public class Prompt : TextBox {
         this.DragOver += Prompt_DragOver;
         this.Drop += Prompt_Drop;
 
-        FilePaths.CollectionChanged += FilePaths_CollectionChanged;
+        FileParsersContent.CollectionChanged += FileParsersContent_CollectionChanged;
+
+        LoadAllowedFileTypes();
     }
 
-    private void FilePaths_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) {
+    private void LoadAllowedFileTypes() {
+        foreach (var plugin in PluginsLoader.GetPlugins().Values) {
+            var p = plugin as IFileParser;
+
+            if (p == null) continue;
+
+            _contentTypesAllowed.Add(p.Id, p.ContentTypes.ToArray());
+            _fileTypesAllowed.Add(p.Id, p.Extensions.ToArray());
+        }
+    }
+
+    private void FileParsersContent_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) {
         if (e.Action == NotifyCollectionChangedAction.Add) {
             _listViewFilePaths.Visibility = Visibility.Visible;
         }
 
         if (e.Action == NotifyCollectionChangedAction.Remove) {
-            if (FilePaths.Count == 0) {
+            if (FileParsersContent.Count == 0) {
                 _listViewFilePaths.Visibility = Visibility.Collapsed;
             }
         }
@@ -120,20 +123,33 @@ public class Prompt : TextBox {
     }
 
     private async void Prompt_Drop(object sender, DragEventArgs e) {
-        if (e.DataView.Contains(StandardDataFormats.StorageItems)) {
-            var storageItems = await e.DataView.GetStorageItemsAsync();
+        if (!e.DataView.Contains(StandardDataFormats.StorageItems)) return;
 
-            foreach (var item in storageItems) {
-                if (!item.IsOfType(StorageItemTypes.File)) return;
+        var storageItems = await e.DataView.GetStorageItemsAsync();
 
-                var storageFile = item as StorageFile;
+        foreach (var item in storageItems) {
+            if (!item.IsOfType(StorageItemTypes.File)) continue;
 
-                if (_contentTypesAllowed.Any(x => x == storageFile.ContentType) ||
-                        _fileTypesAllowed.Any(x => x == storageFile.FileType)) {
+            var storageFile = item as StorageFile;
 
-                    FilePaths.Add(item.Path);
-                }
+            // Try to get parser by content type first
+            var contentTypeParserId = _contentTypesAllowed.FirstOrDefault(x => x.Value.Contains(storageFile.ContentType)).Key;
+            if (contentTypeParserId != null) {
+                FileParsersContent.Add(new FileParserContent {
+                    ParserId = contentTypeParserId,
+                    FilePath = item.Path
+                });
 
+                continue;
+            }
+
+            // Try to get parser by file extension
+            var fileTypeParserId = _fileTypesAllowed.FirstOrDefault(x => x.Value.Contains(storageFile.FileType)).Key;
+            if (fileTypeParserId != null) {
+                FileParsersContent.Add(new FileParserContent {
+                    ParserId = fileTypeParserId,
+                    FilePath = item.Path
+                });
             }
         }
     }
@@ -184,8 +200,8 @@ public class Prompt : TextBox {
 
     private void InitializeListViewFilePaths() {
         if (_listViewFilePaths != null) {
-            _listViewFilePaths.ItemsSource = FilePaths;
-            if (FilePaths.Any()) {
+            _listViewFilePaths.ItemsSource = FileParsersContent;
+            if (FileParsersContent.Any()) {
                 _listViewFilePaths.Visibility = Visibility.Visible;
             }
         }
@@ -194,13 +210,13 @@ public class Prompt : TextBox {
     private void SendMessage() {
         var promptMessage = new PromptMessage(
             Message: this.Text,
-            FilePaths: FilePaths.ToList());
+            FileParsersContent: FileParsersContent.ToList());
 
         if (this.SendCommand != null && this.SendCommand.CanExecute(promptMessage)) {
             this.SendCommand.Execute(promptMessage);
 
             this.Text = string.Empty;
-            FilePaths.Clear();
+            FileParsersContent.Clear();
             _listViewFilePaths.Visibility = Visibility.Collapsed;
         }
     }

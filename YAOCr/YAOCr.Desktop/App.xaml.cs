@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using WinUIEx;
 using YAOCr.Bootstrap;
+using YAOCr.Core.Plugins;
 using YAOCr.Views;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -24,31 +26,37 @@ namespace YAOCr {
         /// </summary>
         public App() {
             this.InitializeComponent();
+
+            RegisterServices();
+            
+            LoadPlugins();
+        }
+
+        private static void RegisterServices() {
+            Ioc.Default.ConfigureServices(
+                        new ServiceCollection()
+                            .RegisterConfiguration()
+                            .RegisterViewModels()
+                            .RegisterProviders()
+                            .RegisterServices()
+                            .BuildServiceProvider());
+        }
+
+        private static void LoadPlugins() {
+            PluginsLoader.Initialize(Ioc.Default.GetService<IConfiguration>());
         }
 
         /// <summary>
         /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {
-
-
-            Ioc.Default.ConfigureServices(
-            new ServiceCollection()
-                .RegisterConfiguration()
-                .RegisterViewModels()
-                .RegisterProviders()
-                .RegisterServices()
-                .BuildServiceProvider());
-
+        protected override void OnLaunched(LaunchActivatedEventArgs args) {
             m_window = new MainWindow();
 
             m_window.CenterOnScreen();
             m_window.Activate();
-
-
         }
 
-
+        
     }
 }

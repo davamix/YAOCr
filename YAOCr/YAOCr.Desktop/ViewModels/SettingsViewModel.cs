@@ -2,7 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.ObjectModel;
 using YAOCr.Core.Models;
+using YAOCr.Core.Plugins;
+using YAOCr.Plugins;
 
 namespace YAOCr.ViewModels;
 
@@ -12,10 +15,14 @@ public partial class SettingsViewModel: ObservableObject {
     [ObservableProperty]
     private Settings _settings = null;
 
+    public ObservableCollection<IPlugin> Plugins { get; set; } = new();
+
     public SettingsViewModel(IConfiguration configuration) {
         _configuration = configuration;
 
         LoadConfiguration();
+
+        LoadPlugins();
     }
 
     private void LoadConfiguration() {
@@ -27,6 +34,12 @@ public partial class SettingsViewModel: ObservableObject {
             EmbeddingsAddress = _configuration["AppSettings:LlamaCpp:EmbeddingsAddress"] ?? string.Empty,
             ModelName = _configuration["AppSettings:LlamaCpp:ModelName"] ?? string.Empty
         };
+    }
+
+    private void LoadPlugins() {
+        foreach(var p in PluginsLoader.GetPlugins()) {
+            Plugins.Add(p.Value);
+        }
     }
 
     [RelayCommand]

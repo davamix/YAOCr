@@ -16,7 +16,7 @@
 
 		<TextBlock x:Name="txtValue"
 				   Grid.Column="0"
-				   Text="{Binding}"/>
+				   Text="{Binding FilePath}"/>
 
 		<Button x:Name="btnDelete"
 				Grid.Column="1"

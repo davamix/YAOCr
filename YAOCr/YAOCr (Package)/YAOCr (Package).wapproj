@@ -102,11 +102,28 @@
     <Content Include="Images\Wide310x150Logo.scale-400.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.6584" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.250916003" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YAOCr.Desktop\YAOCr.Desktop.csproj" />
   </ItemGroup>
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
+
+  <ItemGroup>
+    <PluginFiles Include="..\..\Plugins\*.dll" />
+  </ItemGroup>
+
+  <Target Name="CopyPlugins" AfterTargets="Build" Condition="'@(PluginFiles)' != ''">
+    <!-- ensure package staging subfolder exists and copy there -->
+    <MakeDir Directories="$(AppxPackageDir)Plugins" Condition="'$(AppxPackageDir)' != ''" />
+    <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(AppxPackageDir)Plugins\" SkipUnchangedFiles="true" Condition="'$(AppxPackageDir)' != ''"/>
+    <Message Text="AppX: $(AppxPackageDir)" Importance="high"/>
+    
+    <!-- also copy into normal build output (OutDir) so the package project output contains the DLLs -->
+    <MakeDir Directories="$(OutDir)Appx\YAOCr.Desktop\Plugins" Condition="'$(OutDir)' != ''" />
+    <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(OutDir)Appx\YAOCr.Desktop\Plugins\" SkipUnchangedFiles="true" Condition="'$(OutDir)' != ''"/>
+    <Message Text="OutDir: $(OutDir)" Importance="high" />
+
+  </Target>
 </Project>

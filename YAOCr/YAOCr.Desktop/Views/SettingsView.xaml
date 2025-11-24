@@ -6,99 +6,121 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+			 xmlns:ui="using:CommunityToolkit.WinUI"
+			 xmlns:plugins="using:YAOCr.Plugins"
 			 mc:Ignorable="d"
 			 Visibility="Collapsed">
 
 	<Grid Style="{ThemeResource ThemedDialogMainGridStyle}">
 		<Grid Style="{ThemeResource ThemedSettingsCotentGridStyle}">
-			<StackPanel>
-				<!-- HEADER -->
-				<Grid Style="{ThemeResource ThemedSettingsGridHeaderStyle}">
-					<TextBlock Text="Settings"
-							   Style="{ThemeResource ThemedSettingsTextBlockHeaderStyle}" />
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
 
-					<Button x:Name="btnClose"
-							HorizontalAlignment="Right"
-							VerticalAlignment="Top"
-							Click="btnClose_Click"
-							PointerEntered="btn_PointerEntered"
-							PointerExited="btn_PointerExited"
-							Style="{ThemeResource ThemedCloseDialogButtonStyle}"
-							Command="{Binding SaveSettingsCommand}">
-						<FontIcon Glyph="&#xE711;" />
-					</Button>
-				</Grid>
+			<!-- HEADER -->
+			<Grid Grid.Row="0"
+				  Style="{ThemeResource ThemedSettingsGridHeaderStyle}">
+				<TextBlock Text="Settings"
+						   Style="{ThemeResource ThemedSettingsTextBlockHeaderStyle}" />
 
-				<!-- SETTINGS -->
-				<ScrollViewer>
-					<StackPanel Padding="16">
-						<TextBlock Text="General"
-								   Margin="0, 16, 0, 12"
-								   Style="{StaticResource SubtitleTextBlockStyle}" />
+				<Button x:Name="btnClose"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Top"
+						Click="btnClose_Click"
+						PointerEntered="btn_PointerEntered"
+						PointerExited="btn_PointerExited"
+						Style="{ThemeResource ThemedCloseDialogButtonStyle}"
+						Command="{Binding SaveSettingsCommand}">
+					<FontIcon Glyph="&#xE711;" />
+				</Button>
+			</Grid>
 
-						<!-- Qdrant settings -->
-						<controls:SettingsCard Header="Qdrant Server Url"
-											   Description="Set the address of Qdrant server">
-							<TextBox Text="{Binding Settings.QdrantServerAddress, Mode=TwoWay}"
-									 Style="{ThemeResource ThemedTextBoxStyle}"
-									 Width="320"
-									 MaxWidth="320" />
-						</controls:SettingsCard>
+			<!-- SETTINGS -->
+			<ScrollViewer Grid.Row="1">
+				<StackPanel Padding="16">
+					<TextBlock Text="General"
+							   Margin="0, 16, 0, 12"
+							   Style="{StaticResource SubtitleTextBlockStyle}" />
 
-						<!-- LLM Backend settings -->
-						<controls:SettingsExpander Header="LLM Backend"
-												   Description="Configure the LLM backend options">
-							<controls:SettingsExpander.Items>
-								<controls:SettingsCard Header="Completion address">
-									<TextBox Text="{Binding Settings.CompletionAddress, Mode=TwoWay}"
-											 Style="{ThemeResource ThemedTextBoxStyle}"
-											 Width="320"
-											 MaxWidth="320" />
-								</controls:SettingsCard>
-								<controls:SettingsCard Header="Chat address">
-									<TextBox Text="{Binding Settings.ChatAddress, Mode=TwoWay}"
-											 Style="{ThemeResource ThemedTextBoxStyle}"
-											 Width="320"
-											 MaxWidth="320" />
-								</controls:SettingsCard>
-								<controls:SettingsCard Header="Embeddings address">
-									<TextBox Text="{Binding Settings.EmbeddingsAddress, Mode=TwoWay}"
-											 Style="{ThemeResource ThemedTextBoxStyle}"
-											 Width="320"
-											 MaxWidth="320" />
-								</controls:SettingsCard>
-								<controls:SettingsCard Header="Model name">
-									<TextBox Text="{Binding Settings.ModelName, Mode=TwoWay}"
-											 Style="{ThemeResource ThemedTextBoxStyle}"
-											 Width="320"
-											 MaxWidth="320" />
-								</controls:SettingsCard>
-							</controls:SettingsExpander.Items>
-						</controls:SettingsExpander>
+					<!-- Qdrant settings -->
+					<controls:SettingsCard Header="Qdrant Server Url"
+										   Description="Set the address of Qdrant server"
+										   HeaderIcon="{ui:FontIcon Glyph=&#xF22C;}">
+						<TextBox Text="{Binding Settings.QdrantServerAddress, Mode=TwoWay}"
+								 Style="{ThemeResource ThemedTextBoxStyle}"
+								 Width="320"
+								 MaxWidth="320" />
+					</controls:SettingsCard>
 
-						<!-- Appereance settings -->
-						<TextBlock Text="Appereance"
-								   Margin="0, 16, 0, 12"
-								   Style="{StaticResource SubtitleTextBlockStyle}" />
-						<controls:SettingsCard  Header="Application theme"
-												Description="Choose the application theme">
-							<controls:SettingsCard.HeaderIcon>
-								<FontIcon Glyph="&#xE790;" />
-							</controls:SettingsCard.HeaderIcon>
+					<!-- LLM Backend settings -->
+					<controls:SettingsExpander Header="LLM Backend"
+											   Description="Configure the LLM backend options"
+											   HeaderIcon="{ui:FontIcon Glyph=&#xE99A;}">
+						<controls:SettingsExpander.Items>
+							<controls:SettingsCard Header="Completion address">
+								<TextBox Text="{Binding Settings.CompletionAddress, Mode=TwoWay}"
+										 Style="{ThemeResource ThemedTextBoxStyle}"
+										 Width="320"
+										 MaxWidth="320" />
+							</controls:SettingsCard>
+							<controls:SettingsCard Header="Chat address">
+								<TextBox Text="{Binding Settings.ChatAddress, Mode=TwoWay}"
+										 Style="{ThemeResource ThemedTextBoxStyle}"
+										 Width="320"
+										 MaxWidth="320" />
+							</controls:SettingsCard>
+							<controls:SettingsCard Header="Embeddings address">
+								<TextBox Text="{Binding Settings.EmbeddingsAddress, Mode=TwoWay}"
+										 Style="{ThemeResource ThemedTextBoxStyle}"
+										 Width="320"
+										 MaxWidth="320" />
+							</controls:SettingsCard>
+							<controls:SettingsCard Header="Model name">
+								<TextBox Text="{Binding Settings.ModelName, Mode=TwoWay}"
+										 Style="{ThemeResource ThemedTextBoxStyle}"
+										 Width="320"
+										 MaxWidth="320" />
+							</controls:SettingsCard>
+						</controls:SettingsExpander.Items>
+					</controls:SettingsExpander>
 
-							<ComboBox x:Name="cmbTheme"
-									  SelectedItem="{Binding Settings.Theme, Mode=TwoWay}"
-									  Style="{ThemeResource ThemedComboBoxStyle}"
-									  ItemContainerStyle="{ThemeResource ThemedComboBoxItemContainerStyle}"
-									  SelectionChanged="cmbTheme_SelectionChanged">
-								<x:String>Light</x:String>
-								<x:String>Dark</x:String>
-							</ComboBox>
-						</controls:SettingsCard>
-					</StackPanel>
-				</ScrollViewer>
+					<!-- Plugins list -->
+					<controls:SettingsExpander Header="Plugins"
+											   Description="List of available plugins"
+											   ItemsSource="{Binding Plugins}"
+											   HeaderIcon="{ui:FontIcon Glyph=&#xEA86;}">
+						<controls:SettingsExpander.ItemTemplate>
+							<DataTemplate x:DataType="plugins:IPlugin">
+								<controls:SettingsCard Header="{Binding Name}"
+													   Description="{Binding Description}" />
+							</DataTemplate>
+						</controls:SettingsExpander.ItemTemplate>
 
-			</StackPanel>
+					</controls:SettingsExpander>
+
+					<!-- Appereance settings -->
+					<TextBlock Text="Appereance"
+							   Margin="0, 16, 0, 12"
+							   Style="{StaticResource SubtitleTextBlockStyle}" />
+					<controls:SettingsCard  Header="Application theme"
+											Description="Choose the application theme">
+						<controls:SettingsCard.HeaderIcon>
+							<FontIcon Glyph="&#xE790;" />
+						</controls:SettingsCard.HeaderIcon>
+
+						<ComboBox x:Name="cmbTheme"
+								  SelectedItem="{Binding Settings.Theme, Mode=TwoWay}"
+								  Style="{ThemeResource ThemedComboBoxStyle}"
+								  ItemContainerStyle="{ThemeResource ThemedComboBoxItemContainerStyle}"
+								  SelectionChanged="cmbTheme_SelectionChanged">
+							<x:String>Light</x:String>
+							<x:String>Dark</x:String>
+						</ComboBox>
+					</controls:SettingsCard>
+				</StackPanel>
+			</ScrollViewer>
+
 		</Grid>
 
 	</Grid>

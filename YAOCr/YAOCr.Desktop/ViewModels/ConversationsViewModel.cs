@@ -8,10 +8,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Security.Isolation;
 using YAOCr.Core.Dtos;
 using YAOCr.Core.Models;
+using YAOCr.Core.Plugins;
 using YAOCr.Core.Services;
+using YAOCr.Plugins.Parsers;
 using YAOCr.Services.Dialogs;
 
 namespace YAOCr.ViewModels;
@@ -163,7 +164,7 @@ public partial class ConversationsViewModel : ObservableObject {
             StartWaitingForResponse();
 
             SetStatusMessage("Processing user message...");
-            var filesContent = await ExtractFilesContent(promptMessage.FilePaths);
+            var filesContent = await ExtractFilesContent(promptMessage.FileParsersContent);
 
             // Add user message to the conversation
             var message = CreateConversationMessage(promptMessage.Message, SenderEnum.User, filesContent);
@@ -235,13 +236,19 @@ public partial class ConversationsViewModel : ObservableObject {
         _dialogService.OpenDialogSettings();
     }
 
-    private async Task<List<MessageAttachment>> ExtractFilesContent(IEnumerable<string> filesPath) {
+    private async Task<List<MessageAttachment>> ExtractFilesContent(IEnumerable<FileParserContent> filesParserContent) {
         var filesContent = new List<MessageAttachment>();
 
-        foreach (var f in filesPath) {
-            var content = await _fileStorageService.ReadTextFile(f);
+        foreach (var parserContent in filesParserContent) {
+            IFileParser? plugin = PluginsLoader.GetPlugins()[parserContent.ParserId] as IFileParser;
+
+            if(plugin == null) {
+                throw new Exception($"Parser [{parserContent.ParserId}] not found on loaded plugins.");
+            }
+
+            var content = await plugin.Parse(parserContent.FilePath);
             var attachment = new MessageAttachment {
-                Path = f,
+                Path = parserContent.FilePath,
                 Content = content
             };
 
