@@ -37,11 +37,7 @@ docker run -p 6333:6333 -p 6334:6334 -v "$(pwd)/qdrant_storage:/qdrant/storage:z
 ```
 
 ### Documents support
-Only support the following types:
-- `text/plain`
-- `application/json`
-- `.csv`
-- `.sql`
+[2025-11-25] Parsing documents has been externalize to plugins. Check `YAOCr.Plugins.PlainText` project as reference 
 
 ## Demo
 [YAOCr_demo.webm](https://github.com/user-attachments/assets/66168b9d-8d9a-49cb-8da4-3c64840ad4f0)
